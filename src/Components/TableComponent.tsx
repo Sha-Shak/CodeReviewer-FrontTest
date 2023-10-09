@@ -1,6 +1,6 @@
 import { Table } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IDeals } from "../interfaces/zendesk/deals/deals.interface";
 
 interface DataType {
@@ -77,6 +77,9 @@ const onChange: TableProps<DataType>["onChange"] = (
 };
 const TableComponent = (deals: any) => {
   const [dataList, setDataList] = useState(deals as IDeals[]);
+  useEffect(()=>{
+    console.log("hello", dataList)
+  },[])
   
 
   return (

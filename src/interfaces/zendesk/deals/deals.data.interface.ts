@@ -19,7 +19,7 @@ export interface IDealsData {
   value?: number;
   stage_id?: number;
   contact_id: number;
-  custom_fields?: IDealsCustomFields;
+  custom_fields: IDealsCustomFields;
   organization_id?: string;
   estimated_close_date?: string;
   customized_win_likelihood?: string;
