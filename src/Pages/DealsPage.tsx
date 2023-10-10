@@ -1,14 +1,11 @@
 import { Table } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
 import { useEffect, useState } from "react";
-import LineCharts from "../Components/Charts/LineCharts";
-import StudentMarksChart from "../Components/Charts/StudentMarksBar";
 import { IDealsData } from "../interfaces/zendesk/deals/deals.data.interface";
 import { IDealsDataList } from "../interfaces/zendesk/deals/deals.interface";
 import { IDealsMeta } from "../interfaces/zendesk/deals/deals.meta.interface";
 import { serverFetch } from "../utils/handleRequest";
 
-import StudentRadarChart from "../Components/Charts/RadarChart";
 
 interface DataType {
   key?: React.Key;
@@ -131,11 +128,7 @@ const DealsPage = () => {
 
   return (
     <div className="dealBody">
-      <div className="charts">
-        <LineCharts />
-        <StudentMarksChart />
-        <StudentRadarChart />
-      </div>
+      
       <div className="tableBody">
         <Table columns={columns} dataSource={tableData} onChange={onChange} />
       </div>

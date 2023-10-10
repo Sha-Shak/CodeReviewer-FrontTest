@@ -1,9 +1,13 @@
+import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { IStudent } from "../interfaces/student/student.interface";
 import { serverFetch } from "../utils/handleRequest";
-import { Table } from "antd";
 
 import { ColumnsType, TableProps } from "antd/es/table";
+import LineCharts from "../Components/Charts/LineCharts";
+import StudentRadarChart from "../Components/Charts/RadarChart";
+import StudentMarksChart from "../Components/Charts/StudentMarksBar";
+import { useNavigate } from "react-router-dom";
 
 const columns: ColumnsType<IStudent> = [
   {
@@ -57,9 +61,20 @@ const StudentsPage = () => {
     console.log("params", pagination, filters, sorter, extra);
   };
 
+  const navigate = useNavigate()
+
   return (
     <>
-      <Table columns={columns} dataSource={students} onChange={onChange} />
+      <div className="charts">
+        <LineCharts />
+        <StudentMarksChart />
+        <StudentRadarChart />
+      </div>
+      <Table columns={columns} dataSource={students} onChange={onChange} rowKey='_id' onRow={(record)=>({
+        onClick: ()=>{
+          navigate(`/profile/${record._id}`)
+        }
+      })}  />
     </>
   );
 };
