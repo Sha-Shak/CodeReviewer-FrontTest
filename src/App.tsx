@@ -5,6 +5,7 @@ import LeadsPage from "./Pages/LeadsPage";
 import SlatePage from "./Pages/SlatePage";
 import StudentsPage from "./Pages/StudentsPage";
 import ProfilePage from "./Pages/ProfilePage";
+import SingleStudentPage from "./Pages/SingleStudentPage";
 
 const App = () => (
   <>
@@ -14,6 +15,7 @@ const App = () => (
         <Route path="leads" element={<LeadsPage />} />
         <Route path="students" element={<StudentsPage />}></Route>
         <Route path="profile" element={<ProfilePage />}></Route>
+        <Route path="student/:id" element={<SingleStudentPage />}></Route>
       </Route>
     </Routes>
   </>
