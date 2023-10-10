@@ -9,13 +9,18 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 // import logo from '../assets/old-logo.png'
 
-const logo = <img src="../assets/old-logo.png" alt="1Logo" />;
+// const logo = <img src="../assets/old-logo.png" alt="1Logo" />;
 
 const items: MenuProps["items"] = [
   // { key: "logo", label: <img src="../assets/old-logo.png" alt="1Logo" /> },
+   {
+    label: <Link to="/leads">Leads</Link>,
+    key: "leads",
+    icon: <UsergroupAddOutlined />,
+  },
   {
-    label: <Link to="/deals">Candidates</Link>,
-    key: "mail",
+    label: <Link to="/deals">Deals</Link>,
+    key: "deals",
     icon: <UsergroupAddOutlined />,
   },
 
@@ -50,7 +55,7 @@ const items: MenuProps["items"] = [
 ];
 
 const Navbar: React.FC = () => {
-  const [current, setCurrent] = useState("mail");
+  const [current, setCurrent] = useState("deals");
 
   const onClick: MenuProps["onClick"] = (e) => {
     console.log("click ", e);

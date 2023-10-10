@@ -57,7 +57,7 @@ const data = [
 
 const StudentRadarChart = () => {
   return (
-    <div style={{ width: "33%", height: "250px" }}>
+    <div style={{ width: "100%", height: "250px" }}>
       <ResponsiveContainer>
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
           <PolarGrid />

@@ -8,15 +8,67 @@
   width: 70vw !important;
 }
 
-.tableBody{
+.tableBody {
   margin: 0 auto;
   width: 80%;
 }
-.charts{
+.charts {
   display: flex;
   padding: 2rem 0;
   justify-content: center;
 }
-.dealBody{
+.dealBody {
   height: 100vh;
+}
+
+/*PROFILE */
+.profileBody {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem 5vw;
+  height: 90vh;
+}
+
+.profileBody > .leftSideBar,
+.rightSideBar,
+.content {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid lightgray;
+  margin: 0 0.5rem;
+  border-radius: 7px;
+}
+
+.leftSideBar {
+  flex: 0.3;
+  border: 1px solid lightgray;
+}
+.rightSideBar {
+  flex: 0.3;
+  border: 1px solid lightgray;
+}
+.content {
+  flex: 1;
+}
+
+.info {
+  text-align: left;
+  padding: 0.5rem;
+}
+.info > h2 {
+  padding: 0.75rem;
+  font-size: 20px;
+  border-bottom: 1px solid lightgray;
+}
+.email {
+  white-space: nowrap;
+}
+.name {
+  font-weight: bold;
+}
+
+.content .row {
+  display: flex;
+
+  /* flex-wrap: wrap; */
 }

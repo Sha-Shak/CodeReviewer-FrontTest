@@ -1,13 +1,12 @@
-import React from "react";
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 
 const data = [
@@ -59,7 +58,7 @@ const data = [
 
 const StudentMarksChart = () => {
   return (
-    <div style={{ width: "33%", height: "250px" }}>
+    <div style={{ width: "100%", height: "250px" }}>
       <ResponsiveContainer>
         <BarChart
           data={data}

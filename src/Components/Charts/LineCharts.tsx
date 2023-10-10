@@ -1,13 +1,12 @@
-import React from "react";
 import {
-  LineChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
 
 const data = [
@@ -39,7 +38,7 @@ const data = [
 
 const LineCharts = () => {
   return (
-    <div style={{ width: "33%", height: "250px" }}>
+    <div style={{ width: "100%", height: "250px" }}>
       <ResponsiveContainer>
         <LineChart
           data={data}
@@ -61,7 +60,6 @@ const LineCharts = () => {
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />
-          
         </LineChart>
       </ResponsiveContainer>
     </div>
