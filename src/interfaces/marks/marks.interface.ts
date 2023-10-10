@@ -1,7 +1,6 @@
-import { Types } from 'mongoose';
-import { ISingleSkill } from './singleSkill.interface';
+import { ISingleSkillMark } from './singleSkillMark.interface';
 export interface IMarks {
-  studentId: Types.ObjectId;
-  softSkills: ISingleSkill;
-  hardSkills: ISingleSkill;
+  studentId: string;
+  softSkills: ISingleSkillMark;
+  hardSkills: ISingleSkillMark;
 }

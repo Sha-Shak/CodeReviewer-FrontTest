@@ -25,7 +25,7 @@ const items: MenuProps["items"] = [
   },
 
   {
-    label: "Studnets",
+    label: "Students",
     key: "SubMenu",
     icon: <TeamOutlined />,
     children: [
@@ -51,6 +51,11 @@ const items: MenuProps["items"] = [
     ),
     key: "github",
     icon: <GithubOutlined />,
+  },
+  {
+    label: <Link to="/student/6524db8b3d187ee72b9846b8">Student</Link>,
+    key: "stu",
+    icon: <UsergroupAddOutlined />,
   },
 ];
 

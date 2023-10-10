@@ -1,7 +1,6 @@
-import { Types } from 'mongoose';
-
 export interface IStudent {
-  cohort: Types.ObjectId;
+  _id: string;
+  cohort: string;
   zenDealsId?: number;
   zenContactId: number;
   name: string;
