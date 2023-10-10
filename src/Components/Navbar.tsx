@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 const items: MenuProps["items"] = [
   // { key: "logo", label: <img src="../assets/old-logo.png" alt="1Logo" /> },
-   {
+  {
     label: <Link to="/leads">Leads</Link>,
     key: "leads",
     icon: <UsergroupAddOutlined />,
@@ -25,19 +25,9 @@ const items: MenuProps["items"] = [
   },
 
   {
-    label: "Studnets",
-    key: "SubMenu",
+    label: <Link to="/students">Students</Link>,
+    key: "students",
     icon: <TeamOutlined />,
-    children: [
-      {
-        label: <Link to="/students"> Junior</Link>,
-        key: "junior",
-      },
-      {
-        label: "Senior",
-        key: "senior",
-      },
-    ],
   },
   {
     label: (
@@ -81,3 +71,7 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
+
+
+
