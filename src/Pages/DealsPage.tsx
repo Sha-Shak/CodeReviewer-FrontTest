@@ -11,13 +11,13 @@ import { serverFetch } from "../utils/handleRequest";
 import StudentRadarChart from "../Components/Charts/RadarChart";
 
 interface DataType {
-  key: React.Key;
-  name: string;
-  age: number;
-  gender: string;
-  cohortYear: string;
-  cohortMonth: string;
-  converted: string;
+  key?: React.Key;
+  name?: string;
+  age?: number;
+  gender?: string;
+  cohortYear?: string;
+  cohortMonth?: string;
+  converted?: string;
   prExperience?: string;
 }
 
@@ -45,7 +45,11 @@ const columns: ColumnsType<DataType> = [
   {
     title: "Age",
     dataIndex: "age",
-    sorter: (a, b) => a.age - b.age,
+    sorter: (a, b) => {
+      const ageA = a.age ? Number(a.age) : 0;
+      const ageB = b.age ? Number(b.age) : 0;
+      return ageA - ageB;
+    },
   },
   {
     title: "Gender",
@@ -60,7 +64,7 @@ const columns: ColumnsType<DataType> = [
         value: "female",
       },
     ],
-    onFilter: (value: any, record) => record.gender.startsWith(value),
+    onFilter: (value: any, record) => record.gender?.startsWith(value) ?? false,
     filterSearch: true,
   },
   {
@@ -76,7 +80,7 @@ const columns: ColumnsType<DataType> = [
         value: "false",
       },
     ],
-    onFilter: (value: any, record) => record.converted.startsWith(value),
+    onFilter: (value: any, record) => record.converted?.startsWith(value) ?? false ,
     filterSearch: true,
   },
 ];
@@ -86,7 +90,8 @@ const DealsPage = () => {
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [meta, setMeta] = useState({} as IDealsMeta);
 
-  const url = "http://localhost:3000/zen/getdata/deals"; //`${apiUrl}/zen/deals`;
+  const url =
+    "https://code-reviewer-server-projectcode.koyeb.app/zen/getdata/deals"; //`${apiUrl}/zen/deals`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,9 +102,8 @@ const DealsPage = () => {
       // Convert the data to the table format.
       const tableData: DataType[] = dataProps.map((el, i) => {
         return {
-          key: i,
           name: el.name,
-          age: el.custom_fields.Age,
+          age: Number(el.custom_fields.Age),
           gender: el.custom_fields.Gender,
           prExperience: el.custom_fields?.["Programming Experience"],
           converted: el.custom_fields.Converted,
@@ -109,6 +113,7 @@ const DealsPage = () => {
       });
 
       setTableData(tableData);
+      console.log("from deals ", tableData);
       setMeta(data.meta);
     };
 
