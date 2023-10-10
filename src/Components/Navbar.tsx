@@ -14,7 +14,7 @@ const logo = <img src="../assets/old-logo.png" alt="1Logo" />;
 const items: MenuProps["items"] = [
   // { key: "logo", label: <img src="../assets/old-logo.png" alt="1Logo" /> },
   {
-    label: <Link to="/candidates/deals">Candidates</Link>,
+    label: <Link to="/deals">Candidates</Link>,
     key: "mail",
     icon: <UsergroupAddOutlined />,
   },

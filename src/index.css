@@ -7,3 +7,16 @@
   margin: 0 auto;
   width: 70vw !important;
 }
+
+.tableBody{
+  margin: 0 auto;
+  width: 80%;
+}
+.charts{
+  display: flex;
+  padding: 2rem 0;
+  justify-content: center;
+}
+.dealBody{
+  height: 100vh;
+}

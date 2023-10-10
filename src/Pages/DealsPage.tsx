@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import TableComponent from "../Components/TableComponent";
-import {
-  IDeals,
-  IDealsDataList,
-} from "../interfaces/zendesk/deals/deals.interface";
-import { IDealsMeta } from "../interfaces/zendesk/deals/deals.meta.interface";
-import { serverFetch } from "../utils/handleRequest";
 import { Table } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
+import { useEffect, useState } from "react";
+import LineCharts from "../Components/Charts/LineCharts";
+import StudentMarksChart from "../Components/Charts/StudentMarksBar";
 import { IDealsData } from "../interfaces/zendesk/deals/deals.data.interface";
+import { IDealsDataList } from "../interfaces/zendesk/deals/deals.interface";
+import { IDealsMeta } from "../interfaces/zendesk/deals/deals.meta.interface";
+import { serverFetch } from "../utils/handleRequest";
+
+import StudentRadarChart from "../Components/Charts/RadarChart";
 
 interface DataType {
   key: React.Key;
@@ -18,7 +18,7 @@ interface DataType {
   cohortYear: string;
   cohortMonth: string;
   converted: string;
-  prExperience?: string
+  prExperience?: string;
 }
 
 const columns: ColumnsType<DataType> = [
@@ -85,8 +85,8 @@ const DealsPage = () => {
   const [deals, setDeals] = useState({} as IDealsData[]);
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [meta, setMeta] = useState({} as IDealsMeta);
-  const apiUrl = import.meta.env.VITE_SERVER_URL;
-  const url = "http://localhost:3331/zen/getdata/deals"; //`${apiUrl}/zen/deals`;
+
+  const url = "http://localhost:3000/zen/getdata/deals"; //`${apiUrl}/zen/deals`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,7 +97,7 @@ const DealsPage = () => {
       // Convert the data to the table format.
       const tableData: DataType[] = dataProps.map((el, i) => {
         return {
-         key: i,
+          key: i,
           name: el.name,
           age: el.custom_fields.Age,
           gender: el.custom_fields.Gender,
@@ -126,7 +126,14 @@ const DealsPage = () => {
 
   return (
     <div className="dealBody">
-      <Table columns={columns} dataSource={tableData} onChange={onChange} />
+      <div className="charts">
+        <LineCharts />
+        <StudentMarksChart />
+        <StudentRadarChart />
+      </div>
+      <div className="tableBody">
+        <Table columns={columns} dataSource={tableData} onChange={onChange} />
+      </div>
     </div>
   );
 };

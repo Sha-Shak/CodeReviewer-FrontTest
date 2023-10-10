@@ -6,10 +6,7 @@ const SlatePage = () => {
   return (
     <div className="slateBody">
       <Navbar/>
-      <div className="container">
-
       <Outlet/>
-      </div>
     </div>
   )
 }

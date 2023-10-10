@@ -1,9 +1,11 @@
-import React from 'react'
+import Charts from "../Components/Charts/LineCharts";
 
 const StudentsPage = () => {
   return (
-    <div className='st'>StudentsPage</div>
-  )
-}
+    <>
+      <Charts />
+    </>
+  );
+};
 
-export default StudentsPage
+export default StudentsPage;

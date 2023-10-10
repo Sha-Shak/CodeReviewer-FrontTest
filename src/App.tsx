@@ -6,15 +6,15 @@ import SlatePage from "./Pages/SlatePage";
 import StudentsPage from "./Pages/StudentsPage";
 
 const App = () => (
-  <Routes>
-    <Route path="/" element={<SlatePage />}>
-      <Route path="candidates" element={<DealsPage />}>
+  <>
+    <Routes>
+      <Route path="/" element={<SlatePage />}>
         <Route path="deals" index element={<DealsPage />} />
         <Route path="leads" element={<LeadsPage />} />
+        <Route path="students" element={<StudentsPage />}></Route>
       </Route>
-      <Route path="students" element={<StudentsPage />}></Route>
-    </Route>
-  </Routes>
+    </Routes>
+  </>
 );
 
 export default App;

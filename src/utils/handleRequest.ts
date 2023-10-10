@@ -7,6 +7,7 @@ import { IHandleRequestConfig } from "../interfaces/VITE/HandleRequestConfig";
 const token = localStorage.getItem("token");
 
 export const serverFetch = async (method: string, url: string, data?: any): Promise<any> => {
+  console.warn(method, url)
   // const token = localStorage.getItem("token");
   console.log("test",method, url)
    if (!token) {
@@ -24,6 +25,7 @@ export const serverFetch = async (method: string, url: string, data?: any): Prom
       method,
       url, data, ...config
     });
+    console.warn(response.data)
     return response.data;
   } catch (error) {
     console.log(error);
