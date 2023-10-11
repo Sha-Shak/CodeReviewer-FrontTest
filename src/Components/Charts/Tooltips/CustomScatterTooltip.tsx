@@ -3,7 +3,6 @@ import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipCont
 
 const CustomScatterTooltip = ({ active, payload } : TooltipProps<ValueType, NameType>) => {
   if (active && payload && payload.length) {
-    console.log(payload)
     return (
       <div className="custom-tooltip">
         <p className="label">{`${payload[0].payload.studentName}`}</p>
