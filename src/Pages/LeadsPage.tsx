@@ -5,6 +5,7 @@ import { IContactData } from "../interfaces/zendesk/contacts/contacts.data.inter
 import { IContactList } from "../interfaces/zendesk/contacts/contacts.interface";
 import { IContactMeta } from "../interfaces/zendesk/contacts/contacts.meta.interface";
 import { serverFetch } from "../utils/handleRequest";
+import conf from "../config";
 
 interface DataType {
   key?: React.Key;
@@ -81,7 +82,7 @@ const DealsPage = () => {
   const [meta, setMeta] = useState({} as IContactMeta);
   // const apiUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:3331'
   const url =
-    "https://code-reviewer-server-projectcode.koyeb.app/zen/getdata/leads/pending%20pre-screening%20test";
+    `${conf.API_BASE_URL}/zen/getdata/leads/pending%20pre-screening%20test`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,8 +91,9 @@ const DealsPage = () => {
       setDeals(dataProps);
 
       // Convert the data to the table format.
-      const tableData: DataType[] = dataProps.map((el) => {
+      const tableData: DataType[] = dataProps.map((el, i) => {
         return {
+          key: i,
           firstName: el.first_name,
           lastName: el.last_name,
           age: Number(el.custom_fields.Age),

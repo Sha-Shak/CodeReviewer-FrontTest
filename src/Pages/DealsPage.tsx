@@ -5,6 +5,7 @@ import { IDealsData } from "../interfaces/zendesk/deals/deals.data.interface";
 import { IDealsDataList } from "../interfaces/zendesk/deals/deals.interface";
 import { IDealsMeta } from "../interfaces/zendesk/deals/deals.meta.interface";
 import { serverFetch } from "../utils/handleRequest";
+import conf from "../config";
 
 
 interface DataType {
@@ -87,7 +88,7 @@ const DealsPage = () => {
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [meta, setMeta] = useState({} as IDealsMeta);
 
-  const url = "https://code-reviewer-server-projectcode.koyeb.app/zen/getdata/deals"; //`${apiUrl}/zen/deals`;
+  const url = `${conf.API_BASE_URL}/zen/getdata/deals`; //`${apiUrl}/zen/deals`;
 
   useEffect(() => {
     console.log("mount")
