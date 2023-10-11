@@ -83,14 +83,14 @@ const columns: ColumnsType<DataType> = [
 ];
 
 const DealsPage = () => {
-  const [deals, setDeals] = useState({} as IDealsData[]);
+  const [deals, setDeals] = useState<IDealsData[]>([]);
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [meta, setMeta] = useState({} as IDealsMeta);
 
-  const url =
-    "https://code-reviewer-server-projectcode.koyeb.app/zen/getdata/deals"; //`${apiUrl}/zen/deals`;
+  const url = "https://code-reviewer-server-projectcode.koyeb.app/zen/getdata/deals"; //`${apiUrl}/zen/deals`;
 
   useEffect(() => {
+    console.log("mount")
     const fetchData = async () => {
       const data: IDealsDataList = await serverFetch("get", url);
       const dataProps = data.items.map((element) => element.data);
@@ -99,6 +99,7 @@ const DealsPage = () => {
       // Convert the data to the table format.
       const tableData: DataType[] = dataProps.map((el, i) => {
         return {
+          key: i,
           name: el.name,
           age: Number(el.custom_fields.Age),
           gender: el.custom_fields.Gender,

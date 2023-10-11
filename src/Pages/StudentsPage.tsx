@@ -70,11 +70,14 @@ const StudentsPage = () => {
         <StudentMarksChart />
         <StudentRadarChart />
       </div>
+      <div className="tableBody">
+
       <Table columns={columns} dataSource={students} onChange={onChange} rowKey='_id' onRow={(record)=>({
         onClick: ()=>{
           navigate(`/profile/${record._id}`)
         }
       })}  />
+      </div>
     </>
   );
 };

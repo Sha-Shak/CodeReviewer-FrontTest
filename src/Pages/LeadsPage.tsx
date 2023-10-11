@@ -76,12 +76,12 @@ const columns: ColumnsType<DataType> = [
 ];
 
 const DealsPage = () => {
-  const [deals, setDeals] = useState({} as IContactData[]);
+  const [deals, setDeals] = useState<IContactData[]>([]);
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [meta, setMeta] = useState({} as IContactMeta);
-  const apiUrl = import.meta.env.VITE_SERVER_URL;
+  // const apiUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:3331'
   const url =
-    "https://code-reviewer-server-projectcode.koyeb.app/zen/getdata/leads/won"; //`${apiUrl}/zen/deals`;
+    "https://code-reviewer-server-projectcode.koyeb.app/zen/getdata/leads/pending%20pre-screening%20test";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -122,8 +122,11 @@ const DealsPage = () => {
 
   return (
     <div className="dealBody">
+      <div className="tableBody">
+
       <Table columns={columns} dataSource={tableData} onChange={onChange} />
     </div>
+      </div>
   );
 };
 
