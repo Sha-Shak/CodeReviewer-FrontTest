@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import SkillsRadarChart from './Charts/SkillsRadarChart';
 
 function HardSkillsChart({ id }: { id : string }) {

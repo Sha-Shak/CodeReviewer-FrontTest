@@ -4,6 +4,7 @@ import { serverFetch } from '../utils/handleRequest';
 import { IStudent } from '../interfaces/student/student.interface';
 import HardSkillsChart from '../Components/HardSkillsChart';
 import SoftSkillsChart from '../Components/SoftSkillsChart';
+import StudentPositionChart from '../Components/Charts/StudentPositionChart';
 
 function SingleStudentPage() {
 
@@ -28,6 +29,7 @@ function SingleStudentPage() {
         <h1>{student.name}</h1>
         <HardSkillsChart id={student._id} />
         <SoftSkillsChart id={student._id} />
+        <StudentPositionChart id={student._id} />
       </>
     }
 

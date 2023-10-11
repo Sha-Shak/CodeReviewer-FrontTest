@@ -6,9 +6,11 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
   ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 import { IHardSkillWeeklyReport } from "../../interfaces/marks/hardSkillWeeklyReport.interface";
 import { serverFetch } from "../../utils/handleRequest";
+import CustomRadarTooltip from "./Tooltips/CustomRadarTooltip";
 
 const SkillsRadarChart = ({ id, reportType, skillType } : { id: string, reportType: string, skillType: "hard-skills" | "soft-skills"}) => {
 
@@ -37,13 +39,13 @@ const SkillsRadarChart = ({ id, reportType, skillType } : { id: string, reportTy
               <PolarGrid />
               <PolarAngleAxis dataKey="skillName"/>
               <PolarRadiusAxis domain={[0, 10]}/>
+              <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomRadarTooltip />}/>
               <Radar
                 name="Marks"
                 dataKey="averageMarks"
                 stroke="#8884d8"
                 fill="#8884d8"
                 fillOpacity={0.6}
-                dot={true}
               />
             </RadarChart>
           </ResponsiveContainer>
