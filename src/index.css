@@ -98,5 +98,18 @@
 
 .chart-container {
   width: 50%;
+  margin: 10px 5px;
+}
+
+.chart-title {
+  font-size: large;
+  font-weight: 600;
   margin: 10px;
+}
+
+.chart-select {
+  margin-bottom: 10px;
+  border: solid rgb(142, 142, 142) 1px;
+  padding: 2px;
+  border-radius: 10px;
 }

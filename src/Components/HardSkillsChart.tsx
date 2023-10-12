@@ -14,9 +14,9 @@ function HardSkillsChart({ id }: { id : string }) {
   }
 
   return (
-    <div>
-      <h2>Hard Skills</h2>
-      <select onChange={(e) => setSelectedWeek(e.target.value)}>
+    <div className='chart-container'>
+      <h2 className="chart-title">Hard Skills</h2>
+      <select className="chart-select" onChange={(e) => setSelectedWeek(e.target.value)}>
         {options.map((option, index) => <option key={`week-option-${index}`} value={option}>{parseWeekName(option)}</option>)}
       </select>
 

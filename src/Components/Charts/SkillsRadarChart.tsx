@@ -12,6 +12,8 @@ import { IHardSkillWeeklyReport } from "../../interfaces/marks/hardSkillWeeklyRe
 import { serverFetch } from "../../utils/handleRequest";
 import CustomRadarTooltip from "./Tooltips/CustomRadarTooltip";
 
+
+
 const SkillsRadarChart = ({ id, reportType, skillType } : { id: string, reportType: string, skillType: "hard-skills" | "soft-skills"}) => {
 
   const [report, setReport] = useState<IHardSkillWeeklyReport | undefined>(undefined)
@@ -32,12 +34,12 @@ const SkillsRadarChart = ({ id, reportType, skillType } : { id: string, reportTy
   }
   
   return (
-    <div style={{ width: "100%", height: "250px" }}>
+    <div style={{ width: "100%", height: "200px" }}>
       {report && 
             <ResponsiveContainer>
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={report.marks}>
               <PolarGrid />
-              <PolarAngleAxis dataKey="skillName"/>
+              <PolarAngleAxis dataKey="skillName" tick={{fontSize: "small"}}/>
               <PolarRadiusAxis domain={[0, 10]}/>
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomRadarTooltip />}/>
               <Radar

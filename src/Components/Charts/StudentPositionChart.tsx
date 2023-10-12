@@ -25,10 +25,10 @@ function StudentPositionChart({ id } : { id?: string }) {
   }, [])
   
   return (
-    <div>
-      <h2>Student Position</h2>
+    <div className="chart-container">
+      <h2 className="chart-title">Student Position</h2>
 
-      <ResponsiveContainer width="50%" height={400}>
+      <ResponsiveContainer width="100%" height={250}>
         <ScatterChart
           margin={{
             top: 20,

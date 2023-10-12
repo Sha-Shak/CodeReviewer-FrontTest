@@ -12,9 +12,9 @@ function SoftSkillsChart({ id }: { id : string }) {
   }
 
   return (
-    <div>
-      <h2>Soft Skills</h2>
-      <select onChange={(e) => setSelectedReport(e.target.value)}>
+    <div className='chart-container'>
+      <h2 className="chart-title">Soft Skills</h2>
+      <select className="chart-select" onChange={(e) => setSelectedReport(e.target.value)}>
         {options.map((option, index) => <option key={`week-option-${index}`} value={option}>{parseReportName(option)}</option>)}
       </select>
 
