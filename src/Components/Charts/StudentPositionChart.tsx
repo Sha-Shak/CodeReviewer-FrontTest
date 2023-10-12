@@ -51,7 +51,7 @@ function StudentPositionChart({ id } : { id?: string }) {
         <option value="overall">Overall</option>
       </select>
 
-      <ResponsiveContainer width="100%" height={250}>
+      <ResponsiveContainer width="100%" height={200}>
         <ScatterChart
           margin={{
             top: 20,
@@ -61,16 +61,16 @@ function StudentPositionChart({ id } : { id?: string }) {
           }}
         >
           <CartesianGrid />
-          <XAxis type="number" dataKey="softSkillAvg" name="Soft skills" domain={[0, 10]}  interval={0}/>
-          <YAxis type="number" dataKey="hardSkillAvg" name="Hard skills" domain={[0, 10]} />
+          <XAxis type="number" dataKey="softSkillAvg" name="Soft skills" domain={[0, 10]} interval={2}/>
+          <YAxis type="number" dataKey="hardSkillAvg" name="Hard skills" domain={[0, 10]} interval={2}/>
           <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomScatterTooltip />}/>
           <Scatter name="Student Position" data={data} fill="#8884d8">
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.studentId === id ? "#0dde6b" : "#8884d8"} />
           ))}
           </Scatter>
-          <ReferenceLine y={5} stroke="#000000" />
-          <ReferenceLine x={5} stroke="#000000" />
+          <ReferenceLine y={5} label={{ value: 'Soft', position: 'left', offset: 5 }} stroke="#000000" />
+          <ReferenceLine x={5} label={{ value: 'Hard', position: 'top', offset: 5 }} stroke="#000000" />
         </ScatterChart>
       </ResponsiveContainer>
     </div>

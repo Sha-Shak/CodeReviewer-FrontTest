@@ -44,7 +44,7 @@
   border: 1px solid lightgray;
 }
 .rightSideBar {
-  flex: 0.3;
+  flex: 0.2;
   border: 1px solid lightgray;
 }
 .content {
@@ -58,7 +58,7 @@
 }
 .info > h2 {
   padding: 0.75rem;
-  font-size: 20px;
+  font-size: 15px;
   border-bottom: 1px solid lightgray;
 }
 .email {
@@ -109,7 +109,8 @@
 
 .chart-select {
   margin-bottom: 10px;
-  border: solid rgb(142, 142, 142) 1px;
+  border: solid rgb(172, 172, 172) 1px;
   padding: 2px;
-  border-radius: 10px;
+  border-radius: 5px;
+  margin: 0 5px 10px;
 }
