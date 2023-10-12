@@ -8,6 +8,8 @@ import LineCharts from "../Components/Charts/LineCharts";
 import StudentRadarChart from "../Components/Charts/RadarChart";
 import StudentMarksChart from "../Components/Charts/StudentMarksBar";
 import { useNavigate } from "react-router-dom";
+import conf from "../config";
+import { ICohort } from "../interfaces/student/cohort.interface";
 
 const columns: ColumnsType<IStudent> = [
   {
@@ -30,22 +32,24 @@ const columns: ColumnsType<IStudent> = [
   },
   {
     title: "Cohort",
-    dataIndex: "cohort",
+    dataIndex: "cohortInfo",
+    render: item => item.name.split(' ')[2]
   },
   {
     title: "Type",
     dataIndex: "studentType",
+    render: item => item[0].toUpperCase() + item.slice(1)
   },
 ];
 
 const StudentsPage = () => {
-  const url = "https://code-reviewer-server-projectcode.koyeb.app/students/all";
-  const [students, setStudents] = useState<IStudent[]>([]); // Initialize as an empty array
+  const url = `${conf.API_BASE_URL}/students/all`;
+  const [students, setStudents] = useState<(IStudent & {cohortInfo: ICohort})[]>([]); // Initialize as an empty array
 
   useEffect(() => {
     const fetchData = async () => {
       console.log("hello");
-      const res = (await serverFetch("get", url)) as IStudent[];
+      const res : (IStudent & {cohortInfo: ICohort})[] = await serverFetch("get", url);
       setStudents(res);
       console.log(typeof res);
     };
