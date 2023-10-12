@@ -1,23 +1,17 @@
 import { useState } from 'react'
 import SkillsRadarChart from './Charts/SkillsRadarChart';
+import weeks from '../assets/data/weeks.json';
+import { parseWeekName } from '../utils/helper';
 
 function HardSkillsChart({ id }: { id : string }) {
 
-  const options = ['week-1', 'week-2', 'week-3', 'week-4', 'week-5', 'week-6', 'week-7', 'week-8', 'week-9', 'week-10', 'week-11', 'week-12'];
-
   const [selectedWeek, setSelectedWeek] = useState<string>('week-1');
-
-  function parseWeekName (name: string) {
-    const words = name.split('-');
-    words[0] = 'Week';
-    return words.join(' ');
-  }
 
   return (
     <div className='chart-container'>
       <h2 className="chart-title">Hard Skills</h2>
       <select className="chart-select" onChange={(e) => setSelectedWeek(e.target.value)}>
-        {options.map((option, index) => <option key={`week-option-${index}`} value={option}>{parseWeekName(option)}</option>)}
+        {weeks.map((option, index) => <option key={`week-option-${index}`} value={option}>{parseWeekName(option)}</option>)}
       </select>
 
       <SkillsRadarChart id={id} reportType={selectedWeek} skillType='hard-skills' />

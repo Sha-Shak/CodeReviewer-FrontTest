@@ -11,6 +11,7 @@ import {
 import { IHardSkillWeeklyReport } from "../../interfaces/marks/hardSkillWeeklyReport.interface";
 import { serverFetch } from "../../utils/handleRequest";
 import CustomRadarTooltip from "./Tooltips/CustomRadarTooltip";
+import conf from "../../config";
 
 
 
@@ -20,7 +21,7 @@ const SkillsRadarChart = ({ id, reportType, skillType } : { id: string, reportTy
 
   useEffect(() => {
     async function fetchReport() {
-      const url = "https://code-reviewer-server-projectcode.koyeb.app/marks/" + skillType + (skillType === "hard-skills" ? "/weekly/" : "/report/") + reportType + "/" + id;
+      const url = `${conf.API_BASE_URL}/marks/` + skillType + (skillType === "hard-skills" ? "/weekly/" : "/report/") + reportType + "/" + id;
       const report : IHardSkillWeeklyReport = await serverFetch("get", url);
       report.marks.forEach(mark => mark.skillName = capitalizeNames(mark.skillName));
       setReport(report);

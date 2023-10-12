@@ -26,7 +26,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     async function fetchStudent() {
-      const url = "https://code-reviewer-server-projectcode.koyeb.app/students/profile/" + id;
+      const url = `${conf.API_BASE_URL}/students/profile/` + id;
       const student : IStudent = await serverFetch("get", url);
       setStudent(student);
     };
