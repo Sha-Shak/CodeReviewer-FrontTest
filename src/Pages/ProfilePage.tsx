@@ -13,6 +13,7 @@ import StudentPositionChart from "../Components/Charts/StudentPositionChart";
 import conf from "../config";
 import logo from './../assets/new-logo.jpg';
 import SkillsReportChart from "../Components/Charts/SkillsReportChart";
+import PersonalityTagsContainer from "../Components/Personality/PersonalityTagsContainer";
 
 
 
@@ -101,6 +102,7 @@ const ProfilePage = () => {
                       <LineChartOutlined /> {student.studentType}
                     </h2>
                   </div>
+                  <PersonalityTagsContainer />
                 </div>
                 <div className="content">
                   <div className="row">
