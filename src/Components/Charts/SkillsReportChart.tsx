@@ -17,9 +17,11 @@ import {
   Tooltip,
 } from "recharts";
 import CustomRadarTooltip from './Tooltips/CustomRadarTooltip';
+import { Spin } from 'antd';
 
 function SkillsReportChart({ id, type }: { id: string, type: 'hard-skills' | 'soft-skills' | 'peer-review' }) {
   const options = type === "soft-skills" ? reports : weeks;
+  const [loading, setLoading] = useState<boolean>(false);
   const [selectedReport, setSelectedReport] = useState<string>(options[0]);
   const [report, setReport] = useState<IHardSkillWeeklyReport | ISoftSkillsQuarterlyReport | IPeerReviewWeeklyReport | undefined>(undefined)
 
@@ -33,10 +35,17 @@ function SkillsReportChart({ id, type }: { id: string, type: 'hard-skills' | 'so
         url = `${conf.API_BASE_URL}/marks/` + type + (type === "hard-skills" ? "/weekly/" : "/report/") + selectedReport + "/" + id;
       }
 
-      const report: IHardSkillWeeklyReport | ISoftSkillsQuarterlyReport | IPeerReviewWeeklyReport = await serverFetch("get", url);
-      report.marks.forEach(mark => mark.skillName = capitalizeNames(mark.skillName));
-      report.marks = report.marks.sort((a, b) => a.skillName.localeCompare(b.skillName));
-      setReport(report);
+      try {
+        setLoading(true);
+        const report: IHardSkillWeeklyReport | ISoftSkillsQuarterlyReport | IPeerReviewWeeklyReport = await serverFetch("get", url);
+        report.marks.forEach(mark => mark.skillName = capitalizeNames(mark.skillName));
+        report.marks = report.marks.sort((a, b) => a.skillName.localeCompare(b.skillName));
+        setReport(report);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+
     }
 
     fetchReport();
@@ -49,29 +58,29 @@ function SkillsReportChart({ id, type }: { id: string, type: 'hard-skills' | 'so
         {options.map((option, index) => <option key={`${type}-report-option-${index}`} value={option}>{parseName(option)}</option>)}
       </select>
 
-      {/* <SkillsRadarChart id={id} reportType={selectedReport} skillType={type} /> */}
-      <div style={{ width: "100%", height: "200px" }}>
-        {report && report.marks.length ?
-          <ResponsiveContainer>
-            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={report.marks}>
-              <PolarGrid />
-              <PolarAngleAxis dataKey="skillName" tick={{ fontSize: "small" }} />
-              <PolarRadiusAxis domain={[0, 10]} />
-              <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomRadarTooltip />} />
-              <Radar
-                name="Marks"
-                dataKey="averageMarks"
-                stroke="#8884d8"
-                fill="#8884d8"
-                fillOpacity={0.6}
-              />
-            </RadarChart>
-          </ResponsiveContainer>
-          :
-          <h3>No marks for {selectedReport}, yet.</h3>
-        }
-
-      </div>
+      <Spin spinning={loading} tip="Fetching data" size="large" >
+        <div style={{ width: "100%", height: "200px" }}>
+          {report && report.marks.length ?
+            <ResponsiveContainer>
+              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={report.marks}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="skillName" tick={{ fontSize: "small" }} />
+                <PolarRadiusAxis domain={[0, 10]} />
+                <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomRadarTooltip />} />
+                <Radar
+                  name="Marks"
+                  dataKey="averageMarks"
+                  stroke="#8884d8"
+                  fill="#8884d8"
+                  fillOpacity={0.6}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+            :
+            <h3>No marks for {selectedReport}, yet.</h3>
+          }
+        </div>
+      </Spin>
     </div>
   )
 }
