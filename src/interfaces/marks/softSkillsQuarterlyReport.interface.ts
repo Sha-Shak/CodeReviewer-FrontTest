@@ -1,8 +1,8 @@
 
 import { IStudent } from '../student/student.interface';
 import { IReportAvgSkill } from './reportAvgSkill.interface';
-export interface IHardSkillWeeklyReport {
+export interface ISoftSkillsQuarterlyReport {
   student: IStudent;
   marks: IReportAvgSkill[];
-  week: string;
+  report: string;
 }

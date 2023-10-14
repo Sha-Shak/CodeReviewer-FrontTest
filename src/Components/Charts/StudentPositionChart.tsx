@@ -6,7 +6,7 @@ import { IStudentPositionReport } from '../../interfaces/studentPosition/student
 import CustomScatterTooltip from './Tooltips/CustomScatterTooltip';
 import weeks from '../../assets/data/weeks.json';
 import conf from '../../config';
-import { parseWeekName } from '../../utils/helper';
+import { parseName } from '../../utils/helper';
 import { IStudent } from '../../interfaces/student/student.interface';
 
 function StudentPositionChart({ id } : { id?: string }) {
@@ -47,7 +47,7 @@ function StudentPositionChart({ id } : { id?: string }) {
       </select>
 
       <select className="chart-select" onChange={(e) => setTime(e.target.value)}>
-        {weeks.map((week, index) => <option key={`week-option-${index}`} value={week}>{parseWeekName(week)}</option>)} 
+        {weeks.map((week, index) => <option key={`week-option-${index}`} value={week}>{parseName(week)}</option>)} 
         <option value="overall">Overall</option>
       </select>
 

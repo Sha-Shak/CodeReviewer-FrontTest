@@ -9,12 +9,10 @@ import { useParams } from "react-router-dom";
 import { IStudent } from "../interfaces/student/student.interface";
 import { useEffect, useState } from "react";
 import { serverFetch } from "../utils/handleRequest";
-import SoftSkillsChart from "../Components/SoftSkillsChart";
-import HardSkillsChart from "../Components/HardSkillsChart";
 import StudentPositionChart from "../Components/Charts/StudentPositionChart";
 import conf from "../config";
 import logo from './../assets/new-logo.jpg';
-import PeerReviewChart from "../Components/PeerReviewChart";
+import SkillsReportChart from "../Components/Charts/SkillsReportChart";
 
 
 
@@ -85,11 +83,11 @@ const ProfilePage = () => {
           </div>
           <div className="content">
             <div className="row">
-              <SoftSkillsChart id={student._id} />
-              <HardSkillsChart id={student._id} />
+              <SkillsReportChart id={student._id} type="soft-skills" />
+              <SkillsReportChart id={student._id} type="hard-skills" />
             </div>
             <div className="row">
-              <PeerReviewChart id={student._id} />
+              <SkillsReportChart id={student._id} type="peer-review" />
               <StudentPositionChart id={student._id} />
             </div>
           </div>
