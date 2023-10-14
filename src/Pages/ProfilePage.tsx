@@ -14,6 +14,7 @@ import HardSkillsChart from "../Components/HardSkillsChart";
 import StudentPositionChart from "../Components/Charts/StudentPositionChart";
 import conf from "../config";
 import logo from './../assets/new-logo.jpg';
+import PeerReviewChart from "../Components/PeerReviewChart";
 
 
 
@@ -88,7 +89,7 @@ const ProfilePage = () => {
               <HardSkillsChart id={student._id} />
             </div>
             <div className="row">
-              <SoftSkillsChart id={student._id} />
+              <PeerReviewChart id={student._id} />
               <StudentPositionChart id={student._id} />
             </div>
           </div>

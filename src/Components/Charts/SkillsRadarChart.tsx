@@ -15,16 +15,23 @@ import conf from "../../config";
 
 
 
-const SkillsRadarChart = ({ id, reportType, skillType } : { id: string, reportType: string, skillType: "hard-skills" | "soft-skills"}) => {
+const SkillsRadarChart = ({ id, reportType, skillType } : { id: string, reportType: string, skillType: "hard-skills" | "soft-skills" | "peer-review"}) => {
 
   const [report, setReport] = useState<IHardSkillWeeklyReport | undefined>(undefined)
 
   useEffect(() => {
     async function fetchReport() {
-      const url = `${conf.API_BASE_URL}/marks/` + skillType + (skillType === "hard-skills" ? "/weekly/" : "/report/") + reportType + "/" + id;
-      const report : IHardSkillWeeklyReport = await serverFetch("get", url);
-      report.marks.forEach(mark => mark.skillName = capitalizeNames(mark.skillName));
-      setReport(report);
+      if (skillType === "peer-review") {
+        const url = `${conf.API_BASE_URL}/peer-review/average/${id}` + (reportType === "overall" ? "" : `?week=${reportType}`);
+        const report : IHardSkillWeeklyReport = await serverFetch("get", url);
+        report.marks.forEach(mark => mark.skillName = capitalizeNames(mark.skillName));
+        setReport(report);
+      } else {
+        const url = `${conf.API_BASE_URL}/marks/` + skillType + (skillType === "hard-skills" ? "/weekly/" : "/report/") + reportType + "/" + id;
+        const report : IHardSkillWeeklyReport = await serverFetch("get", url);
+        report.marks.forEach(mark => mark.skillName = capitalizeNames(mark.skillName));
+        setReport(report);
+      }
     }
 
     fetchReport();
@@ -36,7 +43,7 @@ const SkillsRadarChart = ({ id, reportType, skillType } : { id: string, reportTy
   
   return (
     <div style={{ width: "100%", height: "200px" }}>
-      {report && 
+      {report && report.marks.length ?
             <ResponsiveContainer>
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={report.marks}>
               <PolarGrid />
@@ -52,6 +59,8 @@ const SkillsRadarChart = ({ id, reportType, skillType } : { id: string, reportTy
               />
             </RadarChart>
           </ResponsiveContainer>
+          :
+          <h3>No marks for {reportType}, yet.</h3>
       }
 
     </div>
