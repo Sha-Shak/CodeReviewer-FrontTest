@@ -17,7 +17,7 @@ import {
   Tooltip,
 } from "recharts";
 import CustomRadarTooltip from './Tooltips/CustomRadarTooltip';
-import { Spin } from 'antd';
+import { Select, Spin } from 'antd';
 
 function SkillsReportChart({ id, type }: { id: string, type: 'hard-skills' | 'soft-skills' | 'peer-review' }) {
   const options = type === "soft-skills" ? reports : weeks;
@@ -54,9 +54,12 @@ function SkillsReportChart({ id, type }: { id: string, type: 'hard-skills' | 'so
   return (
     <div className='chart-container'>
       <h2 className="chart-title">{parseName(type)}</h2>
-      <select className="chart-select" onChange={(e) => setSelectedReport(e.target.value)}>
-        {options.map((option, index) => <option key={`${type}-report-option-${index}`} value={option}>{parseName(option)}</option>)}
-      </select>
+      <Select
+        defaultValue={options[0]}
+        options={options.map(value => {return {value, label: parseName(value)}})}
+        onChange={(value) => setSelectedReport(value)}
+        style={{ marginBottom: 20 }}
+      />
 
       <Spin spinning={loading} tip="Fetching data" size="large" >
         <div style={{ width: "100%", height: "200px" }}>

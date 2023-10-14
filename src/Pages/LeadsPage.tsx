@@ -6,6 +6,7 @@ import { IContactList } from "../interfaces/zendesk/contacts/contacts.interface"
 import { IContactMeta } from "../interfaces/zendesk/contacts/contacts.meta.interface";
 import { serverFetch } from "../utils/handleRequest";
 import conf from "../config";
+import { Spin, message } from 'antd';
 
 interface DataType {
   key?: React.Key;
@@ -80,34 +81,49 @@ const DealsPage = () => {
   const [deals, setDeals] = useState<IContactData[]>([]);
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [meta, setMeta] = useState({} as IContactMeta);
-  // const apiUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:3331'
+  const [loading, setLoading] = useState<boolean>(false);
+  const [messageApi, contextHolder] = message.useMessage();
   const url =
     `${conf.API_BASE_URL}/zen/getdata/leads/pending%20pre-screening%20test`;
 
+  const displayErrorMessage = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const data: IContactList = await serverFetch("get", url);
-      const dataProps = data.items.map((element) => element.data);
-      setDeals(dataProps);
+      try {
+        setLoading(true);
+        const data: IContactList = await serverFetch("get", url);
+        const dataProps = data.items.map((element) => element.data);
+        setDeals(dataProps);
 
-      // Convert the data to the table format.
-      const tableData: DataType[] = dataProps.map((el, i) => {
-        return {
-          key: i,
-          firstName: el.first_name,
-          lastName: el.last_name,
-          age: Number(el.custom_fields.Age),
-          gender: el.custom_fields.Gender,
-          prExperience: el.custom_fields["Programming Experience"],
-          email: el.email,
-          status: el.status,
-          location: el.custom_fields.Location,
-          screeningTest: el.custom_fields["Pre-Screening Score"],
-        };
-      });
+        // Convert the data to the table format.
+        const tableData: DataType[] = dataProps.map((el, i) => {
+          return {
+            key: i,
+            firstName: el.first_name,
+            lastName: el.last_name,
+            age: Number(el.custom_fields.Age),
+            gender: el.custom_fields.Gender,
+            prExperience: el.custom_fields["Programming Experience"],
+            email: el.email,
+            status: el.status,
+            location: el.custom_fields.Location,
+            screeningTest: el.custom_fields["Pre-Screening Score"],
+          };
+        });
 
-      setTableData(tableData);
-      setMeta(data.meta);
+        setTableData(tableData);
+        setMeta(data.meta);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        displayErrorMessage('An error occured while fetching leads.');
+      }
     };
 
     fetchData();
@@ -124,11 +140,13 @@ const DealsPage = () => {
 
   return (
     <div className="dealBody">
+      {contextHolder}
       <div className="tableBody">
-
-      <Table columns={columns} dataSource={tableData} onChange={onChange} />
-    </div>
+        <Spin spinning={loading} tip="Fetching leads..." size="large" >
+          <Table columns={columns} dataSource={tableData} onChange={onChange} />
+        </Spin>
       </div>
+    </div>
   );
 };
 

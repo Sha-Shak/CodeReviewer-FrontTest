@@ -6,6 +6,7 @@ import { IDealsDataList } from "../interfaces/zendesk/deals/deals.interface";
 import { IDealsMeta } from "../interfaces/zendesk/deals/deals.meta.interface";
 import { serverFetch } from "../utils/handleRequest";
 import conf from "../config";
+import { Spin, message } from 'antd';
 
 
 interface DataType {
@@ -78,7 +79,7 @@ const columns: ColumnsType<DataType> = [
         value: "false",
       },
     ],
-    onFilter: (value: any, record) => record.converted?.startsWith(value) ?? false ,
+    onFilter: (value: any, record) => record.converted?.startsWith(value) ?? false,
     filterSearch: true,
   },
 ];
@@ -87,33 +88,48 @@ const DealsPage = () => {
   const [deals, setDeals] = useState<IDealsData[]>([]);
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [meta, setMeta] = useState({} as IDealsMeta);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const displayErrorMessage = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
 
   const url = `${conf.API_BASE_URL}/zen/getdata/deals`; //`${apiUrl}/zen/deals`;
 
   useEffect(() => {
-    console.log("mount")
     const fetchData = async () => {
-      const data: IDealsDataList = await serverFetch("get", url);
-      const dataProps = data.items.map((element) => element.data);
-      setDeals(dataProps);
+      try {
+        setLoading(true);
+        const data: IDealsDataList = await serverFetch("get", url);
+        const dataProps = data.items.map((element) => element.data);
+        setDeals(dataProps);
 
-      // Convert the data to the table format.
-      const tableData: DataType[] = dataProps.map((el, i) => {
-        return {
-          key: i,
-          name: el.name,
-          age: Number(el.custom_fields.Age),
-          gender: el.custom_fields.Gender,
-          prExperience: el.custom_fields?.["Programming Experience"],
-          converted: el.custom_fields.Converted,
-          cohortMonth: el.custom_fields?.["Cohort Month"],
-          cohortYear: el.custom_fields?.["Cohort Year"],
-        };
-      });
+        // Convert the data to the table format.
+        const tableData: DataType[] = dataProps.map((el, i) => {
+          return {
+            key: i,
+            name: el.name,
+            age: Number(el.custom_fields.Age),
+            gender: el.custom_fields.Gender,
+            prExperience: el.custom_fields?.["Programming Experience"],
+            converted: el.custom_fields.Converted,
+            cohortMonth: el.custom_fields?.["Cohort Month"],
+            cohortYear: el.custom_fields?.["Cohort Year"],
+          };
+        });
 
-      setTableData(tableData);
-      console.log("from deals ", tableData);
-      setMeta(data.meta);
+        setTableData(tableData);
+        console.log("from deals ", tableData);
+        setMeta(data.meta);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        displayErrorMessage('An error occured while fetching deals.');
+      }
     };
 
     fetchData();
@@ -130,9 +146,11 @@ const DealsPage = () => {
 
   return (
     <div className="dealBody">
-      
+      {contextHolder}
       <div className="tableBody">
-        <Table columns={columns} dataSource={tableData} onChange={onChange} />
+        <Spin spinning={loading} tip="Fetching deals..." size="large" >
+          <Table columns={columns} dataSource={tableData} onChange={onChange} />
+        </Spin>
       </div>
     </div>
   );

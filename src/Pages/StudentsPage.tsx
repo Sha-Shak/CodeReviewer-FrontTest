@@ -10,6 +10,7 @@ import StudentMarksChart from "../Components/Charts/StudentMarksBar";
 import { useNavigate } from "react-router-dom";
 import conf from "../config";
 import { ICohort } from "../interfaces/student/cohort.interface";
+import { Spin, message } from 'antd';
 
 const columns: ColumnsType<IStudent> = [
   {
@@ -44,14 +45,28 @@ const columns: ColumnsType<IStudent> = [
 
 const StudentsPage = () => {
   const url = `${conf.API_BASE_URL}/students/all`;
-  const [students, setStudents] = useState<(IStudent & {cohortInfo: ICohort})[]>([]); // Initialize as an empty array
+  const [messageApi, contextHolder] = message.useMessage();
+  const [students, setStudents] = useState<(IStudent & { cohortInfo: ICohort })[]>([]); // Initialize as an empty array
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const displayErrorMessage = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("hello");
-      const res : (IStudent & {cohortInfo: ICohort})[] = await serverFetch("get", url);
-      setStudents(res);
-      console.log(typeof res);
+      try {
+        setLoading(true);
+        const res: (IStudent & { cohortInfo: ICohort })[] = await serverFetch("get", url);
+        setStudents(res);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        displayErrorMessage('An error occured while fetching students.');
+      }
     };
     fetchData();
   }, []);
@@ -69,18 +84,20 @@ const StudentsPage = () => {
 
   return (
     <>
+      {contextHolder}
       <div className="charts">
         <LineCharts />
         <StudentMarksChart />
         <StudentRadarChart />
       </div>
       <div className="tableBody">
-
-      <Table columns={columns} dataSource={students} onChange={onChange} rowKey='_id' onRow={(record)=>({
-        onClick: ()=>{
-          navigate(`/profile/${record._id}`)
-        }
-      })}  />
+        <Spin spinning={loading} tip="Fetching students..." size="large" >
+          <Table columns={columns} dataSource={students} onChange={onChange} rowKey='_id' onRow={(record) => ({
+            onClick: () => {
+              navigate(`/profile/${record._id}`)
+            }
+          })} />
+        </Spin>
       </div>
     </>
   );
