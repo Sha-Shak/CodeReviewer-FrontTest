@@ -102,7 +102,7 @@ const ProfilePage = () => {
                       <LineChartOutlined /> {student.studentType}
                     </h2>
                   </div>
-                  <PersonalityTagsContainer />
+                  <PersonalityTagsContainer id={student._id}/>
                 </div>
                 <div className="content">
                   <div className="row">
