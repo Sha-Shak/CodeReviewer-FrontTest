@@ -1,4 +1,4 @@
-import { Button, Modal, Radio, RadioChangeEvent, Select, Spin } from "antd"
+import { Button, Modal, Select, Spin } from "antd"
 import { useEffect, useState } from "react";
 import { IPersonalityTag } from "../../interfaces/personality/personalityTag.interface";
 import conf from "../../config";
@@ -13,7 +13,6 @@ function PersonalityTagsContainer({ id }: { id: string }) {
   const [studentTags, setStudentTags] = useState<IPersonalityTagCount[]>([]);
   const [allTags, setAllTags] = useState<IPersonalityTag[]>([]);
   const [instructorTags, setInstructorTags] = useState<IPersonalityTag[]>([]);
-  const [selectedType, setSelectedType] = useState<string>("personality");
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -71,10 +70,6 @@ function PersonalityTagsContainer({ id }: { id: string }) {
     const negativeTags = tags.filter(tag => tag.class === "negative");
 
     return [...positiveTags, ...neutralTags, ...negativeTags];
-  }
-
-  function handleTypeChange(e: RadioChangeEvent) {
-    setSelectedType(e.target.value);
   }
 
   const showModal = () => {
