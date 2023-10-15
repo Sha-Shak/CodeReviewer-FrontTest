@@ -26,7 +26,7 @@
   display: flex;
   justify-content: space-around;
   padding: 1rem 5vw;
-  height: 90vh;
+  height: fit-content;
 }
 
 .profileBody > .leftSideBar,
@@ -56,16 +56,20 @@
   text-align: left;
   padding: 0.5rem;
 }
-.info > h2 {
-  padding: 0.75rem;
+.info > p {
+  padding: 0.5rem;
   font-size: 15px;
   border-bottom: 1px solid lightgray;
+}
+.info > h2 {
+  text-align: center;
 }
 .email {
   white-space: nowrap;
 }
 .name {
   font-weight: bold;
+  font-size:x-large;
 }
 
 .content .row {

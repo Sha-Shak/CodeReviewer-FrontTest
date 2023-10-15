@@ -3,6 +3,7 @@ import {
   LineChartOutlined,
   MailOutlined,
   PhoneOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { Avatar, Button, Result, Spin, message } from "antd";
 import { useParams } from "react-router-dom";
@@ -14,6 +15,7 @@ import conf from "../config";
 import logo from './../assets/new-logo.jpg';
 import SkillsReportChart from "../Components/Charts/SkillsReportChart";
 import PersonalityTagsContainer from "../Components/Personality/PersonalityTagsContainer";
+import { parseName } from "../utils/helper";
 
 
 
@@ -34,6 +36,12 @@ const ProfilePage = () => {
     });
   };
 
+  const displayInfoMessage = (message: string) => {
+    messageApi.open({
+      type: 'info',
+      content: message,
+    });
+  };
 
   useEffect(() => {
     async function fetchStudent() {
@@ -85,22 +93,22 @@ const ProfilePage = () => {
                   />
                   <div className="info">
                     <h2 className="name">{student.name}</h2>
-                    <h2 className="phone">
+                    <p className="phone">
                       <PhoneOutlined /> {"    "}
                       {student.phone}
-                    </h2>
-                    <h2 className="email">
+                    </p>
+                    <p className="email">
                       {" "}
                       <MailOutlined /> {student.email}
-                    </h2>
-                    <h2 className="ghUserName">
+                    </p>
+                    <p className="ghUserName">
                       {" "}
                       <GithubOutlined /> {student.ghUserName}
-                    </h2>
-                    <h2 className="student ">
+                    </p>
+                    <p className="student ">
                       {" "}
-                      <LineChartOutlined /> {student.studentType}
-                    </h2>
+                      <LineChartOutlined /> {parseName(student.studentType)}
+                    </p>
                   </div>
                   <PersonalityTagsContainer id={student._id}/>
                 </div>
@@ -114,7 +122,9 @@ const ProfilePage = () => {
                     <StudentPositionChart id={student._id} />
                   </div>
                 </div>
-                <div className="rightSideBar">Right</div>
+                <div className="rightSideBar">
+                  <Button type="primary" onClick={() => displayInfoMessage('Whoops! This has not been implemented, yet.')}><TeamOutlined />Build team</Button>
+                </div>
               </>
               : student === "" ?
                 <Result

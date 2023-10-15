@@ -80,7 +80,7 @@ function SkillsReportChart({ id, type }: { id: string, type: 'hard-skills' | 'so
               </RadarChart>
             </ResponsiveContainer>
             :
-            <h3>No marks for {selectedReport}, yet.</h3>
+            <p>No marks for {selectedReport}, yet.</p>
           }
         </div>
       </Spin>
