@@ -42,7 +42,7 @@ function PersonalityTagsContainer({ id }: { id: string }) {
   async function fetchInstructorGivenTags() {
     try {
       const url = `${conf.API_BASE_URL}/personality/instructor/${id}`;
-      const tags : IPersonalityTag[] = await serverFetch("get", url);
+      const tags: IPersonalityTag[] = await serverFetch("get", url);
       setInstructorTags(tags);
     } catch (error) {
       console.log(error);
@@ -80,7 +80,7 @@ function PersonalityTagsContainer({ id }: { id: string }) {
   const handleOk = async () => {
     try {
       setIsModalOpen(false);
-      const body = {reviewerType: "instructor", tags: selectedTags};
+      const body = { reviewerType: "instructor", tags: selectedTags };
       const url = `${conf.API_BASE_URL}/personality/instructor/${id}`;
       await serverFetch('post', url, body);
       await fetchStudentTags();
@@ -104,8 +104,8 @@ function PersonalityTagsContainer({ id }: { id: string }) {
         {studentTags.map(tag => <PersonalityTag key={`personality-${tag.name}`} tag={tag} />)}
       </div>
       <Button type="primary" onClick={showModal} size="large" icon={<PlusOutlined />}>Add tags</Button>
-      <Spin spinning={modalLoading} tip="Fetching personality tags...">
-        <Modal title="Add Tags" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="Add Tags" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Spin spinning={modalLoading} tip="Fetching personality tags...">
           <Select
             mode="tags"
             size="middle"
@@ -115,8 +115,8 @@ function PersonalityTagsContainer({ id }: { id: string }) {
             defaultValue={instructorTags.map(tag => tag._id)}
             options={allTags.map((tag) => ({ label: parseName(tag.name), value: tag._id }))}
           />
-        </Modal>
-      </Spin>
+        </Spin>
+      </Modal>
     </Spin>
   )
 }
