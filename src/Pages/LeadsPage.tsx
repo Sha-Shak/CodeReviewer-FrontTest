@@ -19,11 +19,18 @@ interface DataType {
   prExperience?: string;
 }
 
+const customPaginationConfig = {
+  showSizeChanger: false, // Hide page size changer
+  showQuickJumper: false, // Hide quick jumper
+  showTotal: () => "", // Hide the total count
+  // You can customize other pagination options as needed
+};
+
 const DealsPage = () => {
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [searchedText, setSearchedText] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [pageNumber, setPageNumber] = useState<number>(1); // Track the current page number
+  const [pageNumber, setPageNumber] = useState<number>(1); //? for future if needed: Track the current page number
   const [messageApi, contextHolder] = message.useMessage();
   const [fetchedPages, setFetchedPages] = useState<number[]>([]); // Keep track of fetched pages
 
@@ -35,82 +42,82 @@ const DealsPage = () => {
       content: message,
     });
   };
-     const columns: ColumnsType<DataType> = [
-       {
-         title: "First Name",
-         dataIndex: "firstName",
-         width: "20%",
-       },
-       {
-         title: "Last Name",
-         dataIndex: "lastName",
-         width: "20%",
-         filteredValue: [searchedText],
-         onFilter: (value: any, record) =>
-           String(record.firstName)
-             .toLowerCase()
-             ?.includes(value.toLowerCase()),
-       },
-       {
-         title: "Email",
-         dataIndex: "email",
-         width: "30%",
-       },
-       {
-         title: "status",
-         dataIndex: "status",
-         width: "30%",
-       },
-       {
-         title: "Age",
-         dataIndex: "age",
-         sorter: (a, b) => {
-           const ageA = a.age ? Number(a.age) : 0;
-           const ageB = b.age ? Number(b.age) : 0;
-           return ageA - ageB;
-         },
-       },
-       {
-         title: "Location",
-         dataIndex: "Location",
-       },
-       {
-         title: "Gender",
-         dataIndex: "gender",
-         filters: [
-           {
-             text: "Male",
-             value: "male",
-           },
-           {
-             text: "Female",
-             value: "female",
-           },
-         ],
-         onFilter: (value: any, record) =>
-           record.gender?.startsWith(value) ?? false,
-         filterSearch: true,
-       },
-       {
-         title: "Coder Byte",
-         dataIndex: "screeningTest",
-         width: "20%",
-       },
-     ];
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "First Name",
+      dataIndex: "firstName",
+
+      filteredValue: [searchedText],
+      onFilter: (value: any, record) =>
+        String(record.firstName).toLowerCase()?.includes(value.toLowerCase()),
+    },
+
+    {
+      title: "Last Name",
+      dataIndex: "lastName",
+
+      filteredValue: [searchedText],
+      onFilter: (value: any, record) =>
+        String(record.firstName).toLowerCase()?.includes(value.toLowerCase()),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      width: "20%",
+    },
+    {
+      title: "status",
+      dataIndex: "status",
+      width: "20%",
+    },
+    {
+      title: "Age",
+      dataIndex: "age",
+      sorter: (a, b) => {
+        const ageA = a.age ? Number(a.age) : 0;
+        const ageB = b.age ? Number(b.age) : 0;
+        return ageA - ageB;
+      },
+    },
+    {
+      title: "Location",
+      dataIndex: "Location",
+    },
+    {
+      title: "Gender",
+      dataIndex: "gender",
+      filters: [
+        {
+          text: "Male",
+          value: "male",
+        },
+        {
+          text: "Female",
+          value: "female",
+        },
+      ],
+      onFilter: (value: any, record) =>
+        record.gender?.startsWith(value) ?? false,
+      filterSearch: true,
+    },
+    {
+      title: "Coder Byte",
+      dataIndex: "screeningTest",
+      width: "20%",
+    },
+  ];
   const fetchData = async (page: number) => {
     try {
       setLoading(true);
       if (page) {
         url = `${conf.API_BASE_URL}/zen/getdata/leads/pending%20pre-screening%20test?page=${page}&pageSize=25`;
         setPageNumber(page); // Update the current page number
-        setFetchedPages([...fetchedPages, page])
+        setFetchedPages([...fetchedPages, page]);
       }
       console.log("Fetching data for page", page);
 
       const data: IContactList = await serverFetch("get", url);
       const dataProps = data.items.map((element) => element.data);
-
-   
 
       // Convert the data to the table format.
       const tableData: DataType[] = dataProps.map((el, i) => {
@@ -165,7 +172,7 @@ const DealsPage = () => {
       <div className="tableBody">
         <Input.Search
           placeholder="Search here..."
-          style={{ marginBottom: 9 }}
+          style={{ marginBottom: 9, width: "20%" }}
           onSearch={(value) => setSearchedText(value)}
         />
         {contextHolder}
@@ -174,6 +181,7 @@ const DealsPage = () => {
           columns={columns}
           dataSource={tableData}
           onChange={onChange}
+          pagination={customPaginationConfig}
         />
       </div>
     </div>

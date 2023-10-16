@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Input, Table } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { IContactData } from "../interfaces/zendesk/contacts/contacts.data.interface";
@@ -20,70 +20,7 @@ interface DataType {
   prExperience?: string;
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    width: "30%",
-  },
-  {
-    title: "Cohort Month",
-    dataIndex: "cohortMonth",
-    width: "20%",
-  },
-  {
-    title: "Cohort Year",
-    dataIndex: "cohortYear",
-    width: "20%",
-  },
-  {
-    title: "Programming Experinece",
-    dataIndex: "prExperience",
-    width: "30%",
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    sorter: (a, b) => {
-      const ageA = a.age ? Number(a.age) : 0;
-      const ageB = b.age ? Number(b.age) : 0;
-      return ageA - ageB;
-    },
-  },
-  {
-    title: "Gender",
-    dataIndex: "gender",
-    filters: [
-      {
-        text: "Male",
-        value: "male",
-      },
-      {
-        text: "Female",
-        value: "female",
-      },
-    ],
-    onFilter: (value: any, record) => record.gender?.startsWith(value) ?? false,
-    filterSearch: true,
-  },
-  {
-    title: "Converted",
-    dataIndex: "converted",
-    filters: [
-      {
-        text: "True",
-        value: "true",
-      },
-      {
-        text: "False",
-        value: "false",
-      },
-    ],
-    onFilter: (value: any, record) =>
-      record.converted?.startsWith(value) ?? false,
-    filterSearch: true,
-  },
-];
+
 
 const DealsPage = () => {
   const [tableData, setTableData] = useState<DataType[]>([]);
@@ -92,6 +29,7 @@ const DealsPage = () => {
   const [messageApi, contextHolder] = message.useMessage();
   let url = `${conf.API_BASE_URL}/zen/getdata/deals`;
   const [fetchedPages, setFetchedPages] = useState<number[]>([]); // Keep track of fetched pages
+   const [searchedText, setSearchedText] = useState("");
 
   const displayErrorMessage = (message: string) => {
     messageApi.open({
@@ -99,6 +37,75 @@ const DealsPage = () => {
       content: message,
     });
   };
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      filteredValue: [searchedText],
+      onFilter: (value: any, record) =>
+        String(record.name).toLowerCase()?.includes(value.toLowerCase()),
+    },
+    {
+      title: "Cohort Month",
+      dataIndex: "cohortMonth",
+      onFilter: (value: any, record) =>
+        String(record.name).toLowerCase()?.includes(value.toLowerCase()),
+    },
+    {
+      title: "Cohort Year",
+      dataIndex: "cohortYear",
+      width: "20%",
+    },
+    {
+      title: "Programming Experinece",
+      dataIndex: "prExperience",
+      width: "30%",
+    },
+    {
+      title: "Age",
+      dataIndex: "age",
+      sorter: (a, b) => {
+        const ageA = a.age ? Number(a.age) : 0;
+        const ageB = b.age ? Number(b.age) : 0;
+        return ageA - ageB;
+      },
+    },
+    {
+      title: "Gender",
+      dataIndex: "gender",
+      filters: [
+        {
+          text: "Male",
+          value: "male",
+        },
+        {
+          text: "Female",
+          value: "female",
+        },
+      ],
+      onFilter: (value: any, record) =>
+        record.gender?.startsWith(value) ?? false,
+      filterSearch: true,
+    },
+    {
+      title: "Converted",
+      dataIndex: "converted",
+      filters: [
+        {
+          text: "True",
+          value: "true",
+        },
+        {
+          text: "False",
+          value: "false",
+        },
+      ],
+      onFilter: (value: any, record) =>
+        record.converted?.startsWith(value) ?? false,
+      filterSearch: true,
+    },
+  ];
 
   const fetchData = async (page: number) => {
     try {
@@ -150,7 +157,7 @@ const DealsPage = () => {
   ) => {
     if (pagination.current) {
       if (!fetchedPages.includes(pagination.current)) {
-       // fetchData(pagination.current);
+       fetchData(pagination.current);
       }
     }
   };
@@ -159,9 +166,17 @@ const DealsPage = () => {
     <div className="dealBody">
       {contextHolder}
       <div className="tableBody">
-        <Spin key={1} spinning={loading} tip="Fetching leads..." size="large">
-          <Table columns={columns} dataSource={tableData} onChange={onChange} />
-        </Spin>
+        <Input.Search
+          placeholder="Search here..."
+          style={{ marginBottom: 10, width:"20%"}}
+          onSearch={(value) => setSearchedText(value)}
+        />
+        <Table
+          loading={loading}
+          columns={columns}
+          dataSource={tableData}
+          onChange={onChange}
+        />
       </div>
     </div>
   );
