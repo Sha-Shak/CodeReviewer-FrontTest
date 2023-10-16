@@ -1,5 +1,6 @@
 import {
   GithubOutlined,
+  NumberOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
@@ -28,6 +29,11 @@ const items: MenuProps["items"] = [
     label: <Link to="/students">Students</Link>,
     key: "students",
     icon: <TeamOutlined />,
+  },
+  {
+    label: <Link to="/softskills">Marking</Link>,
+    key: "marks",
+    icon: <NumberOutlined /> ,
   },
   {
     label: (

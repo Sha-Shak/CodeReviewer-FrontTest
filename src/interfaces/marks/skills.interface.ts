@@ -1,5 +1,6 @@
 export interface ISkills {
   name: string;
   type: string;
-  examType: string;
+  propertyName: string;
+  question: string;
 }
