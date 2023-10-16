@@ -1,13 +1,13 @@
 import { Table } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { IDealsData } from "../interfaces/zendesk/deals/deals.data.interface";
-import { IDealsDataList } from "../interfaces/zendesk/deals/deals.interface";
-import { IDealsMeta } from "../interfaces/zendesk/deals/deals.meta.interface";
+import { IContactData } from "../interfaces/zendesk/contacts/contacts.data.interface";
+import { IContactList } from "../interfaces/zendesk/contacts/contacts.interface";
+import { IContactMeta } from "../interfaces/zendesk/contacts/contacts.meta.interface";
 import { serverFetch } from "../utils/handleRequest";
 import conf from "../config";
-import { Spin, message } from 'antd';
-
+import { Spin, message } from "antd";
+import { IDealsDataList } from "../interfaces/zendesk/deals/deals.interface";
 
 interface DataType {
   key?: React.Key;
@@ -79,60 +79,67 @@ const columns: ColumnsType<DataType> = [
         value: "false",
       },
     ],
-    onFilter: (value: any, record) => record.converted?.startsWith(value) ?? false,
+    onFilter: (value: any, record) =>
+      record.converted?.startsWith(value) ?? false,
     filterSearch: true,
   },
 ];
 
 const DealsPage = () => {
-  const [deals, setDeals] = useState<IDealsData[]>([]);
   const [tableData, setTableData] = useState<DataType[]>([]);
-  const [meta, setMeta] = useState({} as IDealsMeta);
+  const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
+  let url = `${conf.API_BASE_URL}/zen/getdata/deals`;
+  const [fetchedPages, setFetchedPages] = useState<number[]>([]); // Keep track of fetched pages
 
   const displayErrorMessage = (message: string) => {
     messageApi.open({
-      type: 'error',
+      type: "error",
       content: message,
     });
   };
 
-  const url = `${conf.API_BASE_URL}/zen/getdata/deals`; //`${apiUrl}/zen/deals`;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
+  const fetchData = async (page: number) => {
+    try {
+      setLoading(true);
         setLoading(true);
+        if (page) {
+          url = `${conf.API_BASE_URL}/zen/getdata/deals?page=${page}&pageSize=25`;
+          setPageNumber(page); // Update the current page number
+          setFetchedPages([...fetchedPages, page]);
+        }
         const data: IDealsDataList = await serverFetch("get", url);
         const dataProps = data.items.map((element) => element.data);
-        setDeals(dataProps);
 
-        // Convert the data to the table format.
-        const tableData: DataType[] = dataProps.map((el, i) => {
-          return {
-            key: i,
-            name: el.name,
-            age: Number(el.custom_fields.Age),
-            gender: el.custom_fields.Gender,
-            prExperience: el.custom_fields?.["Programming Experience"],
-            converted: el.custom_fields.Converted,
-            cohortMonth: el.custom_fields?.["Cohort Month"],
-            cohortYear: el.custom_fields?.["Cohort Year"],
-          };
-        });
+      const tableData: DataType[] = dataProps.map((el, i) => {
+        return {
+          key: i,
+          name: el.name,
+          age: Number(el.custom_fields.Age),
+          gender: el.custom_fields.Gender,
+          prExperience: el.custom_fields?.["Programming Experience"],
+          converted: el.custom_fields.Converted,
+          cohortMonth: el.custom_fields?.["Cohort Month"],
+          cohortYear: el.custom_fields?.["Cohort Year"],
+        };
+      });
 
-        setTableData(tableData);
-        console.log("from deals ", tableData);
-        setMeta(data.meta);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        displayErrorMessage('An error occured while fetching deals.');
-      }
-    };
+     
+       if (!fetchedPages.includes(page)) {
+         // Append new data to tableData if it's not already fetched
+         setTableData((prevData) => [...prevData, ...tableData]);
+         setFetchedPages([...fetchedPages, page]);
+       }
 
-    fetchData();
+       setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      displayErrorMessage("An error occured while fetching leads.");
+    }
+  };
+  useEffect(() => {
+    fetchData(1);
   }, []);
 
   const onChange: TableProps<DataType>["onChange"] = (
@@ -141,14 +148,18 @@ const DealsPage = () => {
     sorter,
     extra
   ) => {
-    console.log("params", pagination, filters, sorter, extra);
+    if (pagination.current) {
+      if (!fetchedPages.includes(pagination.current)) {
+       // fetchData(pagination.current);
+      }
+    }
   };
 
   return (
     <div className="dealBody">
       {contextHolder}
       <div className="tableBody">
-        <Spin spinning={loading} tip="Fetching deals..." size="large" >
+        <Spin key={1} spinning={loading} tip="Fetching leads..." size="large">
           <Table columns={columns} dataSource={tableData} onChange={onChange} />
         </Spin>
       </div>
