@@ -8,12 +8,8 @@ import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-// import logo from '../assets/old-logo.png'
-
-// const logo = <img src="../assets/old-logo.png" alt="1Logo" />;
 
 const items: MenuProps["items"] = [
-  // { key: "logo", label: <img src="../assets/old-logo.png" alt="1Logo" /> },
   {
     label: <Link to="/leads">Leads</Link>,
     key: "leads",
@@ -33,7 +29,7 @@ const items: MenuProps["items"] = [
   {
     label: <Link to="/softskills">Marking</Link>,
     key: "marks",
-    icon: <NumberOutlined /> ,
+    icon: <NumberOutlined />,
   },
   {
     label: (
@@ -50,7 +46,7 @@ const items: MenuProps["items"] = [
   },
 ];
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const [current, setCurrent] = useState("deals");
 
   const onClick: MenuProps["onClick"] = (e) => {
@@ -77,7 +73,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-
-
-
-

@@ -1,12 +1,12 @@
 import DealsPage from "./Pages/DealsPage";
 
+import { ConfigProvider } from "antd";
 import { Route, Routes } from "react-router-dom";
 import LeadsPage from "./Pages/LeadsPage";
-import SlatePage from "./Pages/SlatePage";
-import StudentsPage from "./Pages/StudentsPage";
 import ProfilePage from "./Pages/ProfilePage";
-import { ConfigProvider } from "antd";
+import SlatePage from "./Pages/SlatePage";
 import SoftSkillsPage from "./Pages/SoftSkillsPage";
+import StudentsPage from "./Pages/StudentsPage";
 
 const App = () => (
   <>
@@ -33,9 +33,9 @@ const App = () => (
         <Route path="/" element={<SlatePage />}>
           <Route path="deals" element={<DealsPage />} />
           <Route path="leads" element={<LeadsPage />} />
-          <Route path="students" element={<StudentsPage />}/>
-          <Route path="profile/:id" element={<ProfilePage />}/>
-          <Route path="softskills" element={<SoftSkillsPage />}/>
+          <Route path="students" element={<StudentsPage />} />
+          <Route path="profile/:id" element={<ProfilePage />} />
+          <Route path="softskills" element={<SoftSkillsPage />} />
         </Route>
       </Routes>
     </ConfigProvider>
