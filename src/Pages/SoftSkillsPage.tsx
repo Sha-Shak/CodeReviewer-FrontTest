@@ -1,6 +1,7 @@
 import { Popover, Steps } from "antd";
 import { useEffect, useState } from "react";
 import conf from "../config";
+
 import useFetchData from "../hooks/useFetchData";
 import { ISkills } from "../interfaces/marks/skills.interface";
 import { ICohort } from "../interfaces/student/cohort.interface";
@@ -54,20 +55,22 @@ const SoftSkillsPage = () => {
 
   return (
     <>
-      {contextHolderCohorts}
-      {contextHolderSkills}
-      {contextHolderStundets}
-      {}
       {Array.isArray(cohorts) &&
         cohorts.map((el, i) => {
           return <i key={i}>{el.name}</i>;
         })}
-
+      <br />
       {Array.isArray(stundets) &&
         stundets.map((el, i) => {
           return <i key={i}>{el.name}</i>;
         })}
-      <Steps current={1} progressDot={customDot} items={[...skillArray]} />
+      <Steps
+        current={1}
+        progressDot={customDot}
+        items={
+          Array.isArray(skills) ? skills.map((el) => ({ title: el.name })) : []
+        }
+      />
     </>
   );
 };
