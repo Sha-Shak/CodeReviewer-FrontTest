@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container {
+  padding-top: 2rem;
+  margin: 0 auto;
+  width: 70vw !important;
+}
+
+.tableBody {
+  margin: 0 auto;
+  width: 80%;
+}
+.charts {
+  display: flex;
+  padding: 2rem 0;
+  justify-content: center;
+}
+.dealBody {
+  height: 100vh;
+}
+
+/*PROFILE */
+.profileBody {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem 5vw;
+  height: fit-content;
+}
+
+.profileBody > .leftSideBar,
+.rightSideBar,
+.content {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid lightgray;
+  margin: 0 0.5rem;
+  border-radius: 7px;
+}
+
+.leftSideBar {
+  flex: 0.3;
+  border: 1px solid lightgray;
+}
+.rightSideBar {
+  flex: 0.2;
+  border: 1px solid lightgray;
+}
+.content {
+  flex: 1;
+  height: 100%;
+}
+
+.info {
+  text-align: left;
+  padding: 0.5rem;
+}
+.info > p {
+  padding: 0.5rem;
+  font-size: 15px;
+  border-bottom: 1px solid lightgray;
+}
+.info > h2 {
+  text-align: center;
+}
+.email {
+  white-space: nowrap;
+}
+.name {
+  font-weight: bold;
+  font-size:x-large;
+}
+
+.content .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: space-between;
+}
+
+
+/* Scatter tooltip */
+.custom-tooltip {
+  background: rgba( 255, 255, 255, 0.40 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 10.5px );
+  -webkit-backdrop-filter: blur( 10.5px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  padding: 5px;
+}
+
+.label {
+  font-weight: 600;
+  font-size: small;
+}
+
+.data {
+  font-size: small;
+}
+
+.chart-container {
+  width: 50%;
+  margin: 10px 5px;
+}
+
+.chart-title {
+  font-size: large;
+  font-weight: 600;
+  margin: 10px;
+}
+
+.chart-select {
+  border: solid rgb(172, 172, 172) 1px;
+  padding: 2px;
+  border-radius: 5px;
+  margin: 0 5px 10px;
+}
+
+.tags-container {
+  display: block;
+  margin-bottom: 10px;
+}
