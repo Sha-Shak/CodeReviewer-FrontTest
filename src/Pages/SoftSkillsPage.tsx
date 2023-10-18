@@ -25,10 +25,13 @@ const SoftSkillsPage = () => {
   const url = conf.API_BASE_URL;
   const cohortUrl = url + "/cohort";
   const softSkillUrl = url + `/skill/soft-skill`;
+  const [message, setMessage] = useState("");
+  const notify = (message: string) => setMessage(message);
 
   const [cohorts, setCohorts, contextHolderCohorts] = useFetchData<ICohort[]>(
     cohortUrl,
-    "Cohorts"
+    "Cohorts",
+    notify
   );
   const dummyCohort = {
     _id: "651938516853000980439b1a",
@@ -38,12 +41,19 @@ const SoftSkillsPage = () => {
   const [selectedCohort, setSelectedCohort] = useState<ICohort>(dummyCohort);
   const cohortId = selectedCohort._id;
   const studentUrl = url + `/students/StudentByCohort/${cohortId}`;
+  
+   const [softSkills, setSoftSkills] = useFetchData<ISkills[]>(
+     softSkillUrl,
+     "skills",
+     notify
+   );
   const [students, setStudents, contextHolderStudents] = useFetchData<
     IStudent[]
-  >(studentUrl, "students");
+  >(studentUrl, "students", notify);
   const [skills, setSkills, contextHolderSkills] = useFetchData<ISkills[]>(
     softSkillUrl,
-    "skills"
+    "skills",
+    notify
   );
 
   const [currentStep, setCurrentStep] = useState(0);

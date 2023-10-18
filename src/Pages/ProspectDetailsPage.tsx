@@ -19,15 +19,21 @@ const ProspectDetailsPage = () => {
     conf.API_BASE_URL + `/prospect/soft-skills/add/interview/${id}`;
   const [ratings, setRatings] = useState<SkillRatings>({});
   const softSkillUrl = conf.API_BASE_URL + `/skill/soft-skill`;
+  const [message, setMessage] = useState<string | null>(null);
+  const notify = (message: string)=> setMessage(message)
   const [softSkills, setSoftSkills] = useFetchData<ISkills[]>(
     softSkillUrl,
-    "skills"
+    "skills", notify
   );
   const [education, setEducation] = useState("");
+  const [experience, setExperience] = useState("");
   const [description, setDescription] = useState("");
-  const handleSelectChange = (value: string) => {
+  const handleEducationChange = (value: string) => {
     setEducation(value);
   };
+   const handleExperienceChange = (value: string) => {
+     setExperience(value);
+   };
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -50,8 +56,10 @@ const ProspectDetailsPage = () => {
       skills: skillMarks,
       education: education,
       notes: description,
+      experience: experience
     };
     console.log("final data", data);
+    //! HUGE PERFORMANCE ISSUE
     serverFetch("post", submitMarkUrl, data);
   };
 
@@ -86,7 +94,7 @@ const ProspectDetailsPage = () => {
                 <Select
                   value={education}
                   style={{ width: "100%" }}
-                  onChange={handleSelectChange}
+                  onChange={handleEducationChange}
                 >
                   <Option value="High School">High School</Option>
                   <Option value="University">University</Option>
@@ -97,24 +105,45 @@ const ProspectDetailsPage = () => {
             </Col>
             <Col span={12}>
               <Form.Item
-                className="h3-label"
-                label="Interview Notes"
-                name="description"
+                label="Experience Level"
+                name="experience"
                 rules={[
                   {
-                    max: 1000,
-                    message: "Notes cannot exceed 1000 characters",
+                    required: true,
+                    message: "Please select an experience level",
                   },
                 ]}
               >
-                <Input.TextArea
-                  className="h3-label"
-                  value={description}
-                  onChange={handleDescriptionChange}
-                />
+                <Select
+                  value={experience}
+                  style={{ width: "100%" }}
+                  onChange={handleExperienceChange}
+                >
+                  <Option value="1">Less than 1 year</Option>
+                  <Option value="2">1-2 years</Option>
+                  <Option value="3">3-5 years</Option>
+                  <Option value="4">5 years+</Option>
+                </Select>
               </Form.Item>
             </Col>
           </Row>
+          <Form.Item
+            className="h3-label"
+            label="Interview Notes"
+            name="description"
+            rules={[
+              {
+                max: 1000,
+                message: "Notes cannot exceed 1000 characters",
+              },
+            ]}
+          >
+            <Input.TextArea
+              className="h3-label"
+              value={description}
+              onChange={handleDescriptionChange}
+            />
+          </Form.Item>
 
           <Form.Item style={{ textAlign: "center" }}>
             <Button type="primary" htmlType="submit">

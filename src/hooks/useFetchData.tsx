@@ -2,11 +2,12 @@ import { message } from "antd";
 import React, { useEffect, useState } from "react";
 import { serverFetch } from "../utils/handleRequest";
 
-const useFetchData = <T,>(url: string, dataType: string) => {
+const useFetchData = <T,>(url: string, dataType: string, notify : (message: string)=> void) => {
   const [data, setData] = useState<T | null>(null);
   const [messageApi, contextHolder] = message.useMessage();
 
   const displayErrorMessage = (message: string) => {
+    notify(message)
     messageApi.error(message);
   };
 
