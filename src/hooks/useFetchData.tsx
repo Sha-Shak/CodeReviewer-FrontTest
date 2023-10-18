@@ -2,9 +2,11 @@ import { message } from "antd";
 import React, { useEffect, useState } from "react";
 import { serverFetch } from "../utils/handleRequest";
 
-const useFetchData = <T,>(url: string, dataType: string, notify : (message: string)=> void) => {
+const useFetchData = <T,>(url: string, dataType: string, notify : (message: string)=> void, handleLoader: (data: any)=> void) => {
   const [data, setData] = useState<T | null>(null);
   const [messageApi, contextHolder] = message.useMessage();
+
+  
 
   const displayErrorMessage = (message: string) => {
     notify(message)
@@ -15,6 +17,7 @@ const useFetchData = <T,>(url: string, dataType: string, notify : (message: stri
     try {
       const result = await serverFetch("get", url) as T;
       setData(result);
+      if(result) handleLoader(false);
     } catch (error) {
       displayErrorMessage(`Error while fetching ${dataType}`);
     }
