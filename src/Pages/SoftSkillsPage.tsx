@@ -1,7 +1,6 @@
-import { Popover, Steps } from "antd";
+import { Popover, Steps, Slider, Button } from "antd";
 import { useEffect, useState } from "react";
 import conf from "../config";
-
 import useFetchData from "../hooks/useFetchData";
 import { ISkills } from "../interfaces/marks/skills.interface";
 import { ICohort } from "../interfaces/student/cohort.interface";
@@ -21,6 +20,7 @@ const customDot = (
     {dot}
   </Popover>
 );
+
 const SoftSkillsPage = () => {
   const url = conf.API_BASE_URL;
   const cohortUrl = url + "/cohort";
@@ -38,7 +38,7 @@ const SoftSkillsPage = () => {
   const [selectedCohort, setSelectedCohort] = useState<ICohort>(dummyCohort);
   const cohortId = selectedCohort._id;
   const studentUrl = url + `/students/StudentByCohort/${cohortId}`;
-  const [stundets, setStudents, contextHolderStundets] = useFetchData<
+  const [students, setStudents, contextHolderStudents] = useFetchData<
     IStudent[]
   >(studentUrl, "students");
   const [skills, setSkills, contextHolderSkills] = useFetchData<ISkills[]>(
@@ -46,31 +46,70 @@ const SoftSkillsPage = () => {
     "skills"
   );
 
-  let skillArray: { title: string }[] = [];
+  const [currentStep, setCurrentStep] = useState(0);
+  const [studentScores, setStudentScores] = useState<number[]>([]);
+
   useEffect(() => {
-    if (Array.isArray(skills))
-      skillArray = skills.map((el) => ({ title: el.question }));
-    console.log("first", skillArray);
-  }, []);
+    if (Array.isArray(students)) {
+      setStudentScores(Array(students.length).fill(5));
+    }
+  }, [students]);
+
+  const handleNextStep = () => {
+    if (Array.isArray(students) && currentStep < students.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevStep = () => {
+    if (Array.isArray(students) && currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
   return (
     <>
-      {Array.isArray(cohorts) &&
-        cohorts.map((el, i) => {
-          return <i key={i}>{el.name}</i>;
-        })}
-      <br />
-      {Array.isArray(stundets) &&
-        stundets.map((el, i) => {
-          return <i key={i}>{el.name}</i>;
-        })}
       <Steps
-        current={1}
+        current={currentStep}
         progressDot={customDot}
         items={
           Array.isArray(skills) ? skills.map((el) => ({ title: el.name })) : []
         }
       />
+      <div>
+        <h3>Step {currentStep + 1}</h3>
+        <div>
+          {Array.isArray(students) &&
+            students.map((student, index) => (
+              <div key={student._id}>
+                <h4>{student.name}</h4>
+                <Slider
+                  value={studentScores[index]}
+                  onChange={(value) => {
+                    if (Array.isArray(students)) {
+                      const newStudentScores = [...studentScores];
+                      newStudentScores[index] = value;
+                      setStudentScores(newStudentScores);
+                    }
+                  }}
+                  min={1}
+                  max={10}
+                />
+              </div>
+            ))}
+        </div>
+        <Button onClick={handlePrevStep} disabled={currentStep === 0}>
+          Previous
+        </Button>
+        <Button
+          onClick={handleNextStep}
+          disabled={
+            Array.isArray(students) && currentStep === students.length - 1
+          }
+        >
+          Next
+        </Button>
+      </div>
     </>
   );
 };

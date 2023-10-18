@@ -1,7 +1,6 @@
-import { Types } from 'mongoose';
 import { ISingleSkillMark } from './singleSkillMark.interface';
 export interface ISoftSkillMarks {
-  studentId: Types.ObjectId;
+  studentId: string;
   skills: ISingleSkillMark[];
   report: string;
   timestamp: Date;

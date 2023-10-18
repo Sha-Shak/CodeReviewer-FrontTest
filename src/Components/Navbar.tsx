@@ -16,6 +16,11 @@ const items: MenuProps["items"] = [
     icon: <UsergroupAddOutlined />,
   },
   {
+    label: <Link to="/prospects">Prospects</Link>,
+    key: "prospects",
+    icon: <UsergroupAddOutlined />,
+  },
+  {
     label: <Link to="/deals">Deals</Link>,
     key: "deals",
     icon: <UsergroupAddOutlined />,

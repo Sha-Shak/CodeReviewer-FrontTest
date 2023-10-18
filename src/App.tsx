@@ -7,6 +7,8 @@ import ProfilePage from "./Pages/ProfilePage";
 import SlatePage from "./Pages/SlatePage";
 import SoftSkillsPage from "./Pages/SoftSkillsPage";
 import StudentsPage from "./Pages/StudentsPage";
+import ProspectPage from "./Pages/ProspectPage";
+import ProspectDetailsPage from "./Pages/ProspectDetailsPage";
 
 const App = () => (
   <>
@@ -36,6 +38,8 @@ const App = () => (
           <Route path="students" element={<StudentsPage />} />
           <Route path="profile/:id" element={<ProfilePage />} />
           <Route path="softskills" element={<SoftSkillsPage />} />
+          <Route path="prospects" element={<ProspectPage />} />
+          <Route path="prospect/:id" element={<ProspectDetailsPage />} />
         </Route>
       </Routes>
     </ConfigProvider>

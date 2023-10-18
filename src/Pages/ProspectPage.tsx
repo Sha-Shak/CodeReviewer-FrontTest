@@ -1,22 +1,17 @@
 import { Input, Table, message } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import conf from "../config";
-import { IContactList } from "../interfaces/zendesk/contacts/contacts.interface";
+import { IProspect } from "../interfaces/prospects/prospects.interface";
 import { serverFetch } from "../utils/handleRequest";
 
 interface DataType {
   key?: React.Key;
-  firstName: string;
+  _id?: string
+  firstName?: string;
   lastName?: string;
   email?: string;
-  status?: string;
-  age?: number;
-  gender?: string;
-  location?: string;
-  screeningTest?: string;
-  converted?: string;
-  prExperience?: string;
 }
 
 const customPaginationConfig = {
@@ -30,10 +25,8 @@ const DealsPage = () => {
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [searchedText, setSearchedText] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [pageNumber, setPageNumber] = useState<number>(1); //? for future if needed: Track the current page number
   const [messageApi, contextHolder] = message.useMessage();
-  const [fetchedPages, setFetchedPages] = useState<number[]>([]); // Keep track of fetched pages
-
+  const navigate = useNavigate()
   let url = `${conf.API_BASE_URL}/zen/getdata/leads/pending%20pre-screening%20test`;
 
   const displayErrorMessage = (message: string) => {
@@ -65,82 +58,29 @@ const DealsPage = () => {
       dataIndex: "email",
       width: "20%",
     },
-    {
-      title: "status",
-      dataIndex: "status",
-      width: "20%",
-    },
-    {
-      title: "Age",
-      dataIndex: "age",
-      sorter: (a, b) => {
-        const ageA = a.age ? Number(a.age) : 0;
-        const ageB = b.age ? Number(b.age) : 0;
-        return ageA - ageB;
-      },
-    },
-    {
-      title: "Location",
-      dataIndex: "Location",
-    },
-    {
-      title: "Gender",
-      dataIndex: "gender",
-      filters: [
-        {
-          text: "Male",
-          value: "male",
-        },
-        {
-          text: "Female",
-          value: "female",
-        },
-      ],
-      onFilter: (value: any, record) =>
-        record.gender?.startsWith(value) ?? false,
-      filterSearch: true,
-    },
-    {
-      title: "Coder Byte",
-      dataIndex: "screeningTest",
-      width: "20%",
-    },
+    
   ];
-  const fetchData = async (page: number) => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-      if (page) {
-        url = `${conf.API_BASE_URL}/zen/getdata/leads/passed%20pre-screening?page=${page}&pageSize=25`;
-        setPageNumber(page); // Update the current page number
-        setFetchedPages([...fetchedPages, page]);
-      }
-      console.log("Fetching data for page", page);
-
-      const data: IContactList = await serverFetch("get", url);
-      const dataProps = data.items.map((element) => element.data);
+      
+      url = `${conf.API_BASE_URL}/prospect/all`;
+      const data: IProspect[] = await serverFetch("get", url);
+     
 
       // Convert the data to the table format.
-      const tableData: DataType[] = dataProps.map((el, i) => {
+      const list: DataType[] = data.map((el, i) => {
         return {
           key: i,
+          _id: el._id,
           firstName: el.first_name,
           lastName: el.last_name,
-          age: Number(el.custom_fields.Age),
-          gender: el.custom_fields.Gender,
-          prExperience: el.custom_fields["Programming Experience"],
           email: el.email,
-          status: el.status,
-          location: el.custom_fields.Location,
-          screeningTest: el.custom_fields["Pre-Screening Score"],
+          
         };
       });
 
-      if (!fetchedPages.includes(page)) {
-        // Append new data to tableData if it's not already fetched
-        setTableData((prevData) => [...prevData, ...tableData]);
-        setFetchedPages([...fetchedPages, page]);
-      }
-
+      setTableData(list)
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -149,7 +89,7 @@ const DealsPage = () => {
   };
 
   useEffect(() => {
-    fetchData(1);
+    fetchData();
   }, []);
 
   const onChange: TableProps<DataType>["onChange"] = (
@@ -160,11 +100,7 @@ const DealsPage = () => {
   ) => {
     console.log("params", pagination, filters, sorter, extra);
 
-    if (pagination.current) {
-      if (!fetchedPages.includes(pagination.current)) {
-        fetchData(pagination.current);
-      }
-    }
+    
   };
 
   return (
@@ -182,7 +118,12 @@ const DealsPage = () => {
           dataSource={tableData}
           onChange={onChange}
           pagination={customPaginationConfig}
-        />
+          onRow={(record) => ({
+            onClick: () => {
+              navigate(`/prospect/${record._id}`)
+            }
+          })} 
+          />
       </div>
     </div>
   );

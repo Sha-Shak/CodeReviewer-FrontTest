@@ -12,7 +12,7 @@ const useFetchData = <T,>(url: string, dataType: string) => {
 
   const fetchData = async () => {
     try {
-      const result = await serverFetch("get", url);
+      const result = await serverFetch("get", url) as T;
       setData(result);
     } catch (error) {
       displayErrorMessage(`Error while fetching ${dataType}`);
