@@ -3,6 +3,7 @@ import { useState } from "react";
 import ProspectSoftSkill from "../Components/Prospect/ProspectSoftSkill";
 import ProspectHardSkill from "../Components/Prospect/ProspectHardSkill";
 import ProspectAssignment from "../Components/Prospect/ProspectAssignment";
+import RadarChartComponent from "../Components/Charts/Prospect/ProspectRadarChart";
 
 const ProspectDetailsPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>("soft"); // Default to "soft" tab
@@ -13,6 +14,7 @@ const ProspectDetailsPage = () => {
 
   return (
     <div className="tableBody">
+      <RadarChartComponent />
       <Menu
         onClick={(e) => handleTabClick(e.key)}
         selectedKeys={[selectedTab]}

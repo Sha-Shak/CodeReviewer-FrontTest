@@ -81,92 +81,94 @@ const ProspectSoftSKill = () => {
   };
 
   return (
-    <Spin spinning={loading} tip="Fetching students..." size="large" >
-    <Form form={form} name="rating-form" onFinish={onFinish}>
-      <Space className="space" direction="vertical" style={{ width: "100%" }}>
-        {Array.isArray(softSkills) &&
-          softSkills.map((skill) => (
-            <SkillsSlider
-              key={skill.name}
-              skill={skill}
-              rating={ratings[skill._id] || 1}
-              onRatingChange={(rating) => handleRatingChange(skill._id, rating)}
-            />
-          ))}
-        <Row>
-          <Col span={10} style={{ marginRight: "6.5vw" }}>
-            {" "}
-            <Form.Item
-              label="Education Level"
-              name="education"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select an education level",
-                },
-              ]}
-            >
-              <Select
-                value={education}
-                style={{ width: "100%" }}
-                onChange={handleEducationChange}
+    <Spin spinning={loading} tip="Fetching questions..." size="large">
+      <Form form={form} name="rating-form" onFinish={onFinish}>
+        <Space className="space" direction="vertical" style={{ width: "100%" }}>
+          {Array.isArray(softSkills) &&
+            softSkills.map((skill) => (
+              <SkillsSlider
+                key={skill.name}
+                skill={skill}
+                rating={ratings[skill._id] || 1}
+                onRatingChange={(rating) =>
+                  handleRatingChange(skill._id, rating)
+                }
+              />
+            ))}
+          <Row>
+            <Col span={10} style={{ marginRight: "6.5vw" }}>
+              {" "}
+              <Form.Item
+                label="Education Level"
+                name="education"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select an education level",
+                  },
+                ]}
               >
-                <Option value="High School">High School</Option>
-                <Option value="University">University</Option>
-                <Option value="Masters">Masters</Option>
-                <Option value="Ph.D">Ph.D</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Experience Level"
-              name="experience"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select an experience level",
-                },
-              ]}
-            >
-              <Select
-                value={experience}
-                style={{ width: "100%" }}
-                onChange={handleExperienceChange}
+                <Select
+                  value={education}
+                  style={{ width: "100%" }}
+                  onChange={handleEducationChange}
+                >
+                  <Option value="High School">High School</Option>
+                  <Option value="University">University</Option>
+                  <Option value="Masters">Masters</Option>
+                  <Option value="Ph.D">Ph.D</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Experience Level"
+                name="experience"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select an experience level",
+                  },
+                ]}
               >
-                <Option value="1">Less than 1 year</Option>
-                <Option value="2">1-2 years</Option>
-                <Option value="3">3-5 years</Option>
-                <Option value="4">5 years+</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Form.Item
-          className="h3-label"
-          label="Interview Notes"
-          name="description"
-          rules={[
-            {
-              max: 1000,
-              message: "Notes cannot exceed 1000 characters",
-            },
-          ]}
-        >
-          <Input.TextArea
+                <Select
+                  value={experience}
+                  style={{ width: "100%" }}
+                  onChange={handleExperienceChange}
+                >
+                  <Option value="1">Less than 1 year</Option>
+                  <Option value="2">1-2 years</Option>
+                  <Option value="3">3-5 years</Option>
+                  <Option value="4">5 years+</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item
             className="h3-label"
-            value={description}
-            onChange={handleDescriptionChange}
-          />
-        </Form.Item>
+            label="Interview Notes"
+            name="description"
+            rules={[
+              {
+                max: 1000,
+                message: "Notes cannot exceed 1000 characters",
+              },
+            ]}
+          >
+            <Input.TextArea
+              className="h3-label"
+              value={description}
+              onChange={handleDescriptionChange}
+            />
+          </Form.Item>
 
-        <Form.Item style={{ textAlign: "center" }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Space>
-    </Form>
+          <Form.Item style={{ textAlign: "center" }}>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Space>
+      </Form>
     </Spin>
   );
 };

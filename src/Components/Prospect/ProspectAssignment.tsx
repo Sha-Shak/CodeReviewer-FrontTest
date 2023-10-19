@@ -1,5 +1,3 @@
-
-
 import { Button, Form, Input, Space, Spin } from "antd";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -74,16 +72,14 @@ const ProspectAssignment = () => {
   };
 
   return (
-    <Spin spinning={loading} tip="Fetching students..." size="large">
+    <Spin spinning={loading} tip="Fetching questions..." size="large">
       <Form form={form} name="rating-form" onFinish={onFinish}>
         <Space className="space" direction="vertical" style={{ width: "100%" }}>
           {Array.isArray(hardSkills) &&
             hardSkills
               .filter(
                 (skill) =>
-                  skill.name !== "back-end" &&
-                  skill.name !== "typescript" &&
-                  skill.name !== "front-end"
+                  skill.name !== "back-end" && skill.name !== "typescript"
               )
               .map((skill) => (
                 <SkillsSlider
@@ -112,7 +108,6 @@ const ProspectAssignment = () => {
               onChange={handleDescriptionChange}
             />
           </Form.Item>
-
           <Form.Item style={{ textAlign: "center" }}>
             <Button type="primary" htmlType="submit">
               Submit

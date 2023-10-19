@@ -1,5 +1,5 @@
 import { Button, Form, Input, Space, Spin } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import conf from "../../config";
 import useFetchData from "../../hooks/useFetchData";
@@ -22,12 +22,11 @@ const ProspectHardSkill = () => {
   const [message, setMessage] = useState<string | null>(null);
    const [loading, setLoading] = useState<boolean>(true);
   const notify = (message: string) => setMessage(message);
-  const [hardSkills, setHardSkills] = useFetchData<ISkills[]>(
-    hardSkillUrl,
-    "skills",
-    notify,
-    setLoading
-  );
+  const memoizedUseFetchData = useMemo(() => {
+    return useFetchData<ISkills[]>(hardSkillUrl, "skills", notify, setLoading);
+  }, [hardSkillUrl, notify, setLoading]);
+  const [hardSkills, setHardSkills] = memoizedUseFetchData;
+
 
   const [description, setDescription] = useState("");
 
@@ -71,7 +70,7 @@ const ProspectHardSkill = () => {
   };
 
   return (
-    <Spin spinning={loading} tip="Fetching students..." size="large">
+    <Spin spinning={loading} tip="Fetching questions..." size="large">
       <Form form={form} name="rating-form" onFinish={onFinish}>
         <Space className="space" direction="vertical" style={{ width: "100%" }}>
           {Array.isArray(hardSkills) &&
