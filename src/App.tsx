@@ -5,7 +5,6 @@ import { Route, Routes } from "react-router-dom";
 import LeadsPage from "./Pages/LeadsPage";
 import ProfilePage from "./Pages/ProfilePage";
 import SlatePage from "./Pages/SlatePage";
-import SoftSkillsPage from "./Pages/SoftSkillsPage";
 import StudentsPage from "./Pages/StudentsPage";
 import ProspectPage from "./Pages/ProspectPage";
 import ProspectDetailsPage from "./Pages/ProspectDetailsPage";
