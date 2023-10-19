@@ -4,17 +4,32 @@ import ProspectSoftSkill from "../Components/Prospect/ProspectSoftSkill";
 import ProspectHardSkill from "../Components/Prospect/ProspectHardSkill";
 import ProspectAssignment from "../Components/Prospect/ProspectAssignment";
 import RadarChartComponent from "../Components/Charts/Prospect/ProspectRadarChart";
+import conf from "../config";
+import { useParams } from "react-router-dom";
 
 const ProspectDetailsPage = () => {
-  const [selectedTab, setSelectedTab] = useState<string>("soft"); // Default to "soft" tab
-
+  const [selectedTab, setSelectedTab] = useState<string>("soft"); 
+ let { id } = useParams();
   const handleTabClick = (tab: string) => {
     setSelectedTab(tab);
   };
 
   return (
     <div className="tableBody">
-      <RadarChartComponent />
+      <div className="flex">
+        <RadarChartComponent
+          url={`${conf.API_BASE_URL}/prospect/assignment/interview/${id}/coding-assignment`}
+          title="Coding Assignment"
+        />
+        <RadarChartComponent
+          url={`${conf.API_BASE_URL}/prospect/hard-skills/interview/${id}/tech-interview`}
+          title="Tech Interview"
+        />
+        <RadarChartComponent
+          url={`${conf.API_BASE_URL}/prospect/soft-skills/interview/${id}`}
+          title="Motivation Interview"
+        />
+      </div>
       <Menu
         onClick={(e) => handleTabClick(e.key)}
         selectedKeys={[selectedTab]}

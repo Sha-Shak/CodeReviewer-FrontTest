@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   Radar,
   RadarChart,
@@ -10,26 +9,22 @@ import {
   Tooltip,
 } from "recharts";
 import { Spin } from "antd";
-import conf from "../../../config";
 import CustomRadarTooltip from "../Tooltips/CustomRadarTooltip";
 import { serverFetch } from "../../../utils/handleRequest";
 
-function RadarChartComponent() {
-  const { type, id } = useParams();
+function RadarChartComponent({ url, title }: {url: string, title: string}) {
   const [loading, setLoading] = useState(false);
-  const [report, setReport] = useState<any[]>([]);
+  const [report, setReport] = useState([]);
 
   useEffect(() => {
     async function fetchReport() {
-      const url = `${conf.API_BASE_URL}/prospect/assignment/interview/${id}/coding-assignment`;
-
       try {
         setLoading(true);
         const response = await serverFetch("get", url);
         const reportData = response.marks;
         const transformedReportData = reportData.map((item: any) => ({
-          skillName: item.skills.name, 
-          averageMarks: item.skills.marks, 
+          skillName: item.skills.name,
+          averageMarks: item.skills.marks,
         }));
 
         setReport(transformedReportData);
@@ -40,11 +35,11 @@ function RadarChartComponent() {
     }
 
     fetchReport();
-  }, [type, id]);
+  }, [url]);
 
   return (
     <div className="chart-container">
-      <h2 className="chart-title">{type}</h2>
+      <h2 className="chart-title">{title}</h2>
       <Spin spinning={loading} tip="Fetching data" size="large">
         <div style={{ width: "100%", height: "200px" }}>
           {report && report.length ? (
@@ -70,7 +65,7 @@ function RadarChartComponent() {
               </RadarChart>
             </ResponsiveContainer>
           ) : (
-            <p>No marks for coding-assignment, yet.</p>
+            <p>No marks for {title}, yet.</p>
           )}
         </div>
       </Spin>
