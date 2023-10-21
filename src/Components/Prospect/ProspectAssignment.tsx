@@ -1,4 +1,4 @@
-import { Button, Form, Input, Space, Spin } from "antd";
+import { Alert, Button, Form, Input, Space, Spin } from "antd";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import conf from "../../config";
@@ -7,8 +7,6 @@ import { ISingleSkillMark } from "../../interfaces/marks/singleSkillMark.interfa
 import { ISkills } from "../../interfaces/marks/skills.interface";
 import { serverFetch } from "../../utils/handleRequest";
 import SkillsSlider from "../SkillsSlider";
-
-//! TODO: need to add loader and prevent user from submitting the form twice.
 
 type SkillRatings = { [key: string]: number };
 
@@ -52,7 +50,8 @@ const ProspectAssignment = () => {
     }
   };
 
-  const onFinish = () => {
+  const onFinish = async (values: any) => {
+    setLoading(true);
     const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map(
       (skillId) => ({
         skillId,
@@ -61,19 +60,47 @@ const ProspectAssignment = () => {
     );
     const data = {
       skills: skillMarks,
-
       notes: description,
     };
-    console.log("final data", data);
-    form.resetFields();
-    resetSliderValues();
-    //! TODO: need to change prospect's status
-    serverFetch("post", submitMarkUrl, data);
+    const sliderValues = Object.values(ratings);
+    if (sliderValues.some((value) => value < 2) || !values.description) {
+      setMessage(
+        "Please fill all form fields and ensure slider values are more than 2."
+      );
+        setLoading(false);
+    } else {
+      console.log("final data", data);
+      try {
+        const response = await serverFetch("post", submitMarkUrl, data);
+        if (response.prospectId) {
+          setMessage("Form submitted successfully!");
+          setTimeout(() => setMessage(null), 5000);
+          form.resetFields();
+          resetSliderValues();
+          setLoading(false);
+        } else {
+          setMessage("Form submission failed. Please try again");
+          setLoading(false);
+        }
+      } catch (error) {
+        setMessage("An error occured");
+        setLoading(false);
+      }
+    }
   };
 
   return (
     <Spin spinning={loading} tip="Fetching questions..." size="large">
       <Form form={form} name="rating-form" onFinish={onFinish}>
+        {message && (
+          <Alert
+            message={message}
+            type={message.startsWith("Form submitted") ? "success" : "error"}
+            showIcon
+            closable
+            onClose={() => setMessage(null)}
+          />
+        )}
         <Space className="space" direction="vertical" style={{ width: "100%" }}>
           {Array.isArray(hardSkills) &&
             hardSkills
@@ -89,7 +116,7 @@ const ProspectAssignment = () => {
                   onRatingChange={(rating) =>
                     handleRatingChange(skill._id, rating)
                   }
-                  form
+                  form={form}
                 />
               ))}
           <Form.Item

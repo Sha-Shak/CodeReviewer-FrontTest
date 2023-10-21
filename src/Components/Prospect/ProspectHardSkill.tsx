@@ -1,4 +1,4 @@
-import { Button, Form, Input, Space, Spin } from "antd";
+import { Alert, Button, Form, Input, Space, Spin } from "antd";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import conf from "../../config";
@@ -8,25 +8,23 @@ import { ISkills } from "../../interfaces/marks/skills.interface";
 import { serverFetch } from "../../utils/handleRequest";
 import SkillsSlider from "../SkillsSlider";
 
-//! TODO: need to add loader and prevent user from submitting the form twice.
-
 type SkillRatings = { [key: string]: number };
 
 const ProspectHardSkill = () => {
   const [form] = Form.useForm();
   let { id } = useParams();
   const submitMarkUrl =
-    conf.API_BASE_URL + `/prospect/hard-skills/add/interview/${id}/tech-interview`;
+    conf.API_BASE_URL +
+    `/prospect/hard-skills/add/interview/${id}/tech-interview`;
   const [ratings, setRatings] = useState<SkillRatings>({});
   const hardSkillUrl = conf.API_BASE_URL + `/skill/hard-skill`;
   const [message, setMessage] = useState<string | null>(null);
-   const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const notify = (message: string) => setMessage(message);
   const memoizedUseFetchData = useMemo(() => {
     return useFetchData<ISkills[]>(hardSkillUrl, "skills", notify, setLoading);
   }, [hardSkillUrl, notify, setLoading]);
-  const [hardSkills, setHardSkills] = memoizedUseFetchData;
-
+  const [skills, setSkills] = memoizedUseFetchData;
 
   const [description, setDescription] = useState("");
 
@@ -42,15 +40,16 @@ const ProspectHardSkill = () => {
 
   const resetSliderValues = () => {
     const newRatings: SkillRatings = {};
-    if (Array.isArray(hardSkills)) {
-      hardSkills.forEach((skill) => {
+    if (Array.isArray(skills)) {
+      skills.forEach((skill) => {
         newRatings[skill._id] = 1; // Set the default rating to 1
       });
       setRatings(newRatings);
     }
   };
 
-  const onFinish = () => {
+  const onFinish = async () => {
+    setLoading(true);
     const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map(
       (skillId) => ({
         skillId,
@@ -59,22 +58,56 @@ const ProspectHardSkill = () => {
     );
     const data = {
       skills: skillMarks,
-
       notes: description,
     };
-    console.log("final data", data);
-    form.resetFields();
-    resetSliderValues();
-    //! TODO: need to change prospect's status
-    serverFetch("post", submitMarkUrl, data);
+
+    // Validate form fields
+    const sliderValues = Object.values(ratings);
+    if (
+      sliderValues.some((value) => value < 2) ||
+      !data.notes ||
+      data.notes.trim() === ""
+    ) {
+      setMessage(
+        "Please fill all form fields and ensure slider values are more than 2."
+      );
+        setLoading(false);
+    } else {
+      // Data is valid, proceed with submission
+      try {
+        const response = await serverFetch("post", submitMarkUrl, data);
+        if (response.prospectId) {
+          setMessage("Form submitted successfully!");
+          setTimeout(() => setMessage(null), 5000);
+          form.resetFields();
+          resetSliderValues();
+          setLoading(false);
+        } else {
+          setMessage("Form submission failed. Please try again");
+          setLoading(false);
+        }
+      } catch (error) {
+        setMessage("An error occurred");
+        setLoading(false);
+      }
+    }
   };
 
   return (
     <Spin spinning={loading} tip="Fetching questions..." size="large">
       <Form form={form} name="rating-form" onFinish={onFinish}>
+        {message && (
+          <Alert
+            message={message}
+            type={message.startsWith("Form submitted") ? "success" : "error"}
+            showIcon
+            closable
+            onClose={() => setMessage(null)}
+          />
+        )}
         <Space className="space" direction="vertical" style={{ width: "100%" }}>
-          {Array.isArray(hardSkills) &&
-            hardSkills
+          {Array.isArray(skills) &&
+            skills
               .filter(
                 (skill) =>
                   skill.name !== "back-end" &&
@@ -89,6 +122,7 @@ const ProspectHardSkill = () => {
                   onRatingChange={(rating) =>
                     handleRatingChange(skill._id, rating)
                   }
+                  form={form}
                 />
               ))}
           <Form.Item

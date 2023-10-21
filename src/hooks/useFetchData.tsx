@@ -1,22 +1,19 @@
-import { message } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { serverFetch } from "../utils/handleRequest";
 
-const useFetchData = <T,>(url: string, dataType: string, notify : (message: string)=> void, handleLoader: (data: any)=> void) => {
+const useFetchData = <T,>(
+  url: string,
+  dataType: string,
+  notify: (message: string) => void,
+  handleLoader: (data: any) => void
+) => {
   const [data, setData] = useState<T | null>(null);
-  const [messageApi, contextHolder] = message.useMessage();
-
-  
-
-  const displayErrorMessage = (message: string) => {
-    notify(message)
-  };
 
   const fetchData = async () => {
     try {
-      const result = await serverFetch("get", url) as T;
+      const result = (await serverFetch("get", url)) as T;
       setData(result);
-      if(result) handleLoader(false);
+      if (result) handleLoader(false);
     } catch (error) {
       notify(`Error while fetching ${dataType}`);
     }
@@ -26,7 +23,7 @@ const useFetchData = <T,>(url: string, dataType: string, notify : (message: stri
     fetchData();
   }, [url]);
 
-  return [data, setData, contextHolder] ;
+  return [data, setData];
 };
 
 export default useFetchData;

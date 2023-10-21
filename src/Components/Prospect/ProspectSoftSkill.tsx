@@ -64,13 +64,14 @@ const ProspectSoftSKill = () => {
     const newRatings: SkillRatings = {};
     if (Array.isArray(softSkills)) {
       softSkills.forEach((skill) => {
-        newRatings[skill._id] = 1; 
+        newRatings[skill._id] = 1;
       });
       setRatings(newRatings);
     }
   };
 
   const onFinish = async (values: any) => {
+    setLoading(true);
     const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map(
       (skillId) => ({
         skillId,
@@ -94,22 +95,23 @@ const ProspectSoftSKill = () => {
         "Please fill all form fields and ensure slider values are more than 2."
       );
     } else {
-       console.log("final data", data);
-       form.resetFields();
-       resetSliderValues();
-       try {
-         const response = await serverFetch("post", submitMarkUrl, data);
-         if (response.prospectId) {
-           setMessage("Form submitted successfully!");
-           setTimeout(() => setMessage(null), 5000);
-         } else {
-           setMessage("Form submission failed. Please try again");
-         }
-       } catch (error) {
-         setMessage("An error occured");
-       }
+      try {
+        const response = await serverFetch("post", submitMarkUrl, data);
+        if (response.prospectId) {
+          setMessage("Form submitted successfully!");
+          setTimeout(() => setMessage(null), 5000);
+          form.resetFields();
+          resetSliderValues();
+          setLoading(false);
+        } else {
+          setMessage("Form submission failed. Please try again");
+          setLoading(false);
+        }
+      } catch (error) {
+        setMessage("An error occured");
+        setLoading(false);
       }
-   
+    }
   };
 
   return (
@@ -122,12 +124,6 @@ const ProspectSoftSKill = () => {
             showIcon
             closable
             onClose={() => setMessage(null)}
-            style={{
-              position: "fixed",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
           />
         )}
         <Space className="space" direction="vertical" style={{ width: "100%" }}>
@@ -197,7 +193,7 @@ const ProspectSoftSKill = () => {
             label="Interview Notes"
             name="description"
             rules={[
-              { 
+              {
                 required: true,
                 max: 1000,
                 message: "Notes cannot exceed 1000 characters",
