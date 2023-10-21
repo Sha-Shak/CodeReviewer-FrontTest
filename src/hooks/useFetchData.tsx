@@ -10,7 +10,6 @@ const useFetchData = <T,>(url: string, dataType: string, notify : (message: stri
 
   const displayErrorMessage = (message: string) => {
     notify(message)
-    messageApi.error(message);
   };
 
   const fetchData = async () => {
@@ -19,7 +18,7 @@ const useFetchData = <T,>(url: string, dataType: string, notify : (message: stri
       setData(result);
       if(result) handleLoader(false);
     } catch (error) {
-      displayErrorMessage(`Error while fetching ${dataType}`);
+      notify(`Error while fetching ${dataType}`);
     }
   };
 

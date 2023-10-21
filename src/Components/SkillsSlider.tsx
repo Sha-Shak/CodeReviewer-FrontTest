@@ -6,15 +6,33 @@ interface SkillsSliderProps {
   skill: ISkills;
   rating: number;
   onRatingChange: (rating: number) => void;
+  form: any
 }
 
 const SkillsSlider: React.FC<SkillsSliderProps> = ({
   skill,
   rating,
   onRatingChange,
+  form
 }) => {
   const handleSliderChange = (value: number) => {
     onRatingChange(value);
+      if (value < 2) {
+        form.setFields([
+          {
+            name: `ratings.${skill._id}`,
+            errors: ["Select at least 2 options."],
+          },
+        ]);
+      } else {
+        form.setFields([
+          {
+            name: `ratings.${skill._id}`,
+            errors: [],
+          },
+        ]);
+      }
+    
   };
 
    const getTrackStyle = (rating: number) => {

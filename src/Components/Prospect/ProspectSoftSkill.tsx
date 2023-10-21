@@ -1,4 +1,14 @@
-import { Button, Col, Form, Input, Row, Select, Space, Spin } from "antd";
+import {
+  Alert,
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  Spin,
+} from "antd";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import conf from "../../config";
@@ -20,9 +30,9 @@ const ProspectSoftSKill = () => {
   const [ratings, setRatings] = useState<SkillRatings>({});
   const softSkillUrl = conf.API_BASE_URL + `/skill/soft-skill`;
   const [message, setMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(true);
   const notify = (message: string) => setMessage(message);
-   
+
   const [softSkills, setSoftSkills] = useFetchData<ISkills[]>(
     softSkillUrl,
     "skills",
@@ -32,7 +42,7 @@ const ProspectSoftSKill = () => {
   const [education, setEducation] = useState("");
   const [experience, setExperience] = useState("");
   const [description, setDescription] = useState("");
-  
+
   const handleEducationChange = (value: string) => {
     setEducation(value);
   };
@@ -50,17 +60,17 @@ const ProspectSoftSKill = () => {
     setRatings({ ...ratings, [skillId]: rating });
   };
 
-   const resetSliderValues = () => {
-     const newRatings: SkillRatings = {};
-     if (Array.isArray(softSkills)) {
-       softSkills.forEach((skill) => {
-         newRatings[skill._id] = 1; // Set the default rating to 1
-       });
-       setRatings(newRatings);
-     }
-   };
+  const resetSliderValues = () => {
+    const newRatings: SkillRatings = {};
+    if (Array.isArray(softSkills)) {
+      softSkills.forEach((skill) => {
+        newRatings[skill._id] = 1; 
+      });
+      setRatings(newRatings);
+    }
+  };
 
-  const onFinish = () => {
+  const onFinish = async (values: any) => {
     const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map(
       (skillId) => ({
         skillId,
@@ -73,16 +83,53 @@ const ProspectSoftSKill = () => {
       notes: description,
       experience: experience,
     };
-    console.log("final data", data);
-    //! HUGE PERFORMANCE ISSUE
-    form.resetFields();
-    resetSliderValues();
-    serverFetch("post", submitMarkUrl, data);
+    const sliderValues = Object.values(ratings);
+    if (
+      sliderValues.some((value) => value < 2) ||
+      !values.description ||
+      !values.education ||
+      !values.experience
+    ) {
+      setMessage(
+        "Please fill all form fields and ensure slider values are more than 2."
+      );
+    } else {
+       console.log("final data", data);
+       form.resetFields();
+       resetSliderValues();
+       try {
+         const response = await serverFetch("post", submitMarkUrl, data);
+         if (response.prospectId) {
+           setMessage("Form submitted successfully!");
+           setTimeout(() => setMessage(null), 5000);
+         } else {
+           setMessage("Form submission failed. Please try again");
+         }
+       } catch (error) {
+         setMessage("An error occured");
+       }
+      }
+   
   };
 
   return (
     <Spin spinning={loading} tip="Fetching questions..." size="large">
       <Form form={form} name="rating-form" onFinish={onFinish}>
+        {message && (
+          <Alert
+            message={message}
+            type={message.startsWith("Form submitted") ? "success" : "error"}
+            showIcon
+            closable
+            onClose={() => setMessage(null)}
+            style={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        )}
         <Space className="space" direction="vertical" style={{ width: "100%" }}>
           {Array.isArray(softSkills) &&
             softSkills.map((skill) => (
@@ -93,6 +140,7 @@ const ProspectSoftSKill = () => {
                 onRatingChange={(rating) =>
                   handleRatingChange(skill._id, rating)
                 }
+                form={form}
               />
             ))}
           <Row>
@@ -149,7 +197,8 @@ const ProspectSoftSKill = () => {
             label="Interview Notes"
             name="description"
             rules={[
-              {
+              { 
+                required: true,
                 max: 1000,
                 message: "Notes cannot exceed 1000 characters",
               },

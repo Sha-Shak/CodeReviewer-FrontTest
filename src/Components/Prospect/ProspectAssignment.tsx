@@ -89,6 +89,7 @@ const ProspectAssignment = () => {
                   onRatingChange={(rating) =>
                     handleRatingChange(skill._id, rating)
                   }
+                  form
                 />
               ))}
           <Form.Item
