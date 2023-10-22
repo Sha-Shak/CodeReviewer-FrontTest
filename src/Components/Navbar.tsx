@@ -1,60 +1,22 @@
 import {
+  CheckOutlined,
   GithubOutlined,
   NumberOutlined,
+  SlidersOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
+  
 } from "@ant-design/icons";
-import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const items: MenuProps["items"] = [
-  {
-    label: <Link to="/leads">Leads</Link>,
-    key: "leads",
-    icon: <UsergroupAddOutlined />,
-  },
-  {
-    label: <Link to="/prospects">Prospects</Link>,
-    key: "prospects",
-    icon: <UsergroupAddOutlined />,
-  },
-  {
-    label: <Link to="/deals">Deals</Link>,
-    key: "deals",
-    icon: <UsergroupAddOutlined />,
-  },
-
-  {
-    label: <Link to="/students">Students</Link>,
-    key: "students",
-    icon: <TeamOutlined />,
-  },
-  {
-    label: <Link to="/softskills">Marking</Link>,
-    key: "marks",
-    icon: <NumberOutlined />,
-  },
-  {
-    label: (
-      <a
-        href="https://github.com/Project-Code-Bd"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Github
-      </a>
-    ),
-    key: "github",
-    icon: <GithubOutlined />,
-  },
-];
+const { SubMenu } = Menu;
 
 const Navbar = () => {
-  const [current, setCurrent] = useState("deals");
+  const [current, setCurrent] = useState("leads");
 
-  const onClick: MenuProps["onClick"] = (e) => {
+  const onClick = (e: { key: string }) => {
     console.log("click ", e);
     setCurrent(e.key);
   };
@@ -72,8 +34,43 @@ const Navbar = () => {
       onClick={onClick}
       selectedKeys={[current]}
       mode="horizontal"
-      items={items}
-    />
+    >
+      <SubMenu
+        key="candidate"
+        icon={<UsergroupAddOutlined />}
+        title="Candidate"
+      >
+        <Menu.Item key="prospects" icon={<SlidersOutlined />}>
+          <Link to="/prospects">Prospects</Link>
+        </Menu.Item>
+        <Menu.Item key="deals" icon={<CheckOutlined />}>
+          <Link to="/deals">Deals</Link>
+        </Menu.Item>
+        <Menu.Item key="leads" icon={<UsergroupAddOutlined />}>
+          <Link to="/leads">Zendesk Leads</Link>
+        </Menu.Item>
+      </SubMenu>
+      <SubMenu key="student" icon={<TeamOutlined />} title="Student">
+        <Menu.Item key="junior">
+          <Link to="students/junior">Junior</Link>
+        </Menu.Item>
+        <Menu.Item key="senior">
+          <Link to="students/senior">Senior</Link>
+        </Menu.Item>
+      </SubMenu>
+      <Menu.Item key="marks" icon={<NumberOutlined />}>
+        <Link to="/softskills">Marking</Link>
+      </Menu.Item>
+      <Menu.Item
+        key="github"
+        icon={<GithubOutlined />}
+        onClick={(e) => {
+          window.open("https://github.com/Project-Code-Bd");
+        }}
+      >
+        Github
+      </Menu.Item>
+    </Menu>
   );
 };
 

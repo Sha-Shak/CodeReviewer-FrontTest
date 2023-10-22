@@ -70,52 +70,57 @@ const ProspectSoftSKill = () => {
     }
   };
 
-  const onFinish = async (values: any) => {
-    setLoading(true);
-    const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map(
-      (skillId) => ({
-        skillId,
-        marks: ratings[skillId],
-      })
-    );
-    const data = {
-      skills: skillMarks,
-      education: education,
-      notes: description,
-      experience: experience,
-    };
-    const sliderValues = Object.values(ratings);
-    if (
-      sliderValues.some((value) => value < 2) ||
-      !values.description ||
-      !values.education ||
-      !values.experience
-    ) {
-      setMessage(
-        "Please fill all form fields and ensure slider values are more than 2."
-      );
-    } else {
-      try {
-        const response = await serverFetch("post", submitMarkUrl, data);
-        if (response.prospectId) {
-          setMessage("Form submitted successfully!");
-          setTimeout(() => setMessage(null), 5000);
-          form.resetFields();
-          resetSliderValues();
-          setLoading(false);
-        } else {
-          setMessage("Form submission failed. Please try again");
-          setLoading(false);
-        }
-      } catch (error) {
-        setMessage("An error occured");
-        setLoading(false);
-      }
-    }
+const onFinish = async (values: any) => {
+  setLoading(true);
+  const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map(
+    (skillId) => ({
+      skillId,
+      marks: ratings[skillId],
+    })
+  );
+  const data = {
+    skills: skillMarks,
+    education: education,
+    notes: description,
+    experience: experience,
   };
 
+  // Check if all slider values are greater than 2
+  const areAllSliderValuesValid = Object.values(ratings).every(
+    (value) => value > 2
+  );
+
+  if (
+    areAllSliderValuesValid &&
+    values.description &&
+    values.education &&
+    values.experience
+  ) {
+    try {
+      const response = await serverFetch("post", submitMarkUrl, data);
+      if (response.prospectId) {
+        setMessage("Form submitted successfully!");
+        setTimeout(() => setMessage(null), 5000);
+        form.resetFields();
+        resetSliderValues();
+        setLoading(false);
+      } else {
+        setMessage("Form submission failed. Please try again");
+        setLoading(false);
+      }
+    } catch (error) {
+      setMessage("An error occurred");
+      setLoading(false);
+    }
+  } else {
+    setMessage(
+      "Please fill all form fields and ensure all slider values are more than 2."
+    );
+    setLoading(false);
+  }
+};
   return (
-    <Spin spinning={loading} tip="Fetching questions..." size="large">
+    <Spin spinning={loading} tip="Please wait..." size="large">
       <Form form={form} name="rating-form" onFinish={onFinish}>
         {message && (
           <Alert

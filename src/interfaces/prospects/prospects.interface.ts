@@ -4,4 +4,6 @@ export interface IProspect {
   last_name: string;
   zenLeadsId: number;
   email: string;
+  stage: string;
+  displayPic?: string
 }

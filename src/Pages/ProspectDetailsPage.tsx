@@ -1,21 +1,35 @@
 import { Menu } from "antd";
-import { useState } from "react";
-import ProspectSoftSkill from "../Components/Prospect/ProspectSoftSkill";
-import ProspectHardSkill from "../Components/Prospect/ProspectHardSkill";
-import ProspectAssignment from "../Components/Prospect/ProspectAssignment";
-import RadarChartComponent from "../Components/Charts/Prospect/ProspectRadarChart";
-import conf from "../config";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import RadarChartComponent from "../Components/Charts/Prospect/ProspectRadarChart";
+import ProspectAssignment from "../Components/Prospect/ProspectAssignment";
+import ProspectHardSkill from "../Components/Prospect/ProspectHardSkill";
+import ProspectSoftSkill from "../Components/Prospect/ProspectSoftSkill";
+import conf from "../config";
+import { IProspect } from "../interfaces/prospects/prospects.interface";
+import { serverFetch } from "../utils/handleRequest";
+import ProfileBadge from "../Components/ProfileBadge";
 
 const ProspectDetailsPage = () => {
-  const [selectedTab, setSelectedTab] = useState<string>("soft"); 
- let { id } = useParams();
+  const [selectedTab, setSelectedTab] = useState<string>("soft");
+  const [profile, setProfile] = useState<IProspect>({} as IProspect);
+  let { id } = useParams();
+  const profileUrl = conf.API_BASE_URL + `/prospect/${id}`;
+  const getProfile = async () => {
+    const result = await serverFetch("get", profileUrl);
+    await setProfile(result);
+    console.log("profile",result)
+  };
+  useEffect(() => {
+    getProfile();
+  }, []);
   const handleTabClick = (tab: string) => {
     setSelectedTab(tab);
   };
 
   return (
     <div className="tableBody">
+      <ProfileBadge profile= {profile} />
       <div className="flex">
         <RadarChartComponent
           url={`${conf.API_BASE_URL}/prospect/assignment/interview/${id}/coding-assignment`}
@@ -41,11 +55,18 @@ const ProspectDetailsPage = () => {
         <Menu.Item key="assignment">Coding Assignment</Menu.Item>
       </Menu>
       <br />
-      {selectedTab === "soft" && <ProspectSoftSkill />}
-      {selectedTab === "tech" && <ProspectHardSkill />}
-      {selectedTab === "assignment" && <ProspectAssignment />}
+      {selectedTab === "soft" && profile?.stage === "motivational-stage" && (
+        <ProspectSoftSkill />
+      )}
+      {selectedTab === "tech" && profile?.stage === "tech-interview" && (
+        <ProspectHardSkill />
+      )}
+      {selectedTab === "assignment" &&
+        profile?.stage === "coding-assignment" && <ProspectAssignment />}
+      {profile?.stage === "interview-done" && <div>No form will be shown.</div>}
     </div>
   );
+
 };
 
 export default ProspectDetailsPage;

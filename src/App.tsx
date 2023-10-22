@@ -8,6 +8,7 @@ import SlatePage from "./Pages/SlatePage";
 import StudentsPage from "./Pages/StudentsPage";
 import ProspectPage from "./Pages/ProspectPage";
 import ProspectDetailsPage from "./Pages/ProspectDetailsPage";
+import SoftSkillsPage from "./Pages/SoftSkillsPage";
 
 const App = () => (
   <>
@@ -34,9 +35,9 @@ const App = () => (
         <Route path="/" element={<SlatePage />}>
           <Route path="deals" element={<DealsPage />} />
           <Route path="leads" element={<LeadsPage />} />
-          <Route path="students" element={<StudentsPage />} />
+          <Route path="students/:type" element={<StudentsPage />} />
           <Route path="profile/:id" element={<ProfilePage />} />
-          {/* <Route path="softskills" element={<SoftSkillsPage />} /> */}
+          <Route path="softskills" element={<SoftSkillsPage />} />
           <Route path="prospects" element={<ProspectPage />} />
           <Route path="prospect/:id" element={<ProspectDetailsPage />} />
         </Route>

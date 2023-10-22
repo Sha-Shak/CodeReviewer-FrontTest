@@ -1,5 +1,5 @@
 import { Alert, Button, Form, Input, Space, Spin } from "antd";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import conf from "../../config";
 import useFetchData from "../../hooks/useFetchData";
@@ -21,10 +21,25 @@ const ProspectHardSkill = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const notify = (message: string) => setMessage(message);
-  const memoizedUseFetchData = useMemo(() => {
-    return useFetchData<ISkills[]>(hardSkillUrl, "skills", notify, setLoading);
-  }, [hardSkillUrl, notify, setLoading]);
-  const [skills, setSkills] = memoizedUseFetchData;
+  const [skills, setSkills] = useFetchData<ISkills[]>(
+    hardSkillUrl,
+    "skills",
+    notify,
+    setLoading
+  );
+  const [filteredSkills, setFilteredSkills] = useState<ISkills[]>([]);
+
+  useEffect(() => {
+    if (Array.isArray(skills)) {
+      const filteredSkills = skills.filter(
+        (skill) =>
+          skill.name !== "back-end" &&
+          skill.name !== "typescript" &&
+          skill.name !== "front-end"
+      );
+      setFilteredSkills(filteredSkills);
+    }
+  }, [skills]);
 
   const [description, setDescription] = useState("");
 
@@ -34,21 +49,44 @@ const ProspectHardSkill = () => {
     setDescription(e.target.value);
   };
 
-  const handleRatingChange = (skillId: string, rating: number) => {
-    setRatings({ ...ratings, [skillId]: rating });
+  const handleRatingChange = async (skillId: string, rating: number) => {
+    await setRatings({ ...ratings, [skillId]: rating });
+    console.log("ratings", ratings)
   };
 
   const resetSliderValues = () => {
     const newRatings: SkillRatings = {};
     if (Array.isArray(skills)) {
       skills.forEach((skill) => {
-        newRatings[skill._id] = 1; // Set the default rating to 1
+        newRatings[skill._id] = 1;
       });
       setRatings(newRatings);
     }
   };
+  const validateForm = () => {
+    const sliderValues = Object.values(ratings);
 
+    if (
+      sliderValues.some((value) => {
+        if (value < 2) {
+          console.log("value list", value);
+          return true;
+        }
+      }) ||
+      !description.trim()
+    ) {
+      setMessage(
+        "Please fill all form fields and ensure slider values are more than 2."
+      );
+      return false;
+    }
+    return true;
+  };
   const onFinish = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
     const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map(
       (skillId) => ({
@@ -61,35 +99,20 @@ const ProspectHardSkill = () => {
       notes: description,
     };
 
-    // Validate form fields
-    const sliderValues = Object.values(ratings);
-    if (
-      sliderValues.some((value) => value < 2) ||
-      !data.notes ||
-      data.notes.trim() === ""
-    ) {
-      setMessage(
-        "Please fill all form fields and ensure slider values are more than 2."
-      );
-        setLoading(false);
-    } else {
-      // Data is valid, proceed with submission
-      try {
-        const response = await serverFetch("post", submitMarkUrl, data);
-        if (response.prospectId) {
-          setMessage("Form submitted successfully!");
-          setTimeout(() => setMessage(null), 5000);
-          form.resetFields();
-          resetSliderValues();
-          setLoading(false);
-        } else {
-          setMessage("Form submission failed. Please try again");
-          setLoading(false);
-        }
-      } catch (error) {
-        setMessage("An error occurred");
-        setLoading(false);
+    try {
+      const response = await serverFetch("post", submitMarkUrl, data);
+      if (response.prospectId) {
+        setMessage("Form submitted successfully!");
+        setTimeout(() => setMessage(null), 5000);
+        form.resetFields();
+        resetSliderValues();
+      } else {
+        setMessage("Form submission failed. Please try again");
       }
+    } catch (error) {
+      setMessage("An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,25 +129,18 @@ const ProspectHardSkill = () => {
           />
         )}
         <Space className="space" direction="vertical" style={{ width: "100%" }}>
-          {Array.isArray(skills) &&
-            skills
-              .filter(
-                (skill) =>
-                  skill.name !== "back-end" &&
-                  skill.name !== "typescript" &&
-                  skill.name !== "front-end"
-              )
-              .map((skill) => (
-                <SkillsSlider
-                  key={skill.name}
-                  skill={skill}
-                  rating={ratings[skill._id] || 1}
-                  onRatingChange={(rating) =>
-                    handleRatingChange(skill._id, rating)
-                  }
-                  form={form}
-                />
-              ))}
+          {Array.isArray(filteredSkills) &&
+            filteredSkills.map((skill) => (
+              <SkillsSlider
+                key={skill.name}
+                skill={skill}
+                rating={ratings[skill._id] || 1}
+                onRatingChange={(rating) =>
+                  handleRatingChange(skill._id, rating)
+                }
+                form={form}
+              />
+            ))}
           <Form.Item
             className="h3-label"
             label="Interview Notes"

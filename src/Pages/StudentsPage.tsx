@@ -7,7 +7,7 @@ import { ColumnsType, TableProps } from "antd/es/table";
 import LineCharts from "../Components/Charts/LineCharts";
 import StudentRadarChart from "../Components/Charts/RadarChart";
 import StudentMarksChart from "../Components/Charts/StudentMarksBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import conf from "../config";
 import { ICohort } from "../interfaces/student/cohort.interface";
 import { Spin, message } from 'antd';
@@ -45,6 +45,7 @@ const columns: ColumnsType<IStudent> = [
 
 const StudentsPage = () => {
   const url = `${conf.API_BASE_URL}/students/all`;
+  const {type= 'junior'} = useParams()
   const [messageApi, contextHolder] = message.useMessage();
   const [students, setStudents] = useState<(IStudent & { cohortInfo: ICohort })[]>([]); // Initialize as an empty array
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,16 +61,23 @@ const StudentsPage = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res: (IStudent & { cohortInfo: ICohort })[] = await serverFetch("get", url);
-        setStudents(res);
+        const students: (IStudent & { cohortInfo: ICohort })[] =
+          await serverFetch("get", url);
+        const filteredstudents = students.filter(
+          (student) =>
+            student.studentType.toLowerCase() === type.toLowerCase()
+        );
+        console.log("first", filteredstudents);
+        setStudents(filteredstudents);
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        displayErrorMessage('An error occured while fetching students.');
+        displayErrorMessage("An error occured while fetching students.");
       }
     };
     fetchData();
-  }, []);
+    console.log("rerender students")
+  }, [type]);
 
   const onChange: TableProps<IStudent>["onChange"] = (
     pagination,

@@ -38,7 +38,7 @@ function RadarChartComponent({ url, title }: {url: string, title: string}) {
   }, [url]);
 
   return (
-    <div className="chart-container">
+    <div className="chart-container text-center mb-1">
       <h2 className="chart-title">{title}</h2>
       <Spin spinning={loading} tip="Fetching data" size="large">
         <div style={{ width: "100%", height: "200px" }}>
