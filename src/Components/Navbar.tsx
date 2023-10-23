@@ -71,7 +71,7 @@ const Navbar = () => {
         <Menu.Item
           key="github"
           icon={<GithubOutlined />}
-          onClick={(e) => {
+          onClick={() => {
             window.open("https://github.com/Project-Code-Bd");
           }}
         >

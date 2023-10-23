@@ -1,6 +1,5 @@
 import { GithubOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
-import React from 'react'
 import conf from '../config'
 
 function LoginPage() {

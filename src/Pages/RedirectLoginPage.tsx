@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { checkIfStaff, getAccessToken } from '../Services/githubAuth.service';
 import { Spin } from 'antd';
