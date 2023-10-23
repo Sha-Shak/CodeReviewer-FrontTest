@@ -15,7 +15,7 @@ function RedirectLoginPage() {
 
       if (isStaff) {
         localStorage.setItem('github-access-token', token);
-        navigate('/students');
+        navigate('/leads');
       } else navigate('/login');
     } catch (error) {
       console.log(error);
