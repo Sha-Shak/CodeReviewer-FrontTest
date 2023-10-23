@@ -5,7 +5,7 @@ export const serverFetch = async (
   url: string,
   data?: any
 ): Promise<any> => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("github-access-token");
 
   if (!token) {
     console.warn("Token not found");
