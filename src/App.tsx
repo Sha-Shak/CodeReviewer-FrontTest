@@ -9,6 +9,9 @@ import StudentsPage from "./Pages/StudentsPage";
 import ProspectPage from "./Pages/ProspectPage";
 import ProspectDetailsPage from "./Pages/ProspectDetailsPage";
 import SoftSkillsPage from "./Pages/SoftSkillsPage";
+import LoginPage from "./Pages/LoginPage";
+import RedirectLoginPage from "./Pages/RedirectLoginPage";
+import Protected from "./Components/Protected";
 
 const App = () => (
   <>
@@ -17,7 +20,7 @@ const App = () => (
         components: {
           Button: {
             colorPrimary: "#8884d8",
-            algorithm: true, // Enable algorithm
+            algorithm: true,
             colorBgContainer: "#8884d8",
           },
         },
@@ -32,7 +35,9 @@ const App = () => (
       }}
     >
       <Routes>
-        <Route path="/" element={<SlatePage />}>
+        <Route path="/login" element={<LoginPage/>} />
+        <Route path="/redirect/oauth" element={<RedirectLoginPage/>} />
+        <Route path="/" element={<Protected><SlatePage /></Protected>}>
           <Route path="deals" element={<DealsPage />} />
           <Route path="leads" element={<LeadsPage />} />
           <Route path="students/:type" element={<StudentsPage />} />

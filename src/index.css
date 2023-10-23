@@ -122,3 +122,11 @@
   margin-bottom: 10px;
 }
 
+.login-container {
+  margin: 0;
+  height: 95dvh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

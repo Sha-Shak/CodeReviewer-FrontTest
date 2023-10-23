@@ -1,27 +1,86 @@
 import {
   CheckOutlined,
   GithubOutlined,
+  LogoutOutlined,
   NumberOutlined,
   SlidersOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
   
 } from "@ant-design/icons";
-import { Menu } from "antd";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Menu, MenuProps } from "antd";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const { SubMenu } = Menu;
+const items: MenuProps["items"] = [
+  {
+    label: <Link to="/leads">Leads</Link>,
+    key: "leads",
+    icon: <UsergroupAddOutlined />,
+  },
+  {
+    label: <Link to="/prospects">Prospects</Link>,
+    key: "prospects",
+    icon: <UsergroupAddOutlined />,
+  },
+  {
+    label: <Link to="/deals">Deals</Link>,
+    key: "deals",
+    icon: <UsergroupAddOutlined />,
+  },
+
+  {
+    label: <Link to="/students">Students</Link>,
+    key: "students",
+    icon: <TeamOutlined />,
+  },
+  {
+    label: <Link to="/softskills">Marking</Link>,
+    key: "marks",
+    icon: <NumberOutlined />,
+  },
+  {
+    label: (
+      <a
+        href="https://github.com/Project-Code-Bd"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Github
+      </a>
+    ),
+    key: "github",
+    icon: <GithubOutlined />,
+  },
+  {
+    label: "Logout",
+    key: "logout",
+    icon: <LogoutOutlined />,
+    danger: true
+  },
+];
 
 const Navbar = () => {
-  const [current, setCurrent] = useState("leads");
+  const [current, setCurrent] = useState("students");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setCurrent(location.pathname.split('/')[1]);
+  }, [location])
+  
 
   const onClick = (e: { key: string }) => {
-    console.log("click ", e);
     setCurrent(e.key);
+    if (e.key === "logout") {
+      localStorage.removeItem('github-access-token');
+      navigate('/login');
+    }
   };
 
   return (
+    <>
     <Menu
       style={{
         position: "relative",
@@ -71,6 +130,7 @@ const Navbar = () => {
         Github
       </Menu.Item>
     </Menu>
+    </>
   );
 };
 
