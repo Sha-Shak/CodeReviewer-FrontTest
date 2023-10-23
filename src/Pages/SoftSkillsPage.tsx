@@ -85,14 +85,14 @@ const handleSubmit = async () => {
 
 
   return (
-    <div>
+    <>
       <Steps
         current={currentStep}
         items={softSkills.map((el) => ({}))}
       />
       <div>
         {softSkills[currentStep] && (
-          <h3>Question: {softSkills[currentStep].question}</h3>
+          <h2>Question: {softSkills[currentStep].question}</h2>
         )}
         <div>
           {students.map((student, studentIndex) => (
@@ -126,7 +126,7 @@ const handleSubmit = async () => {
           <Button onClick={handleSubmit}>Submit</Button>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
