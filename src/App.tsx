@@ -19,7 +19,7 @@ const App = () => (
         components: {
           Button: {
             colorPrimary: "#8884d8",
-            algorithm: true, // Enable algorithm
+            algorithm: true,
             colorBgContainer: "#8884d8",
           },
         },

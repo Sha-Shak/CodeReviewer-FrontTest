@@ -7,8 +7,8 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const items: MenuProps["items"] = [
   {
@@ -59,8 +59,14 @@ const items: MenuProps["items"] = [
 ];
 
 const Navbar = () => {
-  const [current, setCurrent] = useState("deals");
+  const [current, setCurrent] = useState("students");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setCurrent(location.pathname.split('/')[1]);
+  }, [location])
+  
 
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);

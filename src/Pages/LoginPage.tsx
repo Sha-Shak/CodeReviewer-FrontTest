@@ -7,7 +7,7 @@ function LoginPage() {
   return (
     <div className='login-container'>
       <a href={'https://github.com/login/oauth/authorize?client_id=' + conf.GITHUB_CLIENT_ID}>
-        <Button type='primary' size='large'><GithubOutlined />Login with GitHub</Button>
+        <Button type='primary' shape="round" size='large'><GithubOutlined />Login with GitHub</Button>
       </a>
     </div>
   )
