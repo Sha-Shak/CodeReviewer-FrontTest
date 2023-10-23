@@ -1,19 +1,24 @@
 import React from "react";
 import { Col, Row, Slider } from "antd";
 import { ISkills } from "../interfaces/marks/skills.interface";
+import { IStudent } from "../interfaces/student/student.interface";
 
 interface SkillsSliderProps {
   skill: ISkills;
   rating: number;
   onRatingChange: (rating: number) => void;
   form: any
+  question?: boolean;
+  student? : IStudent
 }
 
 const SkillsSlider: React.FC<SkillsSliderProps> = ({
   skill,
   rating,
   onRatingChange,
-  form
+  form,
+  question=true,
+  student
 }) => {
   const handleSliderChange = (value: number) => {
     onRatingChange(value);
@@ -43,9 +48,12 @@ const SkillsSlider: React.FC<SkillsSliderProps> = ({
   return (
     <div>
       <Row>
-        <Col span={12}>
-          <h3>{skill.question}</h3>
-        </Col>
+       
+          <Col span={12}>
+            <h3>{student ? (student.name)  : (skill.question)}</h3>{" "}
+          </Col>
+       
+
         <Col span={12}>
           <Slider
             min={1}
