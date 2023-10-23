@@ -1,5 +1,6 @@
 import {
   GithubOutlined,
+  LogoutOutlined,
   NumberOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
@@ -7,7 +8,7 @@ import {
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const items: MenuProps["items"] = [
   {
@@ -49,17 +50,28 @@ const items: MenuProps["items"] = [
     key: "github",
     icon: <GithubOutlined />,
   },
+  {
+    label: "Logout",
+    key: "logout",
+    icon: <LogoutOutlined />,
+    danger: true
+  },
 ];
 
 const Navbar = () => {
   const [current, setCurrent] = useState("deals");
+  const navigate = useNavigate();
 
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
     setCurrent(e.key);
+    if (e.key === "logout") {
+      localStorage.removeItem('github-access-token');
+      navigate('/login');
+    }
   };
 
   return (
+    <>
     <Menu
       style={{
         position: "relative",
@@ -74,6 +86,7 @@ const Navbar = () => {
       mode="horizontal"
       items={items}
     />
+    </>
   );
 };
 

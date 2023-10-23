@@ -8,6 +8,8 @@ import SlatePage from "./Pages/SlatePage";
 import StudentsPage from "./Pages/StudentsPage";
 import ProspectPage from "./Pages/ProspectPage";
 import ProspectDetailsPage from "./Pages/ProspectDetailsPage";
+import LoginPage from "./Pages/LoginPage";
+import RedirectLoginPage from "./Pages/RedirectLoginPage";
 
 const App = () => (
   <>
@@ -31,6 +33,8 @@ const App = () => (
       }}
     >
       <Routes>
+        <Route path="/login" element={<LoginPage/>} />
+        <Route path="/redirect/oauth" element={<RedirectLoginPage/>} />
         <Route path="/" element={<SlatePage />}>
           <Route path="deals" element={<DealsPage />} />
           <Route path="leads" element={<LeadsPage />} />
