@@ -32,15 +32,18 @@ const ProspectDetailsPage = () => {
       <ProfileBadge profile={profile} />
       <div className="flex">
         <RadarChartComponent
-          url={`${conf.API_BASE_URL}/prospect/assignment/interview/${id}/coding-assignment`}
+          skillurl={`${conf.API_BASE_URL}/prospect/assignment/interview/${id}/coding-assignment`}
+          avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/avgmarks/coding-assignment`}
           title="Coding Assignment"
         />
         <RadarChartComponent
-          url={`${conf.API_BASE_URL}/prospect/hard-skills/interview/${id}/tech-interview`}
+          skillurl={`${conf.API_BASE_URL}/prospect/hard-skills/interview/${id}/tech-interview`}
+          avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/avgmarks/tech-interview`}
           title="Tech Interview"
         />
         <RadarChartComponent
-          url={`${conf.API_BASE_URL}/prospect/soft-skills/interview/${id}`}
+          skillurl={`${conf.API_BASE_URL}/prospect/soft-skills/interview/${id}`}
+          avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/softskill/avgmarks/interview`}
           title="Motivation Interview"
         />
       </div>

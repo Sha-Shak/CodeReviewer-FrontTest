@@ -12,30 +12,44 @@ import {
 import { serverFetch } from "../../../utils/handleRequest";
 import CustomRadarTooltip from "../Tooltips/CustomRadarTooltip";
 
-function RadarChartComponent({ url, title }: { url: string; title: string }) {
+function RadarChartComponent({
+  skillurl,
+  avgMarksUrl,
+  title,
+}: {
+  skillurl: string;
+  avgMarksUrl: string;
+  title: string;
+}) {
   const [loading, setLoading] = useState(false);
-  const [report, setReport] = useState([]);
+  const [skillData, setskillData] = useState([]);
+  const [avgMarksData, setAvgMarksData] = useState([]);
 
   useEffect(() => {
-    async function fetchReport() {
+    async function fetchData() {
       try {
         setLoading(true);
-        const response = await serverFetch("get", url);
-        const reportData = response.marks;
-        const transformedReportData = reportData.map((item: any) => ({
-          skillName: item.skills.name,
-          averageMarks: item.skills.marks,
-        }));
 
-        setReport(transformedReportData);
+    
+        const softSkillResponse = await serverFetch("get", skillurl);
+        const skillData = softSkillResponse;
+
+       
+        const avgMarksResponse = await serverFetch("get", avgMarksUrl);
+        const avgMarksData = avgMarksResponse;
+
+        setskillData(skillData);
+        setAvgMarksData(avgMarksData);
+        console.log("radar", skillData, avgMarksData)
+
         setLoading(false);
       } catch (error) {
         setLoading(false);
       }
     }
 
-    fetchReport();
-  }, [url]);
+    fetchData();
+  }, [skillurl, avgMarksUrl]);
 
   return (
     <div className="chart-container text-center mb-1">
@@ -43,33 +57,46 @@ function RadarChartComponent({ url, title }: { url: string; title: string }) {
 
       <div style={{ width: "100%", height: "200px" }}>
         {loading ? (
-          <Skeleton.Avatar size={164} active/>
+          <Skeleton.Avatar size={164} active />
         ) : (
           <>
-            {report && report.length ? (
+            {skillData.length > 0 && avgMarksData.length > 0 ? (
               <ResponsiveContainer>
-                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={report}>
+                <RadarChart
+                  cx="50%"
+                  cy="50%"
+                  outerRadius="80%"
+                  data={skillData}
+                >
                   <PolarGrid />
-                  <PolarAngleAxis
-                    dataKey="skillName"
-                    tick={{ fontSize: "small" }}
-                  />
+                  <PolarAngleAxis dataKey="name" tick={{ fontSize: "small" }} />
                   <PolarRadiusAxis domain={[0, 10]} />
                   <Tooltip
                     cursor={{ strokeDasharray: "3 3" }}
                     content={<CustomRadarTooltip />}
                   />
+
+                  {/* Render the first data series with a red color */}
                   <Radar
-                    name="Marks"
+                    name="Soft Skills"
+                    dataKey="marks"
+                    stroke="#FF0000"
+                    fill="#FF0000"
+                    fillOpacity={0.6}
+                  />
+
+                  {/* Render the second data series with a different color */}
+                  <Radar
+                    name="Average Marks"
                     dataKey="averageMarks"
-                    stroke="#8884d8"
-                    fill="#8884d8"
+                    stroke="#0088FF"
+                    fill="#0088FF"
                     fillOpacity={0.6}
                   />
                 </RadarChart>
               </ResponsiveContainer>
             ) : (
-              <p>No marks for {title}, yet.</p>
+              <p>No data available for {title}.</p>
             )}
           </>
         )}
