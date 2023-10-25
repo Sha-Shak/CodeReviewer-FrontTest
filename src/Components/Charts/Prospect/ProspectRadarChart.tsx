@@ -6,11 +6,9 @@ import {
   PolarRadiusAxis,
   Radar,
   RadarChart,
-  ResponsiveContainer,
-  Tooltip,
+  ResponsiveContainer
 } from "recharts";
 import { serverFetch } from "../../../utils/handleRequest";
-import CustomRadarTooltip from "../Tooltips/CustomRadarTooltip";
 
 function RadarChartComponent({
   skillurl,
@@ -21,23 +19,34 @@ function RadarChartComponent({
   avgMarksUrl: string;
   title: string;
 }) {
-  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [skillData, setSkillData] = useState<any[]>([]);
-
+  const handleLoader = (value: boolean)=>{
+    setLoader(value);
+  }
+  const notify = (message: string) => console.log(message);
 
   useEffect(() => {
+    console.log(`welcome to radar chart ${title}`);
     async function fetchData() {
       try {
-        setLoading(true);
+        setLoader(true);
 
         // Fetch soft skill data
+        // const skills = await useFetchData(
+        //   skillurl,
+        //   title,
+        //   notify,
+        //   handleLoader
+        // );
         const softSkillResponse = await serverFetch("get", skillurl);
         const skillData: any[] = softSkillResponse;
+        console.log(`checking skills ${title}`, softSkillResponse)
 
         // Fetch average marks data
         const avgMarksResponse = await serverFetch("get", avgMarksUrl);
         const avgMarksData: any[] = avgMarksResponse;
-
+         console.log("checking avg skills", avgMarksData);
         //Combine the two datasets
         const combinedData: any[] = skillData.map((skill, index) => {
           return {
@@ -46,14 +55,16 @@ function RadarChartComponent({
           };
         });
         setSkillData(combinedData);
+        console.log(`"combined data" ${title}`, skillData)
 
-        setLoading(false);
+        setLoader(false);
       } catch (error) {
-        setLoading(false);
+        setLoader(false);
       }
     }
 
     fetchData();
+
   }, [skillurl, avgMarksUrl]);
 
   return (
@@ -61,7 +72,7 @@ function RadarChartComponent({
       <h2 className="chart-title">{title}</h2>
 
       <div style={{ width: "100%", height: "200px" }}>
-        {loading ? (
+        {loader ? (
           <Skeleton.Avatar size={164} active />
         ) : (
           <>
@@ -78,11 +89,11 @@ function RadarChartComponent({
                   <PolarRadiusAxis domain={[0, 10]} />
                   {/* 
                     //! TODO: Need to fix the tooltip!
-                  */}
                   <Tooltip
                     cursor={{ strokeDasharray: "3 3" }}
                     content={<CustomRadarTooltip />}
                   />
+                  */}
 
                   <Radar
                     name="Soft Skills"
