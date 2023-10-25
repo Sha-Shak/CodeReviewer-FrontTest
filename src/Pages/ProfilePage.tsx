@@ -3,9 +3,11 @@ import {
   LineChartOutlined,
   MailOutlined,
   PhoneOutlined,
+  StarOutlined,
+  StarTwoTone,
   TeamOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Result, Spin, message } from "antd";
+import { Avatar, Button, Result, Spin, Switch, message } from "antd";
 import { useParams } from "react-router-dom";
 import { IStudent } from "../interfaces/student/student.interface";
 import { useEffect, useState } from "react";
@@ -26,19 +28,13 @@ const ProfilePage = () => {
   const [student, setStudent] = useState<IStudent | null | "">(null);
   const [imgUrl, setImgUrl] = useState<string>(logo);
   const [loading, setLoading] = useState<boolean>(false);
+  const [toggleLoading, setToggleLoading] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
 
 
-  const displayErrorMessage = (message: string) => {
+  const displayMessage = (type: "error" | "info" | "success", message: string) => {
     messageApi.open({
-      type: 'error',
-      content: message,
-    });
-  };
-
-  const displayInfoMessage = (message: string) => {
-    messageApi.open({
-      type: 'info',
+      type,
       content: message,
     });
   };
@@ -53,7 +49,7 @@ const ProfilePage = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        displayErrorMessage('An error occured while fetching student details.');
+        displayMessage( "error", 'An error occured while fetching student details.');
       }
     };
 
@@ -76,6 +72,23 @@ const ProfilePage = () => {
 
     getStudentImage()
   }, [student])
+
+  async function handleModelToggle () {
+    try {
+      if (student) {
+        setToggleLoading(true);
+        const url = `${conf.API_BASE_URL}/students/model/toggle/${student._id}`;
+        const updatedStudent : IStudent = await serverFetch("put", url);
+        setStudent(updatedStudent);
+        displayMessage("success", `Successfully changed details for ${student.name}.`);
+        setToggleLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      displayMessage("error", 'An error occured while updating student details.');
+      setToggleLoading(false);
+    }
+  }
 
 
   return (
@@ -109,6 +122,21 @@ const ProfilePage = () => {
                       {" "}
                       <LineChartOutlined /> {parseName(student.studentType)}
                     </p>
+                    <p className="model">
+                      {" "}
+                      <span>{student.model ? 
+                        <StarTwoTone twoToneColor="#8884d8" /> 
+                        : <StarOutlined />} Model
+                      </span>
+                      <Switch 
+                        style={{ marginRight: 10 }} 
+                        checkedChildren="Yes" 
+                        unCheckedChildren="No" 
+                        loading={toggleLoading} 
+                        checked={student.model} 
+                        onChange={handleModelToggle} 
+                        />
+                    </p>
                   </div>
                   <PersonalityTagsContainer id={student._id}/>
                 </div>
@@ -123,7 +151,7 @@ const ProfilePage = () => {
                   </div>
                 </div>
                 <div className="rightSideBar">
-                  <Button type="primary" onClick={() => displayInfoMessage('Whoops! This has not been implemented, yet.')}><TeamOutlined />Build team</Button>
+                  <Button type="primary" onClick={() => displayMessage("info", 'Whoops! This has not been implemented, yet.')}><TeamOutlined />Build team</Button>
                 </div>
               </>
               : student === "" ?

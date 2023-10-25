@@ -8,4 +8,5 @@ export interface IStudent {
   email: string;
   ghUserName?: string;
   studentType: string;
+  model: boolean;
 }

@@ -39,6 +39,12 @@
   border-radius: 7px;
 }
 
+.model {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .leftSideBar {
   flex: 0.3;
   border: 1px solid lightgray;

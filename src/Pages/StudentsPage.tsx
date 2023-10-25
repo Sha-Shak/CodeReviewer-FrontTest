@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Table, Spin, message } from "antd";
 import { useEffect, useState } from "react";
 import { IStudent } from "../interfaces/student/student.interface";
 import { serverFetch } from "../utils/handleRequest";
@@ -10,9 +10,14 @@ import StudentMarksChart from "../Components/Charts/StudentMarksBar";
 import { useNavigate, useParams } from "react-router-dom";
 import conf from "../config";
 import { ICohort } from "../interfaces/student/cohort.interface";
-import { Spin, message } from 'antd';
+import { StarTwoTone } from "@ant-design/icons";
 
 const columns: ColumnsType<IStudent> = [
+  {
+    title: "Model",
+    dataIndex: "model",
+    render: item => item ? <StarTwoTone twoToneColor="#8884d8" /> : ""
+  },
   {
     title: "Name",
     dataIndex: "name",
