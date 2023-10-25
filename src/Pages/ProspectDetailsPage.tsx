@@ -4,11 +4,11 @@ import { useParams } from "react-router-dom";
 import RadarChartComponent from "../Components/Charts/Prospect/ProspectRadarChart";
 import ProfileBadge from "../Components/ProfileBadge";
 import ProspectAssignment from "../Components/Prospect/ProspectAssignment";
-import ProspectHardSkill from "../Components/Prospect/ProspectHardSkill";
 import ProspectSoftSkill from "../Components/Prospect/ProspectSoftSkill";
 import conf from "../config";
 import { IProspect } from "../interfaces/prospects/prospects.interface";
 import { serverFetch } from "../utils/handleRequest";
+import ProspectTechInterview from "../Components/Prospect/ProspectTechInterview";
 
 const ProspectDetailsPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>("soft");
@@ -32,19 +32,20 @@ const ProspectDetailsPage = () => {
       <ProfileBadge profile={profile} />
       <div className="flex">
         <RadarChartComponent
-          skillurl={`${conf.API_BASE_URL}/prospect/assignment/interview/${id}/coding-assignment`}
-          avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/avgmarks/coding-assignment`}
-          title="Coding Assignment"
+          skillurl={`${conf.API_BASE_URL}/prospect/soft-skills/interview/${id}`}
+          avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/softskill/avgmarks/interview`}
+          title="Motivation Interview"
         />
+
         <RadarChartComponent
           skillurl={`${conf.API_BASE_URL}/prospect/hard-skills/interview/${id}/tech-interview`}
           avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/avgmarks/tech-interview`}
           title="Tech Interview"
         />
         <RadarChartComponent
-          skillurl={`${conf.API_BASE_URL}/prospect/soft-skills/interview/${id}`}
-          avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/softskill/avgmarks/interview`}
-          title="Motivation Interview"
+          skillurl={`${conf.API_BASE_URL}/prospect/assignment/interview/${id}/coding-assignment`}
+          avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/avgmarks/coding-assignment`}
+          title="Coding Assignment"
         />
       </div>
       <Menu
@@ -59,7 +60,7 @@ const ProspectDetailsPage = () => {
       </Menu>
       <br />
       {selectedTab === "soft" && <ProspectSoftSkill />}
-      {selectedTab === "tech" && <ProspectHardSkill />}
+      {selectedTab === "tech" && <ProspectTechInterview />}
       {selectedTab === "assignment" && <ProspectAssignment />}
       {profile?.stage === "interview-done" && <div>No form will be shown.</div>}
     </div>

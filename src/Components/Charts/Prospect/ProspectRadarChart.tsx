@@ -22,25 +22,30 @@ function RadarChartComponent({
   title: string;
 }) {
   const [loading, setLoading] = useState(false);
-  const [skillData, setskillData] = useState([]);
-  const [avgMarksData, setAvgMarksData] = useState([]);
+  const [skillData, setSkillData] = useState<any[]>([]);
+  const [avgMarksData, setAvgMarksData] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
 
-    
+        // Fetch soft skill data
         const softSkillResponse = await serverFetch("get", skillurl);
-        const skillData = softSkillResponse;
+        const skillData: any[] = softSkillResponse;
 
-       
+        // Fetch average marks data
         const avgMarksResponse = await serverFetch("get", avgMarksUrl);
-        const avgMarksData = avgMarksResponse;
+        const avgMarksData: any[] = avgMarksResponse;
 
-        setskillData(skillData);
-        setAvgMarksData(avgMarksData);
-        console.log("radar", skillData, avgMarksData)
+        //Combine the two datasets
+        const combinedData: any[] = skillData.map((skill, index) => {
+          return {
+            ...skill,
+            averageMarks: avgMarksData[index].marks,
+          };
+        });
+        setSkillData(combinedData);
 
         setLoading(false);
       } catch (error) {
@@ -60,7 +65,7 @@ function RadarChartComponent({
           <Skeleton.Avatar size={164} active />
         ) : (
           <>
-            {skillData.length > 0 && avgMarksData.length > 0 ? (
+            {skillData.length > 0 ? (
               <ResponsiveContainer>
                 <RadarChart
                   cx="50%"
@@ -71,26 +76,27 @@ function RadarChartComponent({
                   <PolarGrid />
                   <PolarAngleAxis dataKey="name" tick={{ fontSize: "small" }} />
                   <PolarRadiusAxis domain={[0, 10]} />
+                  {/* 
+                    //! TODO: Need to fix the tooltip!
+                  */}
                   <Tooltip
                     cursor={{ strokeDasharray: "3 3" }}
                     content={<CustomRadarTooltip />}
                   />
 
-                  {/* Render the first data series with a red color */}
                   <Radar
                     name="Soft Skills"
                     dataKey="marks"
-                    stroke="#FF0000"
-                    fill="#FF0000"
+                    stroke="#0088FF"
+                    fill="#0088FF"
                     fillOpacity={0.6}
                   />
 
-                  {/* Render the second data series with a different color */}
                   <Radar
                     name="Average Marks"
                     dataKey="averageMarks"
-                    stroke="#0088FF"
-                    fill="#0088FF"
+                    stroke="#FF0000"
+                    fill="#FF0000"
                     fillOpacity={0.6}
                   />
                 </RadarChart>

@@ -18,9 +18,8 @@ const SoftSkillsPage = () => {
   const [selectedCohortId, setSelectedCohortId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [assessments, setAssessments] = useState<any[]>([]); // Store assessments for all skills and students
+  const [assessments, setAssessments] = useState<any[]>([]); 
   const [form] = useForm();
-
   const [messageApi, contextHolder] = message.useMessage();
 
 

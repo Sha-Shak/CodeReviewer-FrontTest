@@ -1,5 +1,5 @@
-import React from "react";
 import { Col, Row, Slider } from "antd";
+import React from "react";
 import { ISkills } from "../interfaces/marks/skills.interface";
 import { IStudent } from "../interfaces/student/student.interface";
 
@@ -7,9 +7,9 @@ interface SkillsSliderProps {
   skill: ISkills;
   rating: number;
   onRatingChange: (rating: number) => void;
-  form: any
+  form: any;
   question?: boolean;
-  student? : IStudent
+  student?: IStudent;
 }
 
 const SkillsSlider: React.FC<SkillsSliderProps> = ({
@@ -17,42 +17,39 @@ const SkillsSlider: React.FC<SkillsSliderProps> = ({
   rating,
   onRatingChange,
   form,
-  question=true,
-  student
+  question = true,
+  student,
 }) => {
   const handleSliderChange = (value: number) => {
     onRatingChange(value);
-      if (value < 2) {
-        form.setFields([
-          {
-            name: `ratings.${skill._id}`,
-            errors: ["Select at least 2 options."],
-          },
-        ]);
-      } else {
-        form.setFields([
-          {
-            name: `ratings.${skill._id}`,
-            errors: [],
-          },
-        ]);
-      }
-    
+    if (value < 2) {
+      form.setFields([
+        {
+          name: `ratings.${skill._id}`,
+          errors: ["Select at least 2 options."],
+        },
+      ]);
+    } else {
+      form.setFields([
+        {
+          name: `ratings.${skill._id}`,
+          errors: [],
+        },
+      ]);
+    }
   };
 
-   const getTrackStyle = (rating: number) => {
-     const color = rating >= 5 ? "blue" : "red";
-     return { backgroundColor: color };
-   };
+  const getTrackStyle = (rating: number) => {
+    const color = rating >= 5 ? "blue" : "red";
+    return { backgroundColor: color };
+  };
 
   return (
     <div>
       <Row>
-       
-          <Col span={12}>
-            <h3>{student ? (student.name)  : (skill.question)}</h3>{" "}
-          </Col>
-       
+        <Col span={12}>
+          <h3>{student ? student.name : skill.question}</h3>{" "}
+        </Col>
 
         <Col span={12}>
           <Slider

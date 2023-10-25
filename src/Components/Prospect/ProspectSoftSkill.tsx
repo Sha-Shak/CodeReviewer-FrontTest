@@ -85,10 +85,9 @@ const onFinish = async (values: any) => {
   };
 
   
-  const areAllSliderValuesValid = Object.values(ratings).every((value) => value > 2);
+  const areAllSliderValuesValid = Object.values(ratings).some((value) => value > 2);
 
   if (
-    areAllSliderValuesValid &&
     values.description &&
     values.education &&
     values.experience
