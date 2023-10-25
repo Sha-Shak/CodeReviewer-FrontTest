@@ -21,10 +21,6 @@ function RadarChartComponent({
 }) {
   const [loader, setLoader] = useState(false);
   const [skillData, setSkillData] = useState<any[]>([]);
-  const handleLoader = (value: boolean)=>{
-    setLoader(value);
-  }
-  const notify = (message: string) => console.log(message);
 
   useEffect(() => {
     console.log(`welcome to radar chart ${title}`);
