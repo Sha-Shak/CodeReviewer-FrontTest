@@ -72,23 +72,20 @@ const ProspectSoftSKill = () => {
 
 const onFinish = async (values: any) => {
   setLoading(true);
-  const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map(
-    (skillId) => ({
-      skillId,
-      marks: ratings[skillId],
-    })
-  );
+  const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map((skillId) => ({
+    skillId,
+    marks: ratings[skillId],
+  }));
+
   const data = {
     skills: skillMarks,
-    education: education,
-    notes: description,
-    experience: experience,
+    education,
+    experience,
+    notes: description, 
   };
 
-  // Check if all slider values are greater than 2
-  const areAllSliderValuesValid = Object.values(ratings).every(
-    (value) => value > 2
-  );
+  
+  const areAllSliderValuesValid = Object.values(ratings).every((value) => value > 2);
 
   if (
     areAllSliderValuesValid &&
@@ -97,6 +94,7 @@ const onFinish = async (values: any) => {
     values.experience
   ) {
     try {
+      console.log("checking data", data)
       const response = await serverFetch("post", submitMarkUrl, data);
       if (response.prospectId) {
         setMessage("Form submitted successfully!");
@@ -110,7 +108,7 @@ const onFinish = async (values: any) => {
       }
     } catch (error) {
       setMessage("An error occurred");
-      setLoading(false);
+      setLoading (false);
     }
   } else {
     setMessage(
@@ -119,6 +117,8 @@ const onFinish = async (values: any) => {
     setLoading(false);
   }
 };
+
+
   return (
     <Spin spinning={loading} tip="Please wait..." size="large">
       <Form form={form} name="rating-form" onFinish={onFinish}>
