@@ -21,7 +21,7 @@ const ProspectAssignment = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const notify = (message: string) => setMessage(message);
-  const [hardSkills, setHardSkills] = useFetchData<ISkills[]>(
+  const [hardSkills] = useFetchData<ISkills[]>(
     hardSkillUrl,
     "skills",
     notify,

@@ -23,7 +23,7 @@ function RadarChartComponent({
 }) {
   const [loading, setLoading] = useState(false);
   const [skillData, setSkillData] = useState<any[]>([]);
-  const [avgMarksData, setAvgMarksData] = useState<any[]>([]);
+
 
   useEffect(() => {
     async function fetchData() {

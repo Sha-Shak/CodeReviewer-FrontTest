@@ -33,7 +33,7 @@ const ProspectSoftSKill = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const notify = (message: string) => setMessage(message);
 
-  const [softSkills, setSoftSkills] = useFetchData<ISkills[]>(
+  const [softSkills] = useFetchData<ISkills[]>(
     softSkillUrl,
     "skills",
     notify,
@@ -86,7 +86,7 @@ const onFinish = async (values: any) => {
 
   
   const areAllSliderValuesValid = Object.values(ratings).some((value) => value > 2);
-
+  console.log(areAllSliderValuesValid)
   if (
     values.description &&
     values.education &&
