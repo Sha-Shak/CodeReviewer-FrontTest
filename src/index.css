@@ -45,6 +45,12 @@
   justify-content: space-between;
 }
 
+.edit-profile-btn {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
 .leftSideBar {
   flex: 0.3;
   border: 1px solid lightgray;

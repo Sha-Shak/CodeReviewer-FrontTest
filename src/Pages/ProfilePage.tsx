@@ -18,6 +18,7 @@ import logo from './../assets/new-logo.jpg';
 import SkillsReportChart from "../Components/Charts/SkillsReportChart";
 import PersonalityTagsContainer from "../Components/Personality/PersonalityTagsContainer";
 import { parseName } from "../utils/helper";
+import EditStudentDetailsModal from "../Components/EditStudentDetailsModal";
 
 
 
@@ -39,6 +40,10 @@ const ProfilePage = () => {
     });
   };
 
+  function setUpdatedStudent (update: IStudent) {
+    setStudent(update);
+  }
+
   useEffect(() => {
     async function fetchStudent() {
       try {
@@ -49,7 +54,7 @@ const ProfilePage = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        displayMessage( "error", 'An error occured while fetching student details.');
+        displayMessage("error", 'An error occured while fetching student details.');
       }
     };
 
@@ -73,12 +78,12 @@ const ProfilePage = () => {
     getStudentImage()
   }, [student])
 
-  async function handleModelToggle () {
+  async function handleModelToggle() {
     try {
       if (student) {
         setToggleLoading(true);
         const url = `${conf.API_BASE_URL}/students/model/toggle/${student._id}`;
-        const updatedStudent : IStudent = await serverFetch("put", url);
+        const updatedStudent: IStudent = await serverFetch("put", url);
         setStudent(updatedStudent);
         displayMessage("success", `Successfully changed details for ${student.name}.`);
         setToggleLoading(false);
@@ -106,6 +111,9 @@ const ProfilePage = () => {
                   />
                   <div className="info">
                     <h2 className="name">{student.name}</h2>
+                    <div className="edit-profile-btn">
+                      <EditStudentDetailsModal student={student} displayMessage={displayMessage} setUpdatedStudent={setUpdatedStudent} />
+                    </div>
                     <p className="phone">
                       <PhoneOutlined /> {"    "}
                       {student.phone}
@@ -124,21 +132,21 @@ const ProfilePage = () => {
                     </p>
                     <p className="model">
                       {" "}
-                      <span>{student.model ? 
-                        <StarTwoTone twoToneColor="#8884d8" /> 
+                      <span>{student.model ?
+                        <StarTwoTone twoToneColor="#8884d8" />
                         : <StarOutlined />} Model
                       </span>
-                      <Switch 
-                        style={{ marginRight: 10 }} 
-                        checkedChildren="Yes" 
-                        unCheckedChildren="No" 
-                        loading={toggleLoading} 
-                        checked={student.model} 
-                        onChange={handleModelToggle} 
-                        />
+                      <Switch
+                        style={{ marginRight: 10 }}
+                        checkedChildren="Yes"
+                        unCheckedChildren="No"
+                        loading={toggleLoading}
+                        checked={student.model}
+                        onChange={handleModelToggle}
+                      />
                     </p>
                   </div>
-                  <PersonalityTagsContainer id={student._id}/>
+                  <PersonalityTagsContainer id={student._id} />
                 </div>
                 <div className="content">
                   <div className="row">
