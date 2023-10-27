@@ -17,7 +17,6 @@ const SkillsSlider: React.FC<SkillsSliderProps> = ({
   rating,
   onRatingChange,
   form,
-  question = true,
   student,
 }) => {
   const handleSliderChange = (value: number) => {

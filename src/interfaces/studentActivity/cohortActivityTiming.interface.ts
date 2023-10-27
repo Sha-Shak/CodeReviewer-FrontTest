@@ -1,8 +1,6 @@
-import { Types } from 'mongoose';
-
 export interface ICohortActivityTimings {
-  cohortId: Types.ObjectId;
-  activityId: Types.ObjectId;
+  cohortId: string;
+  activityId: string;
   startTimestamp: Date;
   endTimestamp: Date;
 }

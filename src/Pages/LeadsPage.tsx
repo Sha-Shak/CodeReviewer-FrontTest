@@ -23,14 +23,12 @@ const customPaginationConfig = {
   showSizeChanger: false, // Hide page size changer
   showQuickJumper: false, // Hide quick jumper
   showTotal: () => "", // Hide the total count
-  // You can customize other pagination options as needed
 };
 
 const DealsPage = () => {
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [searchedText, setSearchedText] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [pageNumber, setPageNumber] = useState<number>(1); //? for future if needed: Track the current page number
   const [messageApi, contextHolder] = message.useMessage();
   const [fetchedPages, setFetchedPages] = useState<number[]>([]); // Keep track of fetched pages
 
@@ -111,7 +109,6 @@ const DealsPage = () => {
       setLoading(true);
       if (page) {
         url = `${conf.API_BASE_URL}/zen/getdata/leads/passed%20pre-screening?page=${page}&pageSize=25`;
-        setPageNumber(page); // Update the current page number
         setFetchedPages([...fetchedPages, page]);
       }
       console.log("Fetching data for page", page);

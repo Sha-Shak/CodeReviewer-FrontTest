@@ -1,6 +1,4 @@
-import { Types } from 'mongoose';
-
 export interface IFailedPullRequestReview {
-  reviewId: Types.ObjectId;
+  reviewId: string;
   timestamp: Date;
 }

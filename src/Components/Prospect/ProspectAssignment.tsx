@@ -15,13 +15,13 @@ const ProspectAssignment = () => {
   let { id } = useParams();
   const submitMarkUrl =
     conf.API_BASE_URL +
-    `/prospect/hard-skills/add/interview/${id}/coding-assignment`;
+    `/prospect/interview/add/coding-assignment/${id}`;
   const [ratings, setRatings] = useState<SkillRatings>({});
   const hardSkillUrl = conf.API_BASE_URL + `/skill/hard-skill`;
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const notify = (message: string) => setMessage(message);
-  const [hardSkills, setHardSkills] = useFetchData<ISkills[]>(
+  const [hardSkills] = useFetchData<ISkills[]>(
     hardSkillUrl,
     "skills",
     notify,

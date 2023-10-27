@@ -1,10 +1,9 @@
-import { Types } from 'mongoose';
-import { IOpenAIResult } from './openaiResult.interface';
+import { IOpenAIResult } from "./openaiResult.interface";
 
 export interface IPullRequestReview {
   action: string;
-  activityId: Types.ObjectId;
-  studentId: Types.ObjectId;
+  activityId: string;
+  studentId: string;
   studentRepoName: string;
   title: string;
   pullUrl: string;

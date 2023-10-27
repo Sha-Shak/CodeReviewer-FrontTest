@@ -141,7 +141,7 @@ const SoftSkillsPage = () => {
       <Spin spinning={loading} tip="Fetching students and questions...">
         <Steps
           current={currentStep}
-          items={softSkills.map((el) => ({}))}
+          items={softSkills.map(() => ({}))}
         />
         <div>
           {softSkills[currentStep] && (

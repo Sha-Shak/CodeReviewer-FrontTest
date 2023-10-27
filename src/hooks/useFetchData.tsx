@@ -5,7 +5,7 @@ const useFetchData = <T,>(
   url: string,
   dataType: string,
   notify: (message: string) => void,
-  handleLoader: (data: any) => void
+  handleLoader: (data: any) => void,
 ) => {
   const [data, setData] = useState<T | null>(null);
 

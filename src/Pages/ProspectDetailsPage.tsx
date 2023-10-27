@@ -5,10 +5,10 @@ import RadarChartComponent from "../Components/Charts/Prospect/ProspectRadarChar
 import ProfileBadge from "../Components/ProfileBadge";
 import ProspectAssignment from "../Components/Prospect/ProspectAssignment";
 import ProspectSoftSkill from "../Components/Prospect/ProspectSoftSkill";
+import ProspectTechInterview from "../Components/Prospect/ProspectTechInterview";
 import conf from "../config";
 import { IProspect } from "../interfaces/prospects/prospects.interface";
 import { serverFetch } from "../utils/handleRequest";
-import ProspectTechInterview from "../Components/Prospect/ProspectTechInterview";
 
 const ProspectDetailsPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>("soft");
@@ -18,7 +18,6 @@ const ProspectDetailsPage = () => {
   const getProfile = async () => {
     const result = await serverFetch("get", profileUrl);
     await setProfile(result);
-    console.log("profile", result);
   };
   useEffect(() => {
     getProfile();
@@ -32,18 +31,17 @@ const ProspectDetailsPage = () => {
       <ProfileBadge profile={profile} />
       <div className="flex">
         <RadarChartComponent
-          skillurl={`${conf.API_BASE_URL}/prospect/soft-skills/interview/${id}`}
-          avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/softskill/avgmarks/interview`}
-          title="Motivation Interview"
+          skillUrl={`${conf.API_BASE_URL}/prospect/soft-skills/${id}`}
+          avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/softskill/avgmarks`}
+          title="Motivational Interview"
         />
-
         <RadarChartComponent
-          skillurl={`${conf.API_BASE_URL}/prospect/hard-skills/interview/${id}/tech-interview`}
+          skillUrl={`${conf.API_BASE_URL}/prospect/interview/tech-interview/${id}`}
           avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/avgmarks/tech-interview`}
           title="Tech Interview"
         />
         <RadarChartComponent
-          skillurl={`${conf.API_BASE_URL}/prospect/assignment/interview/${id}/coding-assignment`}
+          skillUrl={`${conf.API_BASE_URL}/prospect/interview/coding-assignment/${id}`}
           avgMarksUrl={`${conf.API_BASE_URL}/prospect/get/avgmarks/coding-assignment`}
           title="Coding Assignment"
         />
@@ -59,7 +57,9 @@ const ProspectDetailsPage = () => {
         <Menu.Item key="assignment">Coding Assignment</Menu.Item>
       </Menu>
       <br />
-      {selectedTab === "soft" && <ProspectSoftSkill />}
+      {selectedTab === "soft" && (
+        <ProspectSoftSkill report={"motivational-interview"} />
+      )}
       {selectedTab === "tech" && <ProspectTechInterview />}
       {selectedTab === "assignment" && <ProspectAssignment />}
       {profile?.stage === "interview-done" && <div>No form will be shown.</div>}

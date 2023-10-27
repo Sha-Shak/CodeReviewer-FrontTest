@@ -1,12 +1,9 @@
 import { Input, Table } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { IContactData } from "../interfaces/zendesk/contacts/contacts.data.interface";
-import { IContactList } from "../interfaces/zendesk/contacts/contacts.interface";
-import { IContactMeta } from "../interfaces/zendesk/contacts/contacts.meta.interface";
 import { serverFetch } from "../utils/handleRequest";
 import conf from "../config";
-import { Spin, message } from "antd";
+import { message } from "antd";
 import { IDealsDataList } from "../interfaces/zendesk/deals/deals.interface";
 
 interface DataType {
@@ -24,7 +21,6 @@ interface DataType {
 
 const DealsPage = () => {
   const [tableData, setTableData] = useState<DataType[]>([]);
-  const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
   let url = `${conf.API_BASE_URL}/zen/getdata/deals`;
@@ -113,7 +109,6 @@ const DealsPage = () => {
         setLoading(true);
         if (page) {
           url = `${conf.API_BASE_URL}/zen/getdata/deals?page=${page}&pageSize=25`;
-          setPageNumber(page); // Update the current page number
           setFetchedPages([...fetchedPages, page]);
         }
         const data: IDealsDataList = await serverFetch("get", url);
@@ -150,10 +145,7 @@ const DealsPage = () => {
   }, []);
 
   const onChange: TableProps<DataType>["onChange"] = (
-    pagination,
-    filters,
-    sorter,
-    extra
+    pagination
   ) => {
     if (pagination.current) {
       if (!fetchedPages.includes(pagination.current)) {

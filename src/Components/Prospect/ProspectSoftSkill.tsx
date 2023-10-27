@@ -22,18 +22,18 @@ import SkillsSlider from "../SkillsSlider";
 
 type SkillRatings = { [key: string]: number };
 
-const ProspectSoftSKill = () => {
+const ProspectSoftSKill = ({report} : {report: string}) => {
   const [form] = Form.useForm();
   let { id } = useParams();
   const submitMarkUrl =
-    conf.API_BASE_URL + `/prospect/soft-skills/add/interview/${id}`;
+    conf.API_BASE_URL + `/prospect/soft-skills/add/${report}/${id}`;
   const [ratings, setRatings] = useState<SkillRatings>({});
   const softSkillUrl = conf.API_BASE_URL + `/skill/soft-skill`;
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const notify = (message: string) => setMessage(message);
 
-  const [softSkills, setSoftSkills] = useFetchData<ISkills[]>(
+  const [softSkills] = useFetchData<ISkills[]>(
     softSkillUrl,
     "skills",
     notify,
@@ -82,11 +82,13 @@ const onFinish = async (values: any) => {
     education,
     experience,
     notes: description, 
+    stage: 'motivational-interview'
   };
 
-  
-  const areAllSliderValuesValid = Object.values(ratings).some((value) => value > 2);
+  //* for future: if val<2 then remove the item
 
+  const areAllSliderValuesValid = Object.values(ratings).some((value) => value > 2);
+  console.log(areAllSliderValuesValid)
   if (
     values.description &&
     values.education &&

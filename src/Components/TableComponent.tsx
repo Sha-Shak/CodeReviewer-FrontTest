@@ -76,7 +76,7 @@ const onChange: TableProps<DataType>["onChange"] = (
   console.log("params", pagination, filters, sorter, extra);
 };
 const TableComponent = (deals: any) => {
-  const [dataList, setDataList] = useState(deals as IDeals[]);
+  const [dataList] = useState(deals as IDeals[]);
   useEffect(()=>{
     console.log("hello", dataList)
   },[])

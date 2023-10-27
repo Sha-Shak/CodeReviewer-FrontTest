@@ -10,18 +10,16 @@ import SkillsSlider from "../SkillsSlider";
 
 type SkillRatings = { [key: string]: number };
 
-const ProspectHardSkill = () => {
+const ProspectHardSkill = ({submitMarkUrl, hardSkillUrl}:{submitMarkUrl: string; hardSkillUrl: string; id: string}) => {
   const [form] = Form.useForm();
-  let { id } = useParams();
-  const submitMarkUrl =
-    conf.API_BASE_URL +
-    `/prospect/hard-skills/add/interview/${id}/tech-interview`;
+ 
+  // const submitMarkUrl =conf.API_BASE_URL +`/prospect/interview/add/tech-interview/${id}`;
+    //const hardSkillUrl = conf.API_BASE_URL + `/skill/hard-skill`;
   const [ratings, setRatings] = useState<SkillRatings>({});
-  const hardSkillUrl = conf.API_BASE_URL + `/skill/hard-skill`;
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const notify = (message: string) => setMessage(message);
-  const [skills, setSkills] = useFetchData<ISkills[]>(
+  const [skills] = useFetchData<ISkills[]>(
     hardSkillUrl,
     "skills",
     notify,
