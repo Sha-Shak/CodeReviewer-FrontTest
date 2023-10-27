@@ -131,7 +131,7 @@ const SoftSkillsPage = () => {
       <Select
         showSearch
         placeholder="Cohort"
-        options={cohorts.map(cohort => ({ label: cohort.name.split(' ')[2], value: cohort._id }))}
+        options={cohorts.map(cohort => ({ label: cohort.name.split(' ')[2] + (cohort.live ? "⭐" : ""), value: cohort._id }))}
         style={{ width: 180, marginBottom: 25, marginTop: 5 }}
         onChange={(value: string) => setSelectedCohortId(value)}
         filterOption={filterOption}
