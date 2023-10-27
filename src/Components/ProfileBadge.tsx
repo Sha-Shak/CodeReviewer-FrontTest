@@ -3,7 +3,6 @@ import avatar from "../assets/defaultavatar.png";
 import { IProspect } from "../interfaces/prospects/prospects.interface";
 
 const ProfileBadge = ({ profile }: { profile: IProspect }) => {
-  console.log("first", profile);
   const handleStage = () => {
     switch (profile.stage) {
       case "motivational-interview":
