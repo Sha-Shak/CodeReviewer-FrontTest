@@ -1,12 +1,13 @@
 import { EditFilled, GithubOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons"
 import { Button, Form, Input, Modal } from "antd"
 import { useState } from "react";
-import { IStudent } from "../interfaces/student/student.interface";
-import conf from "../config";
-import { serverFetch } from "../utils/handleRequest";
+import { IStudent } from "../../interfaces/student/student.interface";
+import conf from "../../config";
+import { serverFetch } from "../../utils/handleRequest";
 
-function EditStudentDetailsModal({ student, displayMessage, setUpdatedStudent }: 
-  { student: IStudent, 
+function EditStudentDetailsModal({ student, displayMessage, setUpdatedStudent }:
+  {
+    student: IStudent,
     displayMessage: (type: "error" | "success" | "info", message: string) => void,
     setUpdatedStudent: (update: IStudent) => void
   }) {
@@ -15,17 +16,17 @@ function EditStudentDetailsModal({ student, displayMessage, setUpdatedStudent }:
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  function updateFormFields (data: {name?: string, phone?: string, email?: string, ghUserName?: string}) {
+  function updateFormFields(data: { name?: string, phone?: string, email?: string, ghUserName?: string }) {
     setUpdatedDetails((prevState) => {
       return { ...prevState, ...data }
     })
   }
 
-  async function submit () {
+  async function submit() {
     try {
       setSubmitting(true);
       const url = conf.API_BASE_URL + '/students/details/' + student._id;
-      const res : IStudent = await serverFetch('put', url, updatedDetails);
+      const res: IStudent = await serverFetch('put', url, updatedDetails);
       setUpdatedStudent(res);
       displayMessage('success', 'Successfully updated student details.');
       setSubmitting(false);
@@ -46,18 +47,16 @@ function EditStudentDetailsModal({ student, displayMessage, setUpdatedStudent }:
 
   return (
     <>
-      <Button ghost icon={<EditFilled />} onClick={showModal}>Edit Details</Button>
+      <Button ghost icon={<EditFilled />} onClick={showModal}>Edit</Button>
 
       <Modal
         title="Edit Student Details"
         open={isModalOpen}
         onCancel={handleCancel}
-        footer={() => (
-          <>
-            <Button ghost onClick={handleCancel} disabled={submitting} >Cancel</Button>
-            <Button type="primary" loading={submitting} onClick={submit}>Submit</Button>
-          </>
-        )}
+        footer={[
+          <Button key="cancel-button" ghost onClick={handleCancel} disabled={submitting} >Cancel</Button>,
+          <Button key="submit-button" type="primary" loading={submitting} onClick={submit}>Submit</Button>
+        ]}
       >
         <Form
           labelCol={{ span: 4 }}

@@ -18,7 +18,8 @@ import logo from './../assets/new-logo.jpg';
 import SkillsReportChart from "../Components/Charts/SkillsReportChart";
 import PersonalityTagsContainer from "../Components/Personality/PersonalityTagsContainer";
 import { parseName } from "../utils/helper";
-import EditStudentDetailsModal from "../Components/EditStudentDetailsModal";
+import EditStudentDetailsModal from "../Components/Modals/EditStudentDetailsModal";
+import ConvertStudentModal from "../Components/Modals/ConvertStudentModal";
 
 
 
@@ -112,6 +113,7 @@ const ProfilePage = () => {
                   <div className="info">
                     <h2 className="name">{student.name}</h2>
                     <div className="edit-profile-btn">
+                      <ConvertStudentModal student={student} displayMessage={displayMessage} setUpdatedStudent={setUpdatedStudent} />
                       <EditStudentDetailsModal student={student} displayMessage={displayMessage} setUpdatedStudent={setUpdatedStudent} />
                     </div>
                     <p className="phone">
