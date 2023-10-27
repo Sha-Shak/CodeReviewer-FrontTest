@@ -86,11 +86,11 @@ function RadarChartComponent({
                   <PolarRadiusAxis domain={[0, 10]} />
                   {/* 
                     //! TODO: Need to fix the tooltip!
-                  */}
                   <Tooltip
                     cursor={{ strokeDasharray: "3 3" }}
                     content={<CustomRadarTooltip />}
                   />
+                  */}
 
                   <Radar
                     name="Skills"
