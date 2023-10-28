@@ -1,5 +1,6 @@
 import {
   CheckOutlined,
+  DashboardOutlined,
   GithubOutlined,
   LogoutOutlined,
   NumberOutlined,
@@ -42,6 +43,14 @@ const Navbar = () => {
         selectedKeys={[current]}
         mode="horizontal"
       >
+        <SubMenu key="dashboard" icon={<DashboardOutlined />} title="Dashboard" >
+          <Menu.Item key="sourcing">
+            <Link to="dashboard/sourcing">Sourcing</Link>
+          </Menu.Item>
+          <Menu.Item key="training">
+            <Link to="dashboard/training">Training</Link>
+          </Menu.Item>
+        </SubMenu>
         <SubMenu
           key="candidate"
           icon={<UsergroupAddOutlined />}

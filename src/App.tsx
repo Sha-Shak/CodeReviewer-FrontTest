@@ -12,6 +12,7 @@ import SoftSkillsPage from "./Pages/SoftSkillsPage";
 import LoginPage from "./Pages/LoginPage";
 import RedirectLoginPage from "./Pages/RedirectLoginPage";
 import Protected from "./Components/Protected";
+import TalentTrainingDashboardPage from "./Pages/TalentTrainingDashboardPage";
 
 const App = () => (
   <>
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="softskills" element={<SoftSkillsPage />} />
           <Route path="prospects" element={<ProspectPage />} />
           <Route path="prospect/:id" element={<ProspectDetailsPage />} />
+          <Route path="dashboard/training" element={<TalentTrainingDashboardPage />} />
         </Route>
       </Routes>
     </ConfigProvider>
