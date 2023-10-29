@@ -1,4 +1,4 @@
-import { Select, Spin } from 'antd';
+import { Select, Spin, Typography } from 'antd';
 import { parseName } from '../../utils/helper';
 import { useEffect, useState } from 'react';
 import conf from '../../config';
@@ -8,6 +8,8 @@ import Table, { ColumnsType, TableProps } from 'antd/es/table';
 import { StarTwoTone } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { ICohort } from '../../interfaces/student/cohort.interface';
+
+const { Text } = Typography;
 
 function StudentTable() {
   const types = ['pre-course', 'junior', 'senior', 'alumni'];
@@ -76,7 +78,7 @@ function StudentTable() {
 
   return (
     <div className="table-container">
-      Student type:
+      <Text strong style={{marginLeft: 20}}>Student Type: </Text>
       <Select
         options={types.map(type => ({ label: parseName(type), value: type }))}
         onChange={(value: string) => setSelectedType(value)}

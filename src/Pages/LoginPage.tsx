@@ -14,7 +14,7 @@ function LoginPage() {
       const token = localStorage.getItem('github-access-token');
       if (token) {
         const isStaff = await checkIfStaff(token);
-        if (isStaff) navigate('/leads')
+        if (isStaff) navigate('/dashboard/training')
       }
     }
 

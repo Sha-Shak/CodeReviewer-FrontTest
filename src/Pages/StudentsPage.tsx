@@ -98,10 +98,7 @@ const StudentsPage = () => {
   return (
     <>
       {contextHolder}
-      <div className="charts">
-        <LineCharts />
-        <StudentMarksChart />
-        <StudentRadarChart />
+      <div>
       </div>
       <div className="tableBody">
         <Spin spinning={loading} tip="Fetching students..." size="large" >
