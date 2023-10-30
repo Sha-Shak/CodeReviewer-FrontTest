@@ -45,7 +45,7 @@ function SprintPairs() {
 
   
   useEffect(() => {
-    fetchPairs();
+    if (selectedCohort.length) fetchPairs();
   }, [selectedCohort]);
 
   
