@@ -26,12 +26,8 @@ const App = () => (
           },
         },
         token: {
-          // Seed Token
           colorPrimary: "#8884d8",
           borderRadius: 2,
-
-          // Alias Token
-          // colorBgContainer: '#f6ffed',
         },
       }}
     >
