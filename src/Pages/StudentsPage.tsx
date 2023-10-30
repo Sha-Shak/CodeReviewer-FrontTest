@@ -4,13 +4,11 @@ import { IStudent } from "../interfaces/student/student.interface";
 import { serverFetch } from "../utils/handleRequest";
 
 import { ColumnsType, TableProps } from "antd/es/table";
-import LineCharts from "../Components/Charts/LineCharts";
-import StudentRadarChart from "../Components/Charts/RadarChart";
-import StudentMarksChart from "../Components/Charts/StudentMarksBar";
 import { useNavigate, useParams } from "react-router-dom";
 import conf from "../config";
 import { ICohort } from "../interfaces/student/cohort.interface";
 import { StarTwoTone } from "@ant-design/icons";
+import SprintPairs from "../Components/SprintPairs";
 
 const columns: ColumnsType<IStudent> = [
   {
@@ -99,6 +97,7 @@ const StudentsPage = () => {
     <>
       {contextHolder}
       <div>
+        <SprintPairs />
       </div>
       <div className="tableBody">
         <Spin spinning={loading} tip="Fetching students..." size="large" >
