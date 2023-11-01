@@ -1,4 +1,4 @@
-import { Skeleton, Tooltip } from "antd";
+import { Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import {
   PolarAngleAxis,
@@ -6,18 +6,15 @@ import {
   PolarRadiusAxis,
   Radar,
   RadarChart,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
 import { serverFetch } from "../../../utils/handleRequest";
-import CustomRadarTooltip from "../Tooltips/CustomRadarTooltip";
 type SkillDataType = {
-      
-        _id: string,
-        skillId: string,
-        marks: 9,
-        name: string
-    
-}
+  _id: string;
+  skillId: string;
+  marks: 9;
+  name: string;
+};
 function RadarChartComponent({
   skillUrl,
   avgMarksUrl,
@@ -43,16 +40,18 @@ function RadarChartComponent({
         // Fetch average marks data
         const avgMarksResponse = await serverFetch("get", avgMarksUrl);
         const avgMarksData: any[] = avgMarksResponse;
-         console.log(`checking avg skills ${title}`, avgMarksData);
+        console.log(`checking avg skills ${title}`, avgMarksData);
         //Combine the two datasets
-        const combinedData: SkillDataType[] = skillData.map((skill: SkillDataType, index: number) => {
-          return {
-            ...skill,
-            averageMarks: avgMarksData[index].marks,
-          };
-        });
+        const combinedData: SkillDataType[] = skillData.map(
+          (skill: SkillDataType, index: number) => {
+            return {
+              ...skill,
+              averageMarks: avgMarksData[index].marks,
+            };
+          }
+        );
         setSkillData(combinedData);
-        console.log(`"combined data" ${title}`, skillData)
+        console.log(`"combined data" ${title}`, skillData);
 
         setLoader(false);
       } catch (error) {
@@ -61,7 +60,6 @@ function RadarChartComponent({
     }
 
     fetchData();
-
   }, []);
 
   return (
@@ -95,16 +93,16 @@ function RadarChartComponent({
                   <Radar
                     name="Skills"
                     dataKey="marks"
-                    stroke="#0088FF"
-                    fill="#0088FF"
+                    stroke="#00ABE3"
+                    fill="#00ABE3"
                     fillOpacity={0.6}
                   />
 
                   <Radar
                     name="Average Marks"
                     dataKey="averageMarks"
-                    stroke="#00FFAA"
-                    fill="#00FFAA"
+                    stroke="#FF4444"
+                    fill="#FF4444"
                     fillOpacity={0.6}
                   />
                 </RadarChart>
