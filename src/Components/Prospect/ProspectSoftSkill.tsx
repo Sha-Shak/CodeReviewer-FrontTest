@@ -15,6 +15,7 @@ import conf from "../../config";
 import useFetchData from "../../hooks/useFetchData";
 import { ISingleSkillMark } from "../../interfaces/marks/singleSkillMark.interface";
 import { ISkills } from "../../interfaces/marks/skills.interface";
+import { serverFetch } from "../../utils/handleRequest";
 import { prospectStage } from "../../utils/prospectStage";
 import SkillsSlider from "../SkillsSlider";
 
