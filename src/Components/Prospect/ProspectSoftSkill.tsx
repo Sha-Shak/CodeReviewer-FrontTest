@@ -16,13 +16,14 @@ import useFetchData from "../../hooks/useFetchData";
 import { ISingleSkillMark } from "../../interfaces/marks/singleSkillMark.interface";
 import { ISkills } from "../../interfaces/marks/skills.interface";
 import { serverFetch } from "../../utils/handleRequest";
+import { prospectStage } from "../../utils/prospectStage";
 import SkillsSlider from "../SkillsSlider";
 
 //! TODO: need to add loader and prevent user from submitting the form twice.
 
 type SkillRatings = { [key: string]: number };
 
-const ProspectSoftSKill = ({report} : {report: string}) => {
+const ProspectSoftSKill = ({ report }: { report: string }) => {
   const [form] = Form.useForm();
   let { id } = useParams();
   const submitMarkUrl =
@@ -41,6 +42,7 @@ const ProspectSoftSKill = ({report} : {report: string}) => {
   );
   const [education, setEducation] = useState("");
   const [experience, setExperience] = useState("");
+  const [stage, setStage] = useState<string>("");
   const [description, setDescription] = useState("");
 
   const handleEducationChange = (value: string) => {
@@ -48,6 +50,10 @@ const ProspectSoftSKill = ({report} : {report: string}) => {
   };
   const handleExperienceChange = (value: string) => {
     setExperience(value);
+  };
+  const handleStageChange = (value: string) => {
+    setStage(value);
+    console.log(stage);
   };
 
   const handleDescriptionChange = (
@@ -70,55 +76,54 @@ const ProspectSoftSKill = ({report} : {report: string}) => {
     }
   };
 
-const onFinish = async (values: any) => {
-  setLoading(true);
-  const skillMarks: ISingleSkillMark[] = Object.keys(ratings).map((skillId) => ({
-    skillId,
-    marks: ratings[skillId],
-  }));
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    const skillMarks: ISingleSkillMark[] = Object.keys(ratings)
+      .map((skillId) => ({
+        skillId,
+        marks: ratings[skillId],
+      }))
+      .filter((mark) => mark.marks >= 2);
 
-  const data = {
-    skills: skillMarks,
-    education,
-    experience,
-    notes: description, 
-    stage: 'motivational-interview'
-  };
+    const data = {
+      skills: skillMarks,
+      education,
+      experience,
+      notes: description,
+      stage: stage,
+    };
 
-  //* for future: if val<2 then remove the item
+    //* for future: if val<2 then remove the item
 
-  const areAllSliderValuesValid = Object.values(ratings).some((value) => value > 2);
-  console.log(areAllSliderValuesValid)
-  if (
-    values.description &&
-    values.education &&
-    values.experience
-  ) {
-    try {
-      console.log("checking data", data)
-      const response = await serverFetch("post", submitMarkUrl, data);
-      if (response.prospectId) {
-        setMessage("Form submitted successfully!");
-        setTimeout(() => setMessage(null), 5000);
-        form.resetFields();
-        resetSliderValues();
-        setLoading(false);
-      } else {
-        setMessage("Form submission failed. Please try again");
+    const areAllSliderValuesValid = Object.values(ratings).some(
+      (value) => value > 2
+    );
+
+    if (values.description && values.education && values.experience) {
+      try {
+        console.log("checking data", data);
+        const response = await serverFetch("post", submitMarkUrl, data);
+        if (response.prospectId) {
+          setMessage("Form submitted successfully!");
+          setTimeout(() => setMessage(null), 5000);
+          form.resetFields();
+          resetSliderValues();
+          setLoading(false);
+        } else {
+          setMessage("Form submission failed. Please try again");
+          setLoading(false);
+        }
+      } catch (error) {
+        setMessage("An error occurred");
         setLoading(false);
       }
-    } catch (error) {
-      setMessage("An error occurred");
-      setLoading (false);
+    } else {
+      setMessage(
+        "Please fill all form fields and ensure all slider values are more than 2."
+      );
+      setLoading(false);
     }
-  } else {
-    setMessage(
-      "Please fill all form fields and ensure all slider values are more than 2."
-    );
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
     <Spin spinning={loading} tip="Please wait..." size="large">
@@ -145,8 +150,8 @@ const onFinish = async (values: any) => {
                 form={form}
               />
             ))}
-          <Row>
-            <Col span={10} style={{ marginRight: "6.5vw" }}>
+          <Row gutter={50}>
+            <Col span={8}>
               {" "}
               <Form.Item
                 label="Education Level"
@@ -170,7 +175,7 @@ const onFinish = async (values: any) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item
                 label="Experience Level"
                 name="experience"
@@ -190,6 +195,24 @@ const onFinish = async (values: any) => {
                   <Option value="2">1-2 years</Option>
                   <Option value="3">3-5 years</Option>
                   <Option value="4">5 years+</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label="Stage"
+                name="stage"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select Stage",
+                  },
+                ]}
+              >
+                <Select style={{ width: "100%" }} onChange={handleStageChange}>
+                  {prospectStage.map((el) => (
+                    <Option value={el.value}>{el.name}</Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
