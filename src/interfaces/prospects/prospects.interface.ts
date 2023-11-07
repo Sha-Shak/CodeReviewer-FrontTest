@@ -5,5 +5,6 @@ export interface IProspect {
   zenLeadsId: number;
   email: string;
   stage: string;
-  displayPic?: string
+  displayPic?: string;
+  interviewAttempts: {name: string, count: number}[]
 }

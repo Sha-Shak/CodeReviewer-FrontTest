@@ -1,4 +1,4 @@
-import { Alert, Button, Form, Input, Space, Spin } from "antd";
+import { Alert, Button, Col, Form, Input, Row, Select, Space, Spin } from "antd";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import conf from "../../config";
@@ -7,15 +7,16 @@ import { ISingleSkillMark } from "../../interfaces/marks/singleSkillMark.interfa
 import { ISkills } from "../../interfaces/marks/skills.interface";
 import { serverFetch } from "../../utils/handleRequest";
 import SkillsSlider from "../SkillsSlider";
+import { prospectStage } from '../../utils/prospectStage'
+import { Option } from "antd/es/mentions";
 
 type SkillRatings = { [key: string]: number };
 
-const ProspectAssignment = () => {
+const ProspectAssignment = ({ currentStage }: { currentStage: string}) => {
   const [form] = Form.useForm();
   let { id } = useParams();
   const submitMarkUrl =
-    conf.API_BASE_URL +
-    `/prospect/interview/add/coding-assignment/${id}`;
+    conf.API_BASE_URL + `/prospect/interview/add/coding-assignment/${id}`;
   const [ratings, setRatings] = useState<SkillRatings>({});
   const hardSkillUrl = conf.API_BASE_URL + `/skill/hard-skill`;
   const [message, setMessage] = useState<string | null>(null);
@@ -29,6 +30,11 @@ const ProspectAssignment = () => {
   );
 
   const [description, setDescription] = useState("");
+  const [stage, setStage] = useState(currentStage);
+  const handleStageChange = (value: string) => {
+    setStage(value);
+    console.log(stage);
+  };
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -60,6 +66,7 @@ const ProspectAssignment = () => {
     );
     const data = {
       skills: skillMarks,
+      stage,
       notes: description,
     };
     const sliderValues = Object.values(ratings);
@@ -67,7 +74,7 @@ const ProspectAssignment = () => {
       setMessage(
         "Please fill all form fields and ensure slider values are more than 2."
       );
-        setLoading(false);
+      setLoading(false);
     } else {
       console.log("final data", data);
       try {
@@ -119,6 +126,26 @@ const ProspectAssignment = () => {
                   form={form}
                 />
               ))}
+          <Row>
+            <Col span={8}>
+              <Form.Item
+                label="Stage"
+                name="stage"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select Stage",
+                  },
+                ]}
+              >
+                <Select style={{ width: "100%" }} onChange={handleStageChange}>
+                  {prospectStage.map((el: { name: string; value: string }) => (
+                    <Option value={el.value}>{el.name}</Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item
             className="h3-label"
             label="Coding Assignment Notes"

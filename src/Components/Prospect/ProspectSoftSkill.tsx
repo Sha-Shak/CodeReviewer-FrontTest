@@ -23,7 +23,13 @@ import SkillsSlider from "../SkillsSlider";
 
 type SkillRatings = { [key: string]: number };
 
-const ProspectSoftSKill = ({ report }: { report: string }) => {
+const ProspectSoftSKill = ({
+  currentStage,
+  report,
+}: {
+  currentStage: string;
+  report: string;
+}) => {
   const [form] = Form.useForm();
   let { id } = useParams();
   const submitMarkUrl =
@@ -85,23 +91,28 @@ const ProspectSoftSKill = ({ report }: { report: string }) => {
       }))
       .filter((mark) => mark.marks >= 2);
 
-    const data = {
+    const data: {
+      skills: ISingleSkillMark[];
+      notes: string;
+      stage: string;
+      education?: string;
+      experience?: string;
+    } = {
       skills: skillMarks,
-      education,
-      experience,
       notes: description,
       stage: stage,
     };
 
-    //* for future: if val<2 then remove the item
+    // Check and validate based on the current stage
+    if (currentStage === "motivational-interview") {
+      // If the stage is "motivational-interview," validate education and experience
+      data.education = education;
+      data.experience = experience;
+    }
 
-    const areAllSliderValuesValid = Object.values(ratings).some(
-      (value) => value > 2
-    );
-
-    if (values.description && values.education && values.experience) {
+    if (values.description) {
       try {
-        console.log("checking data", data);
+        //! FUTURE: Additional checks or validation can be added as needed
         const response = await serverFetch("post", submitMarkUrl, data);
         if (response.prospectId) {
           setMessage("Form submitted successfully!");
@@ -150,54 +161,62 @@ const ProspectSoftSKill = ({ report }: { report: string }) => {
                 form={form}
               />
             ))}
+
           <Row gutter={50}>
-            <Col span={8}>
-              {" "}
-              <Form.Item
-                label="Education Level"
-                name="education"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select an education level",
-                  },
-                ]}
-              >
-                <Select
-                  value={education}
-                  style={{ width: "100%" }}
-                  onChange={handleEducationChange}
-                >
-                  <Option value="High School">High School</Option>
-                  <Option value="University">University</Option>
-                  <Option value="Masters">Masters</Option>
-                  <Option value="Ph.D">Ph.D</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label="Experience Level"
-                name="experience"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select an experience level",
-                  },
-                ]}
-              >
-                <Select
-                  value={experience}
-                  style={{ width: "100%" }}
-                  onChange={handleExperienceChange}
-                >
-                  <Option value="1">Less than 1 year</Option>
-                  <Option value="2">1-2 years</Option>
-                  <Option value="3">3-5 years</Option>
-                  <Option value="4">5 years+</Option>
-                </Select>
-              </Form.Item>
-            </Col>
+            {currentStage === "motivational-interview" && (
+              <>
+                <Col span={8}>
+                  <Form.Item
+                    label="Education Level"
+                    name="education"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select an education level",
+                      },
+                    ]}
+                  >
+                    <Select
+                      value={education}
+                      style={{ width: "100%" }}
+                      onChange={handleEducationChange}
+                    >
+                      <Select.Option value="high-school">
+                        High School
+                      </Select.Option>
+                      <Select.Option value="university">
+                        University
+                      </Select.Option>
+                      <Select.Option value="masters">Masters</Select.Option>
+                      <Select.Option value="Ph.D">Ph.D</Select.Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="Experience Level"
+                    name="experience"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select an experience level",
+                      },
+                    ]}
+                  >
+                    <Select
+                      value={experience}
+                      style={{ width: "100%" }}
+                      onChange={handleExperienceChange}
+                    >
+                      <Select.Option value="1">Less than 1 year</Select.Option>
+                      <Select.Option value="2">1-2 years</Select.Option>
+                      <Select.Option value="3">3-5 years</Select.Option>
+                      <Select.Option value="4">5 years+</Select.Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </>
+            )}
             <Col span={8}>
               <Form.Item
                 label="Stage"
@@ -210,13 +229,14 @@ const ProspectSoftSKill = ({ report }: { report: string }) => {
                 ]}
               >
                 <Select style={{ width: "100%" }} onChange={handleStageChange}>
-                  {prospectStage.map((el) => (
+                  {prospectStage.map((el: { name: string; value: string }) => (
                     <Option value={el.value}>{el.name}</Option>
                   ))}
                 </Select>
               </Form.Item>
             </Col>
           </Row>
+
           <Form.Item
             className="h3-label"
             label="Interview Notes"
@@ -235,7 +255,6 @@ const ProspectSoftSKill = ({ report }: { report: string }) => {
               onChange={handleDescriptionChange}
             />
           </Form.Item>
-
           <Form.Item style={{ textAlign: "center" }}>
             <Button type="primary" htmlType="submit">
               Submit

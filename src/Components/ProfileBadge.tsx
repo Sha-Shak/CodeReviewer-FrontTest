@@ -3,14 +3,19 @@ import avatar from "../assets/defaultavatar.png";
 import { IProspect } from "../interfaces/prospects/prospects.interface";
 
 const ProfileBadge = ({ profile }: { profile: IProspect }) => {
-  const handleStage = () => {
-    switch (profile.stage) {
+  console.log("badge", profile);
+  const handleStage = (stage: string) => {
+    switch (stage) {
       case "motivational-interview":
         return "Motivational Interview";
       case "tech-interview":
         return "Technical Interview";
+      case "failed-tech-interview":
+        return "Failed Technical Interview";
       case "coding-assignment":
         return "Coding Assignment";
+      case "coding-assignment-passed":
+        return "Coding Assignment Passed";
       default:
         break;
     }
@@ -22,13 +27,22 @@ const ProfileBadge = ({ profile }: { profile: IProspect }) => {
         <Skeleton active />
       ) : (
         <Space align="center">
-          <Row gutter={100}>
+          <Row gutter={50}>
             <Col span={6}>
               <img className="w-24" src={avatar} alt="avatar" />
             </Col>
             <Col span={18}>
-              <h2>{profile.first_name + " " + profile.last_name}</h2>
-              <h5>Stage: {handleStage()}</h5>
+              <Row gutter={100}>
+                <Col>
+                  <h2>{profile.first_name + " " + profile.last_name}</h2>
+                  <h5>Stage: {handleStage(profile.stage)}</h5>
+                </Col>
+                <Col>
+                  <div>
+                    <h2>Interview Attempts {profile.interviewAttempts.map(ia=> <p>{ia.name.replace('-', " ")} : {ia.count}</p>)}</h2>
+                  </div>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Space>

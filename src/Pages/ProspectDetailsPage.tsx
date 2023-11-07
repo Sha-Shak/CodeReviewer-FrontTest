@@ -16,8 +16,13 @@ const ProspectDetailsPage = () => {
   let { id } = useParams();
   const profileUrl = conf.API_BASE_URL + `/prospect/${id}`;
   const getProfile = async () => {
-    const result = await serverFetch("get", profileUrl);
-    await setProfile(result);
+    try {
+      
+      const result = await serverFetch("get", profileUrl);
+      await setProfile(result);
+    } catch (error) {
+      console.warn("profile error", error)
+    }
   };
   useEffect(() => {
     getProfile();
@@ -58,10 +63,13 @@ const ProspectDetailsPage = () => {
       </Menu>
       <br />
       {selectedTab === "soft" && (
-        <ProspectSoftSkill report={"motivational-interview"} />
+        <ProspectSoftSkill
+          currentStage={profile.stage}
+          report={"motivational-interview"}
+        />
       )}
       {selectedTab === "tech" && <ProspectTechInterview />}
-      {selectedTab === "assignment" && <ProspectAssignment />}
+      {selectedTab === "assignment" && <ProspectAssignment currentStage = {profile.stage}/>}
       {profile?.stage === "interview-done" && <div>No form will be shown.</div>}
     </div>
   );
