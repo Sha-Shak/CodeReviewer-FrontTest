@@ -28,19 +28,17 @@ function RadarChartComponent({
   const [skillData, setSkillData] = useState<SkillDataType[]>([]);
 
   useEffect(() => {
-    console.log(`welcome to radar chart ${title}`);
     async function fetchData() {
       try {
         setLoader(true);
 
         // Fetch soft skill data
         const skillData = await serverFetch("get", skillUrl);
-        console.log(`checking skills ${title}`, skillData);
 
         // Fetch average marks data
         const avgMarksResponse = await serverFetch("get", avgMarksUrl);
         const avgMarksData: any[] = avgMarksResponse;
-        console.log(`checking avg skills ${title}`, avgMarksData);
+
         //Combine the two datasets
         const combinedData: SkillDataType[] = skillData.map(
           (skill: SkillDataType, index: number) => {
@@ -51,7 +49,6 @@ function RadarChartComponent({
           }
         );
         setSkillData(combinedData);
-        console.log(`"combined data" ${title}`, skillData);
 
         setLoader(false);
       } catch (error) {

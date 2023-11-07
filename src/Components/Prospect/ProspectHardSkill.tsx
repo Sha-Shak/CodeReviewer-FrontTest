@@ -1,7 +1,5 @@
 import { Alert, Button, Form, Input, Space, Spin } from "antd";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import conf from "../../config";
 import useFetchData from "../../hooks/useFetchData";
 import { ISingleSkillMark } from "../../interfaces/marks/singleSkillMark.interface";
 import { ISkills } from "../../interfaces/marks/skills.interface";
@@ -10,11 +8,18 @@ import SkillsSlider from "../SkillsSlider";
 
 type SkillRatings = { [key: string]: number };
 
-const ProspectHardSkill = ({submitMarkUrl, hardSkillUrl}:{submitMarkUrl: string; hardSkillUrl: string; id: string}) => {
+const ProspectHardSkill = ({
+  submitMarkUrl,
+  hardSkillUrl,
+}: {
+  submitMarkUrl: string;
+  hardSkillUrl: string;
+  id: string;
+}) => {
   const [form] = Form.useForm();
- 
+
   // const submitMarkUrl =conf.API_BASE_URL +`/prospect/interview/add/tech-interview/${id}`;
-    //const hardSkillUrl = conf.API_BASE_URL + `/skill/hard-skill`;
+  //const hardSkillUrl = conf.API_BASE_URL + `/skill/hard-skill`;
   const [ratings, setRatings] = useState<SkillRatings>({});
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -49,7 +54,7 @@ const ProspectHardSkill = ({submitMarkUrl, hardSkillUrl}:{submitMarkUrl: string;
 
   const handleRatingChange = async (skillId: string, rating: number) => {
     await setRatings({ ...ratings, [skillId]: rating });
-    console.log("ratings", ratings)
+    console.log("ratings", ratings);
   };
 
   const resetSliderValues = () => {

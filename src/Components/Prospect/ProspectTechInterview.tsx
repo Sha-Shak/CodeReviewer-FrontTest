@@ -24,8 +24,8 @@ const ProspectTechInterview = () => {
         <Menu.Item key="soft">Soft Skills</Menu.Item>
         <Menu.Item key="tech">Hard Skills</Menu.Item>
       </Menu>
-      <br />
-      {selectedTab === "soft" && <ProspectSoftSKill report= {'tech-interview'} />}
+      <br /> 
+      {selectedTab === "soft" && <ProspectSoftSKill currentStage= {'tech-interview'} report= {'tech-interview'} />}
       {selectedTab === "tech" && id && <ProspectHardSkill submitMarkUrl={ submitMarkUrl} hardSkillUrl={skillUrl} id={id}/>}
     </>
   );
