@@ -1,10 +1,10 @@
 import axios from "axios";
 import { IHandleRequestConfig } from "../interfaces/VITE/HandleRequestConfig";
-export const serverFetch = async (
+export const serverFetch = async<T> (
   method: string,
   url: string,
   data?: any
-): Promise<any> => {
+): Promise<T> => {
   const token = localStorage.getItem("github-access-token");
 
   if (!token) {

@@ -13,6 +13,7 @@ import LoginPage from "./Pages/LoginPage";
 import RedirectLoginPage from "./Pages/RedirectLoginPage";
 import Protected from "./Components/Protected";
 import TalentTrainingDashboardPage from "./Pages/TalentTrainingDashboardPage";
+import SourceDashboardPage from "./Pages/SourceDashboardPage";
 
 const App = () => (
   <>
@@ -32,9 +33,16 @@ const App = () => (
       }}
     >
       <Routes>
-        <Route path="/login" element={<LoginPage/>} />
-        <Route path="/redirect/oauth" element={<RedirectLoginPage/>} />
-        <Route path="/" element={<Protected><SlatePage /></Protected>}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/redirect/oauth" element={<RedirectLoginPage />} />
+        <Route
+          path="/"
+          element={
+            <Protected>
+              <SlatePage />
+            </Protected>
+          }
+        >
           <Route path="deals" element={<DealsPage />} />
           <Route path="leads" element={<LeadsPage />} />
           <Route path="students/:type" element={<StudentsPage />} />
@@ -42,7 +50,14 @@ const App = () => (
           <Route path="softskills" element={<SoftSkillsPage />} />
           <Route path="prospects" element={<ProspectPage />} />
           <Route path="prospect/:id" element={<ProspectDetailsPage />} />
-          <Route path="dashboard/training" element={<TalentTrainingDashboardPage />} />
+          <Route
+            path="dashboard/training"
+            element={<TalentTrainingDashboardPage />}
+          />
+          <Route
+            path="dashboard/sourcing"
+            element={<SourceDashboardPage />}
+          />
         </Route>
       </Routes>
     </ConfigProvider>

@@ -4,5 +4,9 @@ export function parseName (name: string) {
 }
 
 export function capitalizeNames (name: string) {
-  return name.split(' ').map(word => word[0].toUpperCase() + word.slice(1)).join(' ');
+  console.log("cap", name)
+  return name.replace(/-/g, " ")
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
