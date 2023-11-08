@@ -3,6 +3,7 @@ export interface IStudentPositionMark {
   softSkillAvg: number;
   studentId: string;
   studentName: string;
+  studentType: string;
   cohortId: string;
   cohortName: string;
 }

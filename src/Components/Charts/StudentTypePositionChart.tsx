@@ -79,11 +79,11 @@ function StudentTypePositionChart() {
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomScatterTooltip />} />
               <Scatter name="Student Position" data={data} fill="#8884d8">
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={"#8884d8"} />
+                  <Cell key={`cell-${index}`} fill={entry.studentType === "junior" ? "#84d892" : entry.studentType === "senior" ? "#8884d8" : "#84d892"} />
                 ))}
               </Scatter>
               <ReferenceLine y={5} label={{ value: 'Soft', position: 'left', offset: 5 }} stroke="#000000" />
-              <ReferenceLine x={5} label={{ value: 'Hard', position: 'top', offset: 5 }} stroke="#000000" />
+              <ReferenceLine x={5} label={{ value: 'Hard', position: 'bottom', offset: 5 }} stroke="#000000" />
             </ScatterChart>
           </ResponsiveContainer>
           : <Text>No data as of yet.</Text>}
