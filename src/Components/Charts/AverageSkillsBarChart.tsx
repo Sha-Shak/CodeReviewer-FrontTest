@@ -17,7 +17,7 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
   const timeOptions = skillType === 'hard-skills' ? weeks : reportTypes;
 
   const [type, setType] = useState<string>('junior');
-  const [time, setTime] = useState<string>(timeOptions[0]);
+  const [time, setTime] = useState<string>('overall');
   const [marks, setMarks] = useState<{ name: string, marks: number }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
