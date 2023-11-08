@@ -1,14 +1,13 @@
-import { Select, Spin, Typography } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Select, Spin, Tag, Typography } from 'antd'
+import { useEffect, useState } from 'react'
 import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Cell, ReferenceLine, Scatter, ScatterChart, Tooltip } from 'recharts'
 import { parseName } from '../../utils/helper'
-import CustomBarLegend from './Legends/CustomBarLegend'
-import CustomSkillBarTooltip from './Tooltips/CustomSkillBarTooltip';
 import { IStudentPositionMark } from '../../interfaces/studentPosition/studentPositonMark.interface'
 import CustomScatterTooltip from './Tooltips/CustomScatterTooltip'
 import { IStudentPositionReport } from '../../interfaces/studentPosition/studentPositionReport.interface'
 import conf from '../../config'
-import { serverFetch } from '../../utils/handleRequest'
+import { serverFetch } from '../../utils/handleRequest';
+import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
 
 const { Title, Text } = Typography;
 
@@ -43,6 +42,30 @@ function StudentTypePositionChart() {
     setSeletedTypes(value);
   }
 
+  const tagRender = (props: CustomTagProps) => {
+    const { label, closable, onClose } = props;
+    const value : string = props.value;
+
+    console.log(props);
+    const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
+    const color = value === "junior" ? "#84d8a6" : props.value === "senior" ? "#8884d8" : "#d884ad";
+    return (
+      <Tag
+        color={color}
+        onMouseDown={onPreventMouseDown}
+        closable={closable}
+        onClose={onClose}
+        style={{ marginRight: 3, height: "120%", display: "flex", alignItems: "center", fontWeight: "bold" }}
+      >
+        {label}
+      </Tag>
+    );
+  };
+
   return (
     <div className="skill-chart">
       <Title level={3}>Student Positions</Title>
@@ -56,6 +79,7 @@ function StudentTypePositionChart() {
           options={typeOptions.map(type => ({ label: parseName(type), value: type }))}
           mode="multiple"
           defaultValue={["junior", "senior"]}
+          tagRender={tagRender}
         />
 
         <Spin spinning={loading} tip="Fetching stats..." style={{ marginLeft: 5 }}>
@@ -79,7 +103,7 @@ function StudentTypePositionChart() {
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomScatterTooltip />} />
               <Scatter name="Student Position" data={data} fill="#8884d8">
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.studentType === "junior" ? "#84d892" : entry.studentType === "senior" ? "#8884d8" : "#84d892"} />
+                  <Cell key={`cell-${index}`} fill={entry.studentType === "junior" ? "#84d8a6" : entry.studentType === "senior" ? "#8884d8" : "#d884ad"} />
                 ))}
               </Scatter>
               <ReferenceLine y={5} label={{ value: 'Soft', position: 'left', offset: 5 }} stroke="#000000" />

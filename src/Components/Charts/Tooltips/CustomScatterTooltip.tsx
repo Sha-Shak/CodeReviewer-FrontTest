@@ -8,7 +8,7 @@ const { Text } = Typography;
 function getColor (type: string) {
   switch (type) {
     case "junior":
-      return "#84d892";
+      return "#84d8a6";
     case "senior":
         return "#8884d8";
     default:
