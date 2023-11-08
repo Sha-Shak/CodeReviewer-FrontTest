@@ -36,8 +36,13 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
           student: IStudent
         }[] = await serverFetch('get', url);
 
-        const newMarks = res.map(mark => ({ name: mark.student.name, marks: mark.averageMarks, _id: mark.student._id }))
-        setMarks(newMarks);
+        const newMarks = res.map(mark => ({ name: mark.student.name, marks: mark.averageMarks, _id: mark.student._id }));
+        const sortedMarks = newMarks.sort((a, b) => {
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          return 0
+        })
+        setMarks(sortedMarks);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -51,6 +56,7 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
   function handleBarClick (data: { payload: {name: string, marks: number, _id: string}}) {
     navigate('/profile/' + data.payload._id);
   }
+
 
   return (
     <div className="skill-chart">
@@ -85,7 +91,7 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
             >
               <CartesianGrid />
               <XAxis dataKey="name" hide />
-              <YAxis domain={[0, 10]} />
+              <YAxis domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]} />
               <Tooltip content={<CustomSkillBarTooltip />}/>
               <Legend content={<CustomBarLegend />} />
               <Bar dataKey="marks" fill="#8884d8" onClick={handleBarClick}/>

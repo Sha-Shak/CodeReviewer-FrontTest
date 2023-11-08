@@ -68,6 +68,7 @@
 .dashboard-container {
   width: 100%;
   display: flex;
+  justify-content: space-around;
 }
 
 .table-container {
@@ -75,7 +76,7 @@
 }
 
 .charts-container {
-  width: 40%;
+  width: 30%;
 }
 
 .skill-chart {
