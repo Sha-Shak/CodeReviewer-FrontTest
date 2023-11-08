@@ -9,6 +9,7 @@ import { serverFetch } from '../../utils/handleRequest';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
 import CustomBarLegend from './Legends/CustomBarLegend';
 import CustomSkillBarTooltip from './Tooltips/CustomSkillBarTooltip';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
@@ -18,8 +19,10 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
 
   const [type, setType] = useState<string>('junior');
   const [time, setTime] = useState<string>('overall');
-  const [marks, setMarks] = useState<{ name: string, marks: number }[]>([]);
+  const [marks, setMarks] = useState<{ name: string, marks: number, _id: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -33,7 +36,7 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
           student: IStudent
         }[] = await serverFetch('get', url);
 
-        const newMarks = res.map(mark => ({ name: mark.student.name, marks: mark.averageMarks }))
+        const newMarks = res.map(mark => ({ name: mark.student.name, marks: mark.averageMarks, _id: mark.student._id }))
         setMarks(newMarks);
         setLoading(false);
       } catch (error) {
@@ -44,6 +47,10 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
 
     fetchMarks();
   }, [skillType, type, time])
+
+  function handleBarClick (data: { payload: {name: string, marks: number, _id: string}}) {
+    navigate('/profile/' + data.payload._id);
+  }
 
   return (
     <div className="skill-chart">
@@ -81,7 +88,7 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
               <YAxis domain={[0, 10]} />
               <Tooltip content={<CustomSkillBarTooltip />}/>
               <Legend content={<CustomBarLegend />} />
-              <Bar dataKey="marks" fill="#8884d8" />
+              <Bar dataKey="marks" fill="#8884d8" onClick={handleBarClick}/>
             </BarChart>
           </ResponsiveContainer>
           : <Text>No data as of yet.</Text>}

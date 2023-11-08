@@ -8,6 +8,7 @@ import { IStudentPositionReport } from '../../interfaces/studentPosition/student
 import conf from '../../config'
 import { serverFetch } from '../../utils/handleRequest';
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
+import { useNavigate } from 'react-router-dom'
 
 const { Title, Text } = Typography;
 
@@ -16,6 +17,8 @@ function StudentTypePositionChart() {
   const [data, setData] = useState<IStudentPositionMark[]>([]);
   const [selectedTypes, setSeletedTypes] = useState<string[]>(["junior", "senior"]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const typeOptions = ["junior", "senior", "alumni"];
 
@@ -103,7 +106,11 @@ function StudentTypePositionChart() {
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomScatterTooltip />} />
               <Scatter name="Student Position" data={data} fill="#8884d8">
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.studentType === "junior" ? "#84d8a6" : entry.studentType === "senior" ? "#8884d8" : "#d884ad"} />
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={entry.studentType === "junior" ? "#84d8a6" : entry.studentType === "senior" ? "#8884d8" : "#d884ad"}
+                    onClick={() => navigate('/profile/' + entry.studentId)}
+                  />
                 ))}
               </Scatter>
               <ReferenceLine y={5} label={{ value: 'Soft', position: 'left', offset: 5 }} stroke="#000000" />
