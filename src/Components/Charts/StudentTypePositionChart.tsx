@@ -9,6 +9,7 @@ import conf from '../../config'
 import { serverFetch } from '../../utils/handleRequest';
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
 import { useNavigate } from 'react-router-dom'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const { Title, Text } = Typography;
 
@@ -47,7 +48,7 @@ function StudentTypePositionChart() {
 
   const tagRender = (props: CustomTagProps) => {
     const { label, closable, onClose } = props;
-    const value : string = props.value;
+    const value: string = props.value;
 
     console.log(props);
     const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
@@ -73,21 +74,26 @@ function StudentTypePositionChart() {
     <div className="skill-chart">
       <Title level={3}>Student Positions</Title>
 
-      <div>
-        <Select
-          placeholder="Please select student types"
-          size="large"
-          onChange={handleChange}
-          style={{ width: 300 }}
-          options={typeOptions.map(type => ({ label: parseName(type), value: type }))}
-          mode="multiple"
-          defaultValue={["junior", "senior"]}
-          tagRender={tagRender}
-        />
+      <Select
+        placeholder="Please select student types"
+        size="large"
+        onChange={handleChange}
+        style={{ width: 300 }}
+        options={typeOptions.map(type => ({ label: parseName(type), value: type }))}
+        mode="multiple"
+        defaultValue={["junior", "senior"]}
+        tagRender={tagRender}
+      />
 
-        <Spin spinning={loading} tip="Fetching stats..." style={{ marginLeft: 5 }}>
-        </Spin>
+      <div className="small-loader-container">
+        {loading &&
+          <>
+            <LoadingOutlined />
+            <Text type="secondary" style={{ marginLeft: 5 }}>Loading...</Text>
+          </>
+        }
       </div>
+
 
       <div style={{ width: "100%", height: "300px" }}>
         {data.length ?
@@ -106,8 +112,8 @@ function StudentTypePositionChart() {
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomScatterTooltip />} />
               <Scatter name="Student Position" data={data} fill="#8884d8">
                 {data.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
+                  <Cell
+                    key={`cell-${index}`}
                     fill={entry.studentType === "junior" ? "#84d8a6" : entry.studentType === "senior" ? "#8884d8" : "#d884ad"}
                     onClick={() => navigate('/profile/' + entry.studentId)}
                   />

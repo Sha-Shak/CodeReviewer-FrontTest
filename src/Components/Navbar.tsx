@@ -105,7 +105,6 @@ const Navbar = () => {
     }
   ]
   return (
-    <>
       <Menu
         style={{
           position: "relative",
@@ -121,7 +120,6 @@ const Navbar = () => {
         items={items}
       >
       </Menu>
-    </>
   );
 };
 

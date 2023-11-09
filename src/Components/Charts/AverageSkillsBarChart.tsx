@@ -10,6 +10,7 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis
 import CustomBarLegend from './Legends/CustomBarLegend';
 import CustomSkillBarTooltip from './Tooltips/CustomSkillBarTooltip';
 import { useNavigate } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
@@ -53,7 +54,7 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
     fetchMarks();
   }, [skillType, type, time])
 
-  function handleBarClick (data: { payload: {name: string, marks: number, _id: string}}) {
+  function handleBarClick(data: { payload: { name: string, marks: number, _id: string } }) {
     navigate('/profile/' + data.payload._id);
   }
 
@@ -74,31 +75,39 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
           onChange={(value: string) => setTime(value)}
           defaultValue="overall"
         />
-        <Spin spinning={loading} tip="Fetching stats..." style={{ marginLeft: 5 }}>
-        </Spin>
       </div>
-      <div style={{ width: "100%", height: "180px" }}>
-        {marks.length ?
-          <ResponsiveContainer>
-            <BarChart
-              data={marks}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid />
-              <XAxis dataKey="name" hide />
-              <YAxis domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]} />
-              <Tooltip content={<CustomSkillBarTooltip />}/>
-              <Legend content={<CustomBarLegend />} />
-              <Bar dataKey="marks" fill="#8884d8" onClick={handleBarClick}/>
-            </BarChart>
-          </ResponsiveContainer>
-          : <Text>No data as of yet.</Text>}
+
+      <div className="small-loader-container">
+        {loading &&
+          <>
+            <LoadingOutlined />
+            <Text type="secondary" style={{ marginLeft: 5 }}>Loading...</Text>
+          </>
+        }
       </div>
+
+        <div style={{ width: "100%", height: "180px" }}>
+          {marks.length ?
+            <ResponsiveContainer>
+              <BarChart
+                data={marks}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid />
+                <XAxis dataKey="name" hide />
+                <YAxis domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]} />
+                <Tooltip content={<CustomSkillBarTooltip />} />
+                <Legend content={<CustomBarLegend />} />
+                <Bar dataKey="marks" fill="#8884d8" onClick={handleBarClick} />
+              </BarChart>
+            </ResponsiveContainer>
+            : <Text>No data as of yet.</Text>}
+        </div>
     </div>
   )
 }
