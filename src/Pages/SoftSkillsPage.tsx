@@ -36,11 +36,11 @@ const SoftSkillsPage = () => {
       try {
         setLoading(true);
         const allCohortUrl = url + '/cohort/';
-        const cohorts: ICohort[] = await serverFetch('get', allCohortUrl);
+        const cohorts = await serverFetch<ICohort[]>("get", allCohortUrl);
         setCohorts(cohorts);
         setSelectedCohortId(cohorts[0]._id);
         
-        const skillsData = await serverFetch("get", softSkillUrl);
+        const skillsData = await serverFetch<ISkills[]>("get", softSkillUrl);
         setSoftSkills(skillsData);
         setLoading(false);
       } catch (error: any) {
@@ -60,7 +60,7 @@ const SoftSkillsPage = () => {
         try {
           setLoading(true);
           const fetchUrl = url + `/students/StudentByCohort/${selectedCohortId}`;
-          const studentsData = await serverFetch("get", fetchUrl);
+          const studentsData = await serverFetch<IStudent[]>("get", fetchUrl);
           setStudents(studentsData);
           
           // Initialize the assessments array

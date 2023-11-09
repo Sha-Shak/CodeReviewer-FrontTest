@@ -78,7 +78,8 @@ const ProspectAssignment = ({ currentStage }: { currentStage: string}) => {
     } else {
       console.log("final data", data);
       try {
-        const response = await serverFetch("post", submitMarkUrl, data);
+        //! need to change in the future
+        const response = await serverFetch<any>("post", submitMarkUrl, data);
         if (response.prospectId) {
           setMessage("Form submitted successfully!");
           setTimeout(() => setMessage(null), 5000);

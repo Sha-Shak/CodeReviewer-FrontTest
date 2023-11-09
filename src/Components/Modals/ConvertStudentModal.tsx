@@ -21,7 +21,7 @@ function ConvertStudentModal({ student, displayMessage, setUpdatedStudent }:
     try {
       setConverting(true);
       const url = `${conf.API_BASE_URL}/students/convert/${student._id}`;
-      const updatedStudent = await serverFetch('put', url);
+      const updatedStudent = await serverFetch<IStudent>('put', url);
       setUpdatedStudent(updatedStudent);
       setConverting(false);
       setIsModalOpen(false);
@@ -36,7 +36,7 @@ function ConvertStudentModal({ student, displayMessage, setUpdatedStudent }:
     try {
       setExpelling(true);
       const url = `${conf.API_BASE_URL}/students/expel/${student._id}`;
-      const updatedStudent = await serverFetch('put', url);
+      const updatedStudent = await serverFetch<IStudent>('put', url);
       setUpdatedStudent(updatedStudent);
       setExpelling(false);
       setIsModalOpen(false);

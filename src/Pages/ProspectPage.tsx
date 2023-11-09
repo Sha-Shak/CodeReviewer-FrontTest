@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import conf from "../config";
 import { IProspect } from "../interfaces/prospects/prospects.interface";
 import { serverFetch } from "../utils/handleRequest";
+import { capitalizeNames } from "../utils/helper";
 
 interface DataType {
   key?: React.Key;
@@ -12,6 +13,7 @@ interface DataType {
   firstName?: string;
   lastName?: string;
   email?: string;
+  stage: string;
 }
 
 const customPaginationConfig = {
@@ -26,6 +28,7 @@ const DealsPage = () => {
   const [searchedText, setSearchedText] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [filteredData, setFilteredData] = useState<DataType[]>([]);
   const navigate = useNavigate()
   let url = `${conf.API_BASE_URL}/zen/getdata/leads/pending%20pre-screening%20test`;
 
@@ -58,7 +61,37 @@ const DealsPage = () => {
       dataIndex: "email",
       width: "20%",
     },
-    
+    {
+      title: "Stage",
+      dataIndex: "stage",
+      filters: [
+        {
+          text: "Motivational Interview",
+          value: "Motivational Interview",
+        },
+        {
+          text: "Technical Interview",
+          value: "Technical Interview",
+        },
+        {
+          text: "Coding Assignment",
+          value: "Coding Assignment",
+        },
+        {
+          text: "Coding Assignment Passed",
+          value: "Coding Assignment Passed",
+        },
+        {
+          text: "Enrolled",
+          value: "Enrolled",
+        },
+      ],
+      onFilter: (value: any, record) => {
+        console.log("Filter Value:", value);
+        console.log("Record Stage:", record.stage);
+        return record.stage === value;
+      },
+    },
   ];
   const fetchData = async () => {
     try {
@@ -76,10 +109,10 @@ const DealsPage = () => {
           firstName: el.first_name,
           lastName: el.last_name,
           email: el.email,
-          
+          stage: capitalizeNames(el.stage),
         };
       });
-
+      console.log("data", list)
       setTableData(list)
       setLoading(false);
     } catch (error) {
@@ -93,12 +126,21 @@ const DealsPage = () => {
   }, []);
 
   const onChange: TableProps<DataType>["onChange"] = (
-    pagination,
+    _pagination,
     filters,
-    sorter,
-    extra
+    _sorter,
+    _extra
   ) => {
-    console.log("params", pagination, filters, sorter, extra);
+   const filteredValues = Object.values(filters);
+   if (filteredValues.length > 0) {
+     const filtered = tableData.filter((record) => {
+       return filteredValues.every((value) => value?.includes(record.stage));
+     });
+     console.log("filtered", filtered)
+     setFilteredData(filtered);
+   } else {
+     setFilteredData([]);
+   }
 
     
   };
@@ -115,15 +157,15 @@ const DealsPage = () => {
         <Table
           loading={loading}
           columns={columns}
-          dataSource={tableData}
+          dataSource={filteredData.length > 0 ? filteredData : tableData}
           onChange={onChange}
           pagination={customPaginationConfig}
           onRow={(record) => ({
             onClick: () => {
-              navigate(`/prospect/${record._id}`)
-            }
-          })} 
-          />
+              navigate(`/prospect/${record._id}`);
+            },
+          })}
+        />
       </div>
     </div>
   );

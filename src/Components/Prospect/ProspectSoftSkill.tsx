@@ -19,6 +19,16 @@ import { serverFetch } from "../../utils/handleRequest";
 import { prospectStage } from "../../utils/prospectStage";
 import SkillsSlider from "../SkillsSlider";
 
+
+interface IFormData{
+      skills: ISingleSkillMark[];
+      notes: string;
+      stage: string;
+      education?: string;
+      experience?: string;
+    }
+
+
 //! TODO: need to add loader and prevent user from submitting the form twice.
 
 type SkillRatings = { [key: string]: number };
@@ -113,8 +123,8 @@ const ProspectSoftSKill = ({
     if (values.description) {
       try {
         //! FUTURE: Additional checks or validation can be added as needed
-        const response = await serverFetch("post", submitMarkUrl, data);
-        if (response.prospectId) {
+        const response = await serverFetch<IFormData>("post", submitMarkUrl, data);
+        if (response) {
           setMessage("Form submitted successfully!");
           setTimeout(() => setMessage(null), 5000);
           form.resetFields();

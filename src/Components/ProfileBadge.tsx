@@ -1,6 +1,7 @@
 import { Col, Row, Skeleton, Space } from "antd";
 import avatar from "../assets/defaultavatar.png";
 import { IProspect } from "../interfaces/prospects/prospects.interface";
+import { capitalizeNames } from "../utils/helper";
 
 const ProfileBadge = ({ profile }: { profile: IProspect }) => {
   console.log("badge", profile);
@@ -39,7 +40,14 @@ const ProfileBadge = ({ profile }: { profile: IProspect }) => {
                 </Col>
                 <Col>
                   <div>
-                    <h2>Interview Attempts {profile.interviewAttempts.map(ia=> <p>{ia.name.replace('-', " ")} : {ia.count}</p>)}</h2>
+                    <h2>
+                      Interview Attempts{" "}
+                      {profile.interviewAttempts.map((ia) => (
+                        <p>
+                          {capitalizeNames(ia.name)} : {ia.count}
+                        </p>
+                      ))}
+                    </h2>
                   </div>
                 </Col>
               </Row>

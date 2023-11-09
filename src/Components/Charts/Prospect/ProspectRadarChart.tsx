@@ -12,8 +12,9 @@ import { serverFetch } from "../../../utils/handleRequest";
 type SkillDataType = {
   _id: string;
   skillId: string;
-  marks: 9;
+  marks: number;
   name: string;
+  averageMarks: number;
 };
 function RadarChartComponent({
   skillUrl,
@@ -33,10 +34,10 @@ function RadarChartComponent({
         setLoader(true);
 
         // Fetch soft skill data
-        const skillData = await serverFetch("get", skillUrl);
+        const skillData = await serverFetch<SkillDataType[]>("get", skillUrl);
 
         // Fetch average marks data
-        const avgMarksResponse = await serverFetch("get", avgMarksUrl);
+        const avgMarksResponse = await serverFetch<number[]>("get", avgMarksUrl);
         const avgMarksData: any[] = avgMarksResponse;
 
         //Combine the two datasets
@@ -90,7 +91,7 @@ function RadarChartComponent({
                   <Radar
                     name="Skills"
                     dataKey="marks"
-                    stroke="#00ABE3"
+                    stroke="#FF0000"
                     fill="#00ABE3"
                     fillOpacity={0.6}
                   />
@@ -98,7 +99,7 @@ function RadarChartComponent({
                   <Radar
                     name="Average Marks"
                     dataKey="averageMarks"
-                    stroke="#FF4444"
+                    stroke="#0000FF"
                     fill="#FF4444"
                     fillOpacity={0.6}
                   />

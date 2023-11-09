@@ -18,7 +18,7 @@ const ProspectDetailsPage = () => {
   const getProfile = async () => {
     try {
       
-      const result = await serverFetch("get", profileUrl);
+      const result = await serverFetch<IProspect>("get", profileUrl);
       await setProfile(result);
     } catch (error) {
       console.warn("profile error", error)
