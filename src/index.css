@@ -27,6 +27,7 @@
   justify-content: space-around;
   padding: 1rem 5vw;
   height: fit-content;
+  min-height: 50dvh;
 }
 
 .profileBody > .leftSideBar,
@@ -190,6 +191,13 @@
 .small-loader-container {
   height: 30px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+}
+
+.no-data-info-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

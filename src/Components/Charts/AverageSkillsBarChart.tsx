@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import weeks from '../../assets/data/weeks.json';
 import reportTypes from '../../assets/data/reportType.json';
-import { Select, Spin, Typography } from 'antd';
+import { Select, Typography } from 'antd';
 import { parseName } from '../../utils/helper';
 import { IStudent } from '../../interfaces/student/student.interface';
 import conf from '../../config';
@@ -86,28 +86,32 @@ function AverageSkillsBarChart({ skillType }: { skillType: 'hard-skills' | 'soft
         }
       </div>
 
-        <div style={{ width: "100%", height: "180px" }}>
-          {marks.length ?
-            <ResponsiveContainer>
-              <BarChart
-                data={marks}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid />
-                <XAxis dataKey="name" hide />
-                <YAxis domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]} />
-                <Tooltip content={<CustomSkillBarTooltip />} />
-                <Legend content={<CustomBarLegend />} />
-                <Bar dataKey="marks" fill="#8884d8" onClick={handleBarClick} />
-              </BarChart>
-            </ResponsiveContainer>
-            : <Text>No data as of yet.</Text>}
-        </div>
+      <div style={{ width: "100%", height: "180px" }}>
+        {marks.length ?
+          <ResponsiveContainer>
+            <BarChart
+              data={marks}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid />
+              <XAxis dataKey="name" hide />
+              <YAxis domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]} />
+              <Tooltip content={<CustomSkillBarTooltip />} />
+              <Legend content={<CustomBarLegend />} />
+              <Bar dataKey="marks" fill="#8884d8" onClick={handleBarClick} />
+            </BarChart>
+          </ResponsiveContainer>
+          :
+          <div className='no-data-info-container'>
+            <Text>No data as of yet.</Text>
+          </div>
+        }
+      </div>
     </div>
   )
 }

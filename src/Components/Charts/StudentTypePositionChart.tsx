@@ -1,4 +1,4 @@
-import { Select, Spin, Tag, Typography } from 'antd'
+import { Select, Tag, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Cell, ReferenceLine, Scatter, ScatterChart, Tooltip } from 'recharts'
 import { parseName } from '../../utils/helper'
@@ -85,18 +85,14 @@ function StudentTypePositionChart() {
         tagRender={tagRender}
       />
 
-      <div className="small-loader-container">
-        {loading &&
-          <>
+      <div style={{ width: "100%", height: "300px" }}>
+
+        {loading ?
+          <div className="small-loader-container">
             <LoadingOutlined />
             <Text type="secondary" style={{ marginLeft: 5 }}>Loading...</Text>
-          </>
-        }
-      </div>
-
-
-      <div style={{ width: "100%", height: "300px" }}>
-        {data.length ?
+          </div> 
+          : data.length ? 
           <ResponsiveContainer>
             <ScatterChart
               margin={{
@@ -123,7 +119,11 @@ function StudentTypePositionChart() {
               <ReferenceLine x={5} label={{ value: 'Hard', position: 'bottom', offset: 5 }} stroke="#000000" />
             </ScatterChart>
           </ResponsiveContainer>
-          : <Text>No data as of yet.</Text>}
+          :
+          <div className='no-data-info-container'>
+            <Text>No data as of yet.</Text>
+          </div>
+        }
       </div>
     </div>
   )
