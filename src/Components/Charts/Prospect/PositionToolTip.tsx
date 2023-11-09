@@ -1,9 +1,7 @@
-import React from "react";
-
-function CustomTooltip({ data}: any) {
+function CustomTooltip({ data }: any) {
   if (data) {
-    console.log("tool tip",data)
-   
+    console.log("tool tip", data);
+
     return (
       <div
         style={{

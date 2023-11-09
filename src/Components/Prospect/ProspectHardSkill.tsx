@@ -103,7 +103,7 @@ const ProspectHardSkill = ({
     };
 
     try {
-      const response = await serverFetch("post", submitMarkUrl, data);
+      const response = await serverFetch<any>("post", submitMarkUrl, data);
       if (response.prospectId) {
         setMessage("Form submitted successfully!");
         setTimeout(() => setMessage(null), 5000);
