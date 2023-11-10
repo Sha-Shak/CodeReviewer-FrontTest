@@ -20,7 +20,7 @@ function EditStudentDetailsModal({ student, displayMessage, setUpdatedStudent }:
 
   function updateFormFields(data: { name?: string, phone?: string, email?: string, ghUserName?: string }) {
 
-    if (data.ghUserName) checkGithubUsername(data.ghUserName);
+    if (data.ghUserName && data.ghUserName !== updatedDetails.ghUserName) checkGithubUsername(data.ghUserName);
 
     setUpdatedDetails((prevState) => {
       return { ...prevState, ...data }
