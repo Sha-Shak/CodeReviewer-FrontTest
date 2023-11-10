@@ -16,8 +16,7 @@ import TalentTrainingDashboardPage from "./Pages/TalentTrainingDashboardPage";
 import SourceDashboardPage from "./Pages/SourceDashboardPage";
 
 const App = () => (
-  <>
-    <ConfigProvider
+  <ConfigProvider
       theme={{
         components: {
           Button: {
@@ -61,7 +60,6 @@ const App = () => (
         </Route>
       </Routes>
     </ConfigProvider>
-  </>
 );
 
 export default App;
