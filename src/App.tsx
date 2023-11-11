@@ -14,6 +14,7 @@ import RedirectLoginPage from "./Pages/RedirectLoginPage";
 import Protected from "./Components/Protected";
 import TalentTrainingDashboardPage from "./Pages/TalentTrainingDashboardPage";
 import SourceDashboardPage from "./Pages/SourceDashboardPage";
+import CohortPage from "./Pages/CohortPage";
 
 const App = () => (
   <ConfigProvider
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="profile/:id" element={<ProfilePage />} />
           <Route path="softskills" element={<SoftSkillsPage />} />
           <Route path="prospects" element={<ProspectPage />} />
+          <Route path="cohorts" element={<CohortPage />} />
           <Route path="prospect/:id" element={<ProspectDetailsPage />} />
           <Route
             path="dashboard/training"

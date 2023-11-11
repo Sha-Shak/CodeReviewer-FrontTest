@@ -6,11 +6,10 @@ import { serverFetch } from "../utils/handleRequest";
 import { IJuniorSprintPair } from "../interfaces/sprint/juniorSprintPair";
 import { DownloadOutlined, TeamOutlined } from "@ant-design/icons";
 
-function SprintPairs() {
+function SprintPairs({ cohorts } : { cohorts: ICohort[]}) {
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const [cohorts, setCohorts] = useState<ICohort[]>([]);
   const [selectedCohort, setSelectedCohort] = useState<string>('');
   const [pairs, setPairs] = useState<IJuniorSprintPair[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -25,23 +24,8 @@ function SprintPairs() {
 
 
   useEffect(() => {
-    const fetchCohorts = async () => {
-      try {
-        setLoading(true);
-        const allCohortUrl = conf.API_BASE_URL + '/cohort/';
-        const cohorts: ICohort[] = await serverFetch('get', allCohortUrl);
-        setCohorts(cohorts);
-        if (cohorts.length) setSelectedCohort(cohorts[0].githubTeam.split('-').slice(1).join('-'));
-        setLoading(false);
-      } catch (error: any) {
-        setLoading(false);
-        displayMessage('error', 'An error occured while fetching cohorts.')
-        console.log("error", error.message);
-      }
-    };
-    
-    fetchCohorts();
-  }, []);
+    if (cohorts.length && !selectedCohort.length) setSelectedCohort(cohorts[0].githubTeam.split('-').slice(1).join('-'));
+  }, [cohorts]);
 
   
   useEffect(() => {

@@ -5,6 +5,7 @@ import {
   LogoutOutlined,
   NumberOutlined,
   SlidersOutlined,
+  SolutionOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
 
@@ -82,6 +83,11 @@ const Navbar = () => {
           label: <Link to="/students/senior">Senior</Link>
         }
       ]
+    },
+    {
+      key: "cohort",
+      icon: <SolutionOutlined />,
+      label: <Link to="/cohorts">Cohorts</Link>
     },
     {
       key: "marks",
