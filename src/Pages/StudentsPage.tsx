@@ -8,7 +8,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import conf from "../config";
 import { ICohort } from "../interfaces/student/cohort.interface";
 import { StarTwoTone } from "@ant-design/icons";
-import SprintPairs from "../Components/SprintPairs";
 
 const columns: ColumnsType<IStudent> = [
   {
