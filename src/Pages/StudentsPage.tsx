@@ -96,9 +96,6 @@ const StudentsPage = () => {
   return (
     <>
       {contextHolder}
-      <div>
-        <SprintPairs />
-      </div>
       <div className="tableBody">
         <Spin spinning={loading} tip="Fetching students..." size="large" >
           <Table columns={columns} dataSource={students} onChange={onChange} rowKey='_id' onRow={(record) => ({
