@@ -49,8 +49,6 @@ function StudentTypePositionChart() {
   const tagRender = (props: CustomTagProps) => {
     const { label, closable, onClose } = props;
     const value: string = props.value;
-
-    console.log(props);
     const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
       event.preventDefault();
       event.stopPropagation();

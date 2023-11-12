@@ -1,7 +1,7 @@
 import DealsPage from "./Pages/DealsPage";
 
 import { ConfigProvider } from "antd";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import LeadsPage from "./Pages/LeadsPage";
 import ProfilePage from "./Pages/ProfilePage";
 import SlatePage from "./Pages/SlatePage";
@@ -59,6 +59,8 @@ const App = () => (
             path="dashboard/sourcing"
             element={<SourceDashboardPage />}
           />
+          <Route path="*" element={<Navigate to='/dashboard/training' />} />
+          <Route path="" element={<Navigate to='/dashboard/training' />} />
         </Route>
       </Routes>
     </ConfigProvider>
