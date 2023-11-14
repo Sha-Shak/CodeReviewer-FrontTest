@@ -4,13 +4,19 @@ import { Typography } from 'antd';
 
 const { Text } = Typography;
 
-function CustomLineTooltip({ active, payload } : TooltipProps<ValueType, NameType>) {
+function CustomLineTooltip({ active, payload }: TooltipProps<ValueType, NameType>) {
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
         <Text strong className='label'>{`${payload[0].payload.week}`}</Text>
-        <br></br>
-        <Text className='data'>{`${payload[0].name} : ${payload[0].value}`}</Text>
+
+
+        {payload.map(item => (
+          <>
+            <br></br>
+            <Text className='data'>{`${item.name} : ${item.value}`}</Text>
+          </>
+        ))}
       </div>
     );
   }

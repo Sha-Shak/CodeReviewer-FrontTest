@@ -9,22 +9,29 @@ import CustomLineTooltip from './Tooltips/CustomLineTooltip';
 function ProgressLineChart({ id }: { id: string }) {
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<{ marks: number, week: string }[]>([]);
+  const [data, setData] = useState<{ hard: number, week: string, soft?: number }[]>([]);
 
   useEffect(() => {
     async function getProgress() {
       try {
         setLoading(true);
-        const url = `${conf.API_BASE_URL}/marks/progress/hard-skill/${id}`;
-        const data = await serverFetch<{ marks: number, week: string }[]>('get', url);
+        const url = `${conf.API_BASE_URL}/marks/progress/${id}`;
+        const data = await serverFetch<{ marks: number, week: string, type: string }[]>('get', url);
         const sortedData = data.sort((a, b) => {
           if (a.week < b.week) return -1;
           else if (a.week > b.week) return 1;
           return 0;
-        });
+        }).map(item => ({ ...item, week: parseName(item.week) }));
 
-        const parsedData = sortedData.map(item => ({ ...item, week: parseName(item.week)}))
-        setData(parsedData);
+        const filteredHardMarks = sortedData.filter(item => item.type === 'hard-skill');
+        const filteredSoftMarks = sortedData.filter(item => item.type === 'soft-skill');
+
+        const parsedMarks = filteredHardMarks.map(item => {
+          const index = filteredSoftMarks.findIndex(soft => soft.week === item.week);
+          return { hard: item.marks, week: item.week, ...(index !== -1 ? { soft: filteredHardMarks[index].marks } : {}) }
+        })
+
+        setData(parsedMarks);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -37,7 +44,7 @@ function ProgressLineChart({ id }: { id: string }) {
 
   return (
     <div className="chart-container">
-      <h2 className="chart-title">Hard Skill Progress</h2>
+      <h2 className="chart-title">Progress</h2>
       <Spin spinning={loading} tip="Fetching data" size="large">
         <div style={{ width: "100%", height: "200px" }}>
           <ResponsiveContainer>
@@ -49,13 +56,17 @@ function ProgressLineChart({ id }: { id: string }) {
               <YAxis domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]} />
               <Tooltip content={<CustomLineTooltip />} />
               <defs>
-                <linearGradient id="colorMarks" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="colorHardMarks" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
                   <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
                 </linearGradient>
+                <linearGradient id="colorSoftMarks" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="marks" stroke="#8884d8" fillOpacity={1} fill="url(#colorMarks)" />
-
+              <Area type="monotone" dataKey="hard" stroke="#8884d8" fillOpacity={1} fill="url(#colorHardMarks)" />
+              <Area type="monotone" dataKey="soft" stroke="#82ca9d" fillOpacity={1} fill="url(#colorSoftMarks)" />
             </AreaChart>
           </ResponsiveContainer>
 
