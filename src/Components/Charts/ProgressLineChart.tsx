@@ -45,7 +45,7 @@ function ProgressLineChart({ id }: { id: string }) {
   }, [id])
 
   return (
-    <div className="chart-container">
+    <div className="progress-chart-container">
       <h2 className="chart-title">Progress</h2>
       <Spin spinning={loading} tip="Fetching data" size="large">
         <div style={{ width: "100%", height: "200px" }}>

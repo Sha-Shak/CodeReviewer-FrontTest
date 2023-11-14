@@ -161,6 +161,11 @@
   margin: 10px 5px;
 }
 
+.progress-chart-container {
+  width: 70%;
+  margin: 10px 5px;
+}
+
 .chart-title {
   font-size: large;
   font-weight: 600;
