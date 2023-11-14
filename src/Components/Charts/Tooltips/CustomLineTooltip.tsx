@@ -9,12 +9,10 @@ function CustomLineTooltip({ active, payload }: TooltipProps<ValueType, NameType
     return (
       <div className="custom-tooltip">
         <Text strong className='label'>{`${payload[0].payload.week}`}</Text>
-
-
         {payload.map(item => (
           <>
             <br></br>
-            <Text className='data'>{`${item.name} : ${item.value}`}</Text>
+            <Text className='data'><span style={{color: item.stroke}}>{item.name}: </span>{item.value}</Text>
           </>
         ))}
       </div>
