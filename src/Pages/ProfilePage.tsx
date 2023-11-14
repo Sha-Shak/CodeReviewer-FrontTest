@@ -20,6 +20,7 @@ import PersonalityTagsContainer from "../Components/Personality/PersonalityTagsC
 import { parseName } from "../utils/helper";
 import EditStudentDetailsModal from "../Components/Modals/EditStudentDetailsModal";
 import ConvertStudentModal from "../Components/Modals/ConvertStudentModal";
+import ProgressLineChart from "../Components/Charts/ProgressLineChart";
 
 
 
@@ -158,6 +159,9 @@ const ProfilePage = () => {
                   <div className="row">
                     <SkillsReportChart id={student._id} type="peer-review" />
                     <StudentPositionChart id={student._id} />
+                  </div>
+                  <div className="row">
+                    <ProgressLineChart id={student._id} />
                   </div>
                 </div>
                 <div className="rightSideBar">
