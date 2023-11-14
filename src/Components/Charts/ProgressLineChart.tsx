@@ -67,8 +67,8 @@ function ProgressLineChart({ id }: { id: string }) {
                   <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="hard" stroke="#8884d8" fillOpacity={1} fill="url(#colorHardMarks)" />
               <Area type="monotone" dataKey="soft" stroke="#82ca9d" fillOpacity={1} fill="url(#colorSoftMarks)" />
+              <Area type="monotone" dataKey="hard" stroke="#8884d8" fillOpacity={1} fill="url(#colorHardMarks)" />
             </AreaChart>
           </ResponsiveContainer>
 
