@@ -27,11 +27,13 @@ function ProgressLineChart({ id }: { id: string }) {
         const filteredSoftMarks = sortedData.filter(item => item.type === 'soft-skill');
 
         const parsedMarks = filteredHardMarks.map(item => {
-          const index = filteredSoftMarks.findIndex(soft => soft.week === item.week);
+          const num = Number(item.week.split(' ')[1]);
+          const searchWeek = num <= 3 ? 'Week 3' : num <= 6 ? 'Week 6' : num <= 9 ? 'Week 9' : 'Week 12';
+          const index = filteredSoftMarks.findIndex(soft => soft.week === searchWeek);
           return { hard: item.marks, week: item.week, ...(index !== -1 ? { soft: filteredHardMarks[index].marks } : {}) }
         })
 
-        setData(parsedMarks);
+        setData([{ hard: 0, soft: 0, week: "week-0" }, ...parsedMarks]);
         setLoading(false);
       } catch (error) {
         setLoading(false);
