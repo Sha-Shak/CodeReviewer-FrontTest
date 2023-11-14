@@ -1,21 +1,22 @@
-import { Spin, Tooltip } from 'antd';
+import { Spin } from 'antd';
 import { useEffect, useState } from 'react'
 import conf from '../../config';
 import { serverFetch } from '../../utils/handleRequest';
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
 import { parseName } from '../../utils/helper';
+import CustomLineTooltip from './Tooltips/CustomLineTooltip';
 
 function ProgressLineChart({ id }: { id: string }) {
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<{ mark: number, week: string }[]>([]);
+  const [data, setData] = useState<{ marks: number, week: string }[]>([]);
 
   useEffect(() => {
     async function getProgress() {
       try {
         setLoading(true);
         const url = `${conf.API_BASE_URL}/marks/progress/hard-skill/${id}`;
-        const data = await serverFetch<{ mark: number, week: string }[]>('get', url);
+        const data = await serverFetch<{ marks: number, week: string }[]>('get', url);
         const sortedData = data.sort((a, b) => {
           if (a.week < b.week) return -1;
           else if (a.week > b.week) return 1;
@@ -46,7 +47,7 @@ function ProgressLineChart({ id }: { id: string }) {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="week" />
               <YAxis domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]} />
-              <Tooltip />
+              <Tooltip content={<CustomLineTooltip />} />
               <defs>
                 <linearGradient id="colorMarks" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
