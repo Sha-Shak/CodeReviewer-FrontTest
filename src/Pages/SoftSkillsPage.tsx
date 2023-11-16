@@ -108,7 +108,7 @@ const SoftSkillsPage = () => {
     for (let studentIndex = 0; studentIndex < students.length; studentIndex++) {
       const student = students[studentIndex];
       const studentId = student._id;
-      const postUrl = conf.API_BASE_URL + `marks/soft-skills/add/mid-junior/${studentId}`
+      const postUrl = conf.API_BASE_URL + `/marks/soft-skills/add/mid-junior/${studentId}`
       const studentData = skillAssessments.map(
         (assessment) => assessment[studentIndex]
       );
