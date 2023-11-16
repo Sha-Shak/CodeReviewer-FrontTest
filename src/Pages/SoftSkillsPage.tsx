@@ -114,7 +114,7 @@ const SoftSkillsPage = () => {
       );
 
       // Send a POST request with the studentData to the postUrl
-      // await serverFetch("post", postUrl, studentData);
+      await serverFetch("post", postUrl, studentData);
 
       console.log(`Data for student ${student.name} submitted.`, postUrl, studentData);
     }
