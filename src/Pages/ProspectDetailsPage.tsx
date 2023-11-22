@@ -9,7 +9,6 @@ import ProspectTechInterview from "../Components/Prospect/ProspectTechInterview"
 import conf from "../config";
 import { IProspect } from "../interfaces/prospects/prospects.interface";
 import { serverFetch } from "../utils/handleRequest";
-import PersonalityTagsContainer from "../Components/Personality/PersonalityTagsContainer";
 import ProspectPersonalityTagsContainer from "../Components/Prospect/Personality/ProspectPersonalityTagsContainer";
 
 const ProspectDetailsPage = () => {
