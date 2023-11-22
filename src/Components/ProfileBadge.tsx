@@ -43,7 +43,7 @@ const ProfileBadge = ({ profile }: { profile: IProspect }) => {
                     <h2>
                       Interview Attempts{" "}
                       {profile.interviewAttempts.map((ia) => (
-                        <p>
+                        <p key={ia.name}>
                           {capitalizeNames(ia.name)} : {ia.count}
                         </p>
                       ))}

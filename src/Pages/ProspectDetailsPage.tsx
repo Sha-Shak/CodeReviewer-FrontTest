@@ -1,4 +1,4 @@
-import { Menu } from "antd";
+import { Menu, MenuProps } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import RadarChartComponent from "../Components/Charts/Prospect/ProspectRadarChart";
@@ -9,6 +9,8 @@ import ProspectTechInterview from "../Components/Prospect/ProspectTechInterview"
 import conf from "../config";
 import { IProspect } from "../interfaces/prospects/prospects.interface";
 import { serverFetch } from "../utils/handleRequest";
+import PersonalityTagsContainer from "../Components/Personality/PersonalityTagsContainer";
+import ProspectPersonalityTagsContainer from "../Components/Prospect/Personality/ProspectPersonalityTagsContainer";
 
 const ProspectDetailsPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>("soft");
@@ -30,6 +32,22 @@ const ProspectDetailsPage = () => {
   const handleTabClick = (tab: string) => {
     setSelectedTab(tab);
   };
+
+
+  const items : MenuProps['items'] = [
+    {
+      key: 'soft',
+      label: 'Motivational Interview'
+    },
+    {
+      key: 'tech',
+      label: 'Technical Interview'
+    },
+    {
+      key: 'assignment',
+      label: 'Coding Assignment'
+    }
+  ];
 
   return (
     <div className="tableBody">
@@ -56,11 +74,8 @@ const ProspectDetailsPage = () => {
         selectedKeys={[selectedTab]}
         mode="horizontal"
         style={{ display: "flex", justifyContent: "center" }}
-      >
-        <Menu.Item key="soft">Motivation Interview</Menu.Item>
-        <Menu.Item key="tech">Tech Interview</Menu.Item>
-        <Menu.Item key="assignment">Coding Assignment</Menu.Item>
-      </Menu>
+        items={items}
+      />
       <br />
       {selectedTab === "soft" && (
         <ProspectSoftSkill
@@ -71,6 +86,10 @@ const ProspectDetailsPage = () => {
       {selectedTab === "tech" && <ProspectTechInterview />}
       {selectedTab === "assignment" && <ProspectAssignment currentStage = {profile.stage}/>}
       {profile?.stage === "interview-done" && <div>No form will be shown.</div>}
+      <br />
+      {
+        profile._id && <ProspectPersonalityTagsContainer id={profile._id} />
+      }
     </div>
   );
 };

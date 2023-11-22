@@ -240,7 +240,7 @@ const ProspectSoftSKill = ({
               >
                 <Select style={{ width: "100%" }} onChange={handleStageChange}>
                   {prospectStage.map((el: { name: string; value: string }) => (
-                    <Option value={el.value}>{el.name}</Option>
+                    <Option key={el.name} value={el.value}>{el.name}</Option>
                   ))}
                 </Select>
               </Form.Item>
