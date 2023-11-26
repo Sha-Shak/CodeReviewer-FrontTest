@@ -72,7 +72,7 @@ function StudentPositionChart({ id }: { id?: string }) {
             <YAxis type="number" dataKey="hardSkillAvg" name="Hard skills" domain={[0, 10]} interval={2} />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomScatterTooltip />} />
             <Scatter name="Student Position" data={data} fill="#8884d8">
-              {data.map((entry, index) => (
+              {data.sort((_, b) => b.studentId === id ? -1 : 0).map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.studentId === id ? "#0dde6b" : "#8884d8"} />
               ))}
             </Scatter>
