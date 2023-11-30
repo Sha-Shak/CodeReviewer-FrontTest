@@ -52,7 +52,7 @@ function StudentPositionChart({ id }: { id?: string }) {
       />
 
       <Select
-        defaultValue="week-1"
+        defaultValue="overall"
         options={[{label: "Overall", value: "overall"}, ...weeks.map(week => {return {label: parseName(week), value: week}})]}
         onChange={(value) => setTime(value)}
       />
