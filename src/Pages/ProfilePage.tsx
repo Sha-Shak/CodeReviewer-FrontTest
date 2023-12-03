@@ -149,7 +149,7 @@ const ProfilePage = () => {
                       />
                     </p>
                   </div>
-                  <PersonalityTagsContainer id={student._id} />
+                  <PersonalityTagsContainer id={student._id} type="student" />
                 </div>
                 <div className="content">
                   <div className="row">

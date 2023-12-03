@@ -9,7 +9,7 @@ import ProspectTechInterview from "../Components/Prospect/ProspectTechInterview"
 import conf from "../config";
 import { IProspect } from "../interfaces/prospects/prospects.interface";
 import { serverFetch } from "../utils/handleRequest";
-import ProspectPersonalityTagsContainer from "../Components/Prospect/Personality/ProspectPersonalityTagsContainer";
+import PersonalityTagsContainer from "../Components/Personality/PersonalityTagsContainer";
 
 const ProspectDetailsPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>("soft");
@@ -87,7 +87,7 @@ const ProspectDetailsPage = () => {
       {profile?.stage === "interview-done" && <div>No form will be shown.</div>}
       <br />
       {
-        profile._id && <ProspectPersonalityTagsContainer id={profile._id} />
+        profile._id && <PersonalityTagsContainer id={profile._id} type="prospect" />
       }
     </div>
   );
